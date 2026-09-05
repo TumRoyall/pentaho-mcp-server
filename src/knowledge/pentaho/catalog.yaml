@@ -1,0 +1,102 @@
+version: 1
+updated_at: "2026-08-26"
+pdi_version: "11"
+enriched_at: "2026-08-26"
+
+policy:
+  generator_requires_status: canonical
+  generator_requires_eligible: true
+  observed_requires_manual_review: true
+
+components:
+  job:
+    - {type: START, xml_type: SPECIAL, file: job/START.md, status: canonical, generator_eligible: true}
+    - {type: SUCCESS, xml_type: SUCCESS, file: job/SUCCESS.md, status: canonical, generator_eligible: true}
+    - {type: FAILURE, xml_type: SPECIAL, file: job/FAILURE.md, status: canonical, generator_eligible: true}
+    - {type: TRANSFORMATION, xml_type: TRANS, file: job/TRANS.md, status: canonical, generator_eligible: true}
+    - {type: JOB, xml_type: JOB, file: job/JOB.md, status: canonical, generator_eligible: true}
+    - {type: SQL, xml_type: SQL, file: job/SQL.md, status: canonical, generator_eligible: true}
+    - {type: EVAL_TABLE_CONTENT, xml_type: EVAL_TABLE_CONTENT, file: job/EVAL_TABLE_CONTENT.md, status: canonical, generator_eligible: true}
+    - {type: MAIL, xml_type: MAIL, file: job/MAIL.md, status: canonical, generator_eligible: true}
+    - {type: SET_VARIABLES, xml_type: SET_VARIABLES, file: job/SET_VARIABLES.md, status: canonical, generator_eligible: true}
+    - {type: SIMPLE_EVAL, xml_type: SIMPLE_EVAL, file: job/SIMPLE_EVAL.md, status: canonical, generator_eligible: true}
+    - {type: WRITE_TO_LOG, xml_type: WRITE_TO_LOG, file: job/WRITE_TO_LOG.md, status: canonical, generator_eligible: true}
+    - {type: SFTPPUT, xml_type: SFTPPUT, file: job/SFTPPUT.md, status: canonical, generator_eligible: true}
+    - {type: TRUNCATE_TABLES, xml_type: TRUNCATE_TABLES, file: job/TRUNCATE_TABLES.md, status: canonical, generator_eligible: true}
+    - {type: ABORT, xml_type: ABORT, file: job/ABORT.md, status: canonical, generator_eligible: true}
+    - {type: SFTP, xml_type: SFTP, file: job/SFTP.md, status: canonical, generator_eligible: true}
+    - {type: COPY_FILES, xml_type: COPY_FILES, file: job/COPY_FILES.md, status: canonical, generator_eligible: true}
+    - {type: SHELL, xml_type: SHELL, file: job/SHELL.md, status: canonical, generator_eligible: true}
+    - {type: DELETE_FILE, xml_type: DELETE_FILE, file: job/DELETE_FILE.md, status: canonical, generator_eligible: true}
+    - {type: MOVE_FILES, xml_type: MOVE_FILES, file: job/MOVE_FILES.md, status: canonical, generator_eligible: true}
+    - {type: FILE_EXISTS, xml_type: FILE_EXISTS, file: job/FILE_EXISTS.md, status: canonical, generator_eligible: true}
+    - {type: WAIT_FOR_FILE, xml_type: WAIT_FOR_FILE, file: job/WAIT_FOR_FILE.md, status: canonical, generator_eligible: true}
+    - {type: CREATE_FOLDER, xml_type: CREATE_FOLDER, file: job/CREATE_FOLDER.md, status: canonical, generator_eligible: true}
+    - {type: ZIP_FILE, xml_type: ZIP_FILE, file: job/ZIP_FILE.md, status: canonical, generator_eligible: true}
+    - {type: UNZIP, xml_type: UNZIP, file: job/UNZIP.md, status: canonical, generator_eligible: true}
+    - {type: FTP_GET, xml_type: FTP, file: job/FTP.md, status: canonical, generator_eligible: true}
+    - {type: CHECK_FILES_LOCKED, xml_type: CHECK_FILES_LOCKED, file: job/CHECK_FILES_LOCKED.md, status: canonical, generator_eligible: true}
+    - {type: EVAL_FILES_METRICS, xml_type: EVAL_FILES_METRICS, file: job/EVAL_FILES_METRICS.md, status: canonical, generator_eligible: true}
+    - {type: CHECK_DB_CONNECTIONS, xml_type: CHECK_DB_CONNECTIONS, file: job/CHECK_DB_CONNECTIONS.md, status: canonical, generator_eligible: true}
+    - {type: FILES_EXIST, xml_type: FILES_EXIST, file: job/FILES_EXIST.md, status: canonical, generator_eligible: true}
+    - {type: DELETE_FOLDERS, xml_type: DELETE_FOLDERS, file: job/DELETE_FOLDERS.md, status: canonical, generator_eligible: true}
+    - {type: DELETE_FILES, xml_type: DELETE_FILES, file: job/DELETE_FILES.md, status: canonical, generator_eligible: true}
+    - {type: DELAY, xml_type: DELAY, file: job/DELAY.md, status: canonical, generator_eligible: true}
+    - {type: XSLT, xml_type: XSLT, file: job/XSLT.md, status: canonical, generator_eligible: true}
+    - {type: EXPORT_REPOSITORY, xml_type: EXPORT_REPOSITORY, file: job/EXPORT_REPOSITORY.md, status: canonical, generator_eligible: true}
+
+  transformation:
+    - {type: TABLE_INPUT, xml_type: TableInput, file: trans/TableInput.md, status: canonical, generator_eligible: true}
+    - {type: TABLE_OUTPUT, xml_type: TableOutput, file: trans/TableOutput.md, status: canonical, generator_eligible: true}
+    - {type: DUMMY, xml_type: Dummy, file: trans/Dummy.md, status: canonical, generator_eligible: true}
+    - {type: ABORT, xml_type: Abort, file: trans/Abort.md, status: canonical, generator_eligible: true}
+    - {type: SELECT_VALUES, xml_type: SelectValues, file: trans/SelectValues.md, status: canonical, generator_eligible: true}
+    - {type: SET_VARIABLE, xml_type: SetVariable, file: trans/SetVariable.md, status: canonical, generator_eligible: true}
+    - {type: GET_VARIABLE, xml_type: GetVariable, file: trans/GetVariable.md, status: canonical, generator_eligible: true}
+    - {type: FILTER_ROWS, xml_type: FilterRows, file: trans/FilterRows.md, status: canonical, generator_eligible: true}
+    - {type: SCRIPT, xml_type: ScriptValueMod, file: trans/ScriptValueMod.md, status: canonical, generator_eligible: true}
+    - {type: GROUP_BY, xml_type: GroupBy, file: trans/GroupBy.md, status: canonical, generator_eligible: true}
+    - {type: JSON_INPUT, xml_type: JsonInput, file: trans/JsonInput.md, status: canonical, generator_eligible: true}
+    - {type: REST, xml_type: Rest, file: trans/Rest.md, status: canonical, generator_eligible: true}
+    - {type: TEXT_FILE_OUTPUT, xml_type: TextFileOutput, file: trans/TextFileOutput.md, status: canonical, generator_eligible: true}
+    - {type: EXCEL_OUTPUT, xml_type: ExcelOutput, file: trans/ExcelOutput.md, status: canonical, generator_eligible: true}
+    - {type: ROW_GENERATOR, xml_type: RowGenerator, file: trans/RowGenerator.md, status: canonical, generator_eligible: true}
+    - {type: EXCEL_INPUT, xml_type: ExcelInput, file: trans/ExcelInput.md, status: canonical, generator_eligible: true}
+    - {type: EXEC_SQL, xml_type: ExecSQL, file: trans/ExecSQL.md, status: canonical, generator_eligible: true}
+    - {type: CONCAT_FIELDS, xml_type: ConcatFields, file: trans/ConcatFields.md, status: canonical, generator_eligible: true}
+    - {type: SYSTEM_INFO, xml_type: SystemInfo, file: trans/SystemInfo.md, status: canonical, generator_eligible: true}
+    - {type: JOIN_ROWS, xml_type: JoinRows, file: trans/JoinRows.md, status: canonical, generator_eligible: true}
+    - {type: WRITE_TO_LOG, xml_type: WriteToLog, file: trans/WriteToLog.md, status: canonical, generator_eligible: true}
+    - {type: ROWS_TO_RESULT, xml_type: RowsToResult, file: trans/RowsToResult.md, status: canonical, generator_eligible: true}
+    - {type: INSERT_UPDATE, xml_type: InsertUpdate, file: trans/InsertUpdate.md, status: canonical, generator_eligible: true}
+    - {type: UPDATE, xml_type: Update, file: trans/Update.md, status: canonical, generator_eligible: true}
+    - {type: DELETE, xml_type: Delete, file: trans/Delete.md, status: canonical, generator_eligible: true}
+    - {type: DB_LOOKUP, xml_type: DBLookup, file: trans/DBLookup.md, status: canonical, generator_eligible: true}
+    - {type: STREAM_LOOKUP, xml_type: StreamLookup, file: trans/StreamLookup.md, status: canonical, generator_eligible: true}
+    - {type: MERGE_JOIN, xml_type: MergeJoin, file: trans/MergeJoin.md, status: canonical, generator_eligible: true}
+    - {type: MERGE_ROWS, xml_type: MergeRows, file: trans/MergeRows.md, status: canonical, generator_eligible: true}
+    - {type: CALCULATOR, xml_type: Calculator, file: trans/Calculator.md, status: canonical, generator_eligible: true}
+    - {type: SORT_ROWS, xml_type: SortRows, file: trans/SortRows.md, status: canonical, generator_eligible: true}
+    - {type: UNIQUE_ROWS, xml_type: Unique, file: trans/Unique.md, status: canonical, generator_eligible: true}
+    - {type: ADD_CONSTANTS, xml_type: Constant, file: trans/Constant.md, status: canonical, generator_eligible: true}
+    - {type: VALUE_MAPPER, xml_type: ValueMapper, file: trans/ValueMapper.md, status: canonical, generator_eligible: true}
+    - {type: STRING_OPERATIONS, xml_type: StringOperations, file: trans/StringOperations.md, status: canonical, generator_eligible: true}
+    - {type: NULL_IF, xml_type: NullIf, file: trans/NullIf.md, status: canonical, generator_eligible: true}
+    - {type: SWITCH_CASE, xml_type: SwitchCase, file: trans/SwitchCase.md, status: canonical, generator_eligible: true}
+    - {type: MAPPING, xml_type: Mapping, file: trans/Mapping.md, status: canonical, generator_eligible: true}
+    - {type: TEXT_FILE_INPUT, xml_type: TextFileInput, file: trans/TextFileInput.md, status: canonical, generator_eligible: true}
+    - {type: GET_FILE_NAMES, xml_type: GetFileNames, file: trans/GetFileNames.md, status: canonical, generator_eligible: true}
+    - {type: REGEX_EVAL, xml_type: RegexEval, file: trans/RegexEval.md, status: canonical, generator_eligible: true}
+    - {type: BLOCK_UNTIL_STEPS_FINISH, xml_type: BlockUntilStepsFinish, file: trans/BlockUntilStepsFinish.md, status: canonical, generator_eligible: true}
+    - {type: CSV_INPUT, xml_type: CsvInput, file: trans/CsvInput.md, status: canonical, generator_eligible: true}
+    - {type: PROPERTY_INPUT, xml_type: PropertyInput, file: trans/PropertyInput.md, status: canonical, generator_eligible: true}
+    - {type: STRING_CUT, xml_type: StringCut, file: trans/StringCut.md, status: canonical, generator_eligible: true}
+    - {type: RANDOM_VALUE, xml_type: RandomValue, file: trans/RandomValue.md, status: canonical, generator_eligible: true}
+    - {type: PROCESS_FILES, xml_type: ProcessFiles, file: trans/ProcessFiles.md, status: canonical, generator_eligible: true}
+    - {type: DATA_GRID, xml_type: DataGrid, file: trans/DataGrid.md, status: canonical, generator_eligible: true}
+    - {type: JOB_EXECUTOR, xml_type: JobExecutor, file: trans/JobExecutor.md, status: canonical, generator_eligible: true}
+    - {type: XML_OUTPUT, xml_type: XMLOutput, file: trans/XMLOutput.md, status: canonical, generator_eligible: true}
+    - {type: ORA_BULK_LOADER, xml_type: OraBulkLoader, file: trans/OraBulkLoader.md, status: canonical, generator_eligible: true}
+    - {type: SET_SESSION_VARIABLE, xml_type: SetSessionVariableStep, file: trans/SetSessionVariableStep.md, status: observed, generator_eligible: false}
+    - {type: EXCEL_WRITER, xml_type: TypeExitExcelWriterStep, file: trans/TypeExitExcelWriterStep.md, status: canonical, generator_eligible: true}
+    - {type: SEQUENCE, xml_type: Sequence, file: trans/Sequence.md, status: canonical, generator_eligible: true}

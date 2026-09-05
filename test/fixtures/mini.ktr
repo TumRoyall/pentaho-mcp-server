@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>mini</name>
+    <parameters>
+    </parameters>
+  </info>
+  <order>
+    <hop>
+      <from>in</from>
+      <to>out</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <step>
+    <name>in</name>
+    <type>TableInput</type>
+    <connection>conn_a</connection>
+    <sql>SELECT 1 FROM DUAL WHERE 1 &lt; 2</sql>
+  </step>
+  <step>
+    <name>out</name>
+    <type>TableOutput</type>
+    <connection>conn_a</connection>
+  </step>
+  <connection>
+    <name>conn_a</name>
+  </connection>
+</transformation>

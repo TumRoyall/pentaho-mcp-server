@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job>
+  <name>minijob</name>
+  <parameters>
+    <parameter>
+      <name>INPUT_DATE</name>
+      <default_value>20260101</default_value>
+      <description/>
+    </parameter>
+  </parameters>
+  <entries>
+    <entry>
+      <name>Start</name>
+      <type>SPECIAL</type>
+      <start>Y</start>
+    </entry>
+    <entry>
+      <name>run sql</name>
+      <type>SQL</type>
+      <sql>DELETE FROM T WHERE D = '${INPUT_DATE}'</sql>
+      <connection>conn_a</connection>
+    </entry>
+    <entry>
+      <name>ok</name>
+      <type>SUCCESS</type>
+    </entry>
+  </entries>
+  <hops>
+    <hop>
+      <from>Start</from>
+      <to>run sql</to>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>run sql</from>
+      <to>ok</to>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+  </hops>
+  <connection>
+    <name>conn_a</name>
+  </connection>
+</job>

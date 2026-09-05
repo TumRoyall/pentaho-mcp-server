@@ -1,0 +1,6 @@
+node_modules/
+*.tmp
+
+# Release build artifacts (produced by scripts/build-release.mjs)
+build/
+dist/

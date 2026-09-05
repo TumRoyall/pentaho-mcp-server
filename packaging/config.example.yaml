@@ -1,0 +1,27 @@
+# .pentaho-mcp.yaml — commit this at the root of the workspace the MCP serves.
+# Copy to <workspace>\.pentaho-mcp.yaml and adjust the values for your project.
+# All paths are relative to the workspace root; absolute or escaping paths are
+# rejected. Project directory names are read from here, never hard-coded.
+
+schema_version: 1
+
+project:
+  # Short uppercase project code used in artifact naming and reports.
+  code: EXAMPLE
+
+paths:
+  # Folder holding BA requirement folders (REQ_<ID>_<UPPER_SNAKE>).
+  requirements: docs
+  # Folder holding generated Pentaho projects (KJB/KTR and supporting files).
+  pentaho: etl-pentaho
+  # Optional: shared AI-context/skills folder, if the workspace has one.
+  # ai_context: ai-context
+
+# Deployment environment. DEV and TEST allow Kitchen/Pan to auto-execute;
+# every other value (including UNKNOWN) requires an explicit confirmation.
+environment: UNKNOWN
+
+pentaho:
+  # Optional: path to a local PDI (Kitchen.bat/Pan.bat live beneath it). Leave
+  # unset when no runtime is installed — validation and generation still work.
+  # home: pentaho-ce/data-integration

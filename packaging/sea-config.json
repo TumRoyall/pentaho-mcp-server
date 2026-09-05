@@ -1,0 +1,7 @@
+{
+  "main": "build/sea-entry.cjs",
+  "output": "build/sea-blob.blob",
+  "disableExperimentalSEAWarning": true,
+  "useSnapshot": false,
+  "useCodeCache": false
+}

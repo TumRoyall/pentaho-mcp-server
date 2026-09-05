@@ -1,0 +1,269 @@
+#!/usr/bin/env node
+/**
+ * Build a self-contained Windows release of the DTE Pentaho lifecycle MCP.
+ *
+ * Pipeline:
+ *   1. Bundle src/index.js (all src/**) into one CommonJS file with esbuild.
+ *   2. Embed every immutable text asset (knowledge base + lifecycle skill
+ *      Markdown) into a generated module. The runtime code reads these through
+ *      fs.readFileSync using import.meta.url-relative paths; inside the single
+ *      executable those files do not exist on disk, so a thin fs interception
+ *      resolves any read whose path suffix matches an embedded asset and falls
+ *      back to the real fs otherwise. Task 1-9 source is untouched.
+ *   3. Generate the SEA blob with `node --experimental-sea-config`.
+ *   4. Copy the running Node executable and inject the blob with postject.
+ *   5. Verify the executable answers initialize/tools/prompts/resources.
+ *   6. Assemble the versioned ZIP (exact inventory) and SHA-256 checksum.
+ *
+ * The build fails loudly if esbuild, postject, or the SEA toolchain is missing;
+ * it never falls back to a release that needs system Node.
+ *
+ * Usage: node scripts/build-release.mjs --version <semver>
+ */
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import {
+  copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync,
+  rmSync, statSync, writeFileSync,
+} from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const buildDir = path.join(root, 'build');
+const distDir = path.join(root, 'dist');
+const EXE_NAME = 'dte-pentaho-mcp.exe';
+// Stable virtual base for all bundled import.meta.url values (see bundleServer).
+const IMPORT_META_URL = 'file:///C:/dte-pentaho-mcp/src/index.js';
+
+const SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+
+function fail(message) {
+  console.error(`build-release: ${message}`);
+  process.exit(1);
+}
+
+/**
+ * Remove a path recursively, tolerating the transient EPERM/EBUSY that Windows
+ * raises while it still holds a handle on a just-touched file or directory
+ * (e.g. an executable that was spawned during verification). Node's own
+ * maxRetries/retryDelay backoff is the supported remedy for this race.
+ */
+function rmrf(target) {
+  rmSync(target, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+}
+
+function parseVersion(argv) {
+  const idx = argv.indexOf('--version');
+  if (idx === -1 || !argv[idx + 1]) fail('missing required --version <semver>');
+  const version = argv[idx + 1];
+  if (!SEMVER.test(version)) fail(`invalid semver: ${version}`);
+  return version;
+}
+
+/** Recursively collect files under dir, returning {abs, rel} with POSIX rel. */
+function collectFiles(dir) {
+  const out = [];
+  const walk = current => {
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      const abs = path.join(current, entry.name);
+      if (entry.isDirectory()) walk(abs);
+      else if (entry.isFile()) out.push(abs);
+    }
+  };
+  walk(dir);
+  return out;
+}
+
+/**
+ * Build the embedded asset map. Keys are POSIX path suffixes anchored at the
+ * `src/` boundary (e.g. "knowledge/pentaho/job/START.md",
+ * "lifecycle/writing-etl-requirements.md"). Values are UTF-8 text.
+ */
+/**
+ * The bundle collapses every module's `import.meta.url` to one base (see
+ * IMPORT_META_URL). That means runtime reads resolve to:
+ *   - knowledge: <base>/pentaho/<entry.file>  (loader.js joins knowledgeDir())
+ *   - lifecycle: <base>/<slug>.md             (catalog.js reads new URL('./..'))
+ * so asset keys are anchored at src/knowledge/ (yielding "pentaho/...") and
+ * src/lifecycle/ (yielding "<slug>.md"). The fs shim matches by path suffix.
+ */
+function collectEmbeddedAssets() {
+  const assets = {};
+  const add = (baseDir, anchorDir, filterExt) => {
+    if (!existsSync(baseDir)) return;
+    for (const abs of collectFiles(baseDir)) {
+      if (filterExt && !filterExt.some(ext => abs.toLowerCase().endsWith(ext))) continue;
+      const rel = path.relative(anchorDir, abs).split(path.sep).join('/');
+      assets[rel] = readFileSync(abs, 'utf8');
+    }
+  };
+  add(path.join(root, 'src', 'knowledge', 'pentaho'), path.join(root, 'src', 'knowledge'));
+  add(path.join(root, 'src', 'lifecycle'), path.join(root, 'src', 'lifecycle'), ['.md']);
+  return assets;
+}
+
+/**
+ * The fs-interception prologue. Installs asset-serving overrides on `fs`
+ * BEFORE the bundled server executes, so runtime import.meta.url-relative reads
+ * of embedded knowledge/lifecycle files resolve from memory. Any read whose
+ * normalized path suffix matches an embedded key is served; everything else
+ * delegates to the real fs. A single self-contained file is required because a
+ * SEA embeds exactly one main script and cannot require sibling files.
+ */
+function generatePrologue(assets) {
+  const json = JSON.stringify(assets);
+  return `// Generated by scripts/build-release.mjs. Do not edit.
+'use strict';
+(function installEmbeddedAssetFs() {
+  const fs = require('node:fs');
+  const ASSETS = ${json};
+  const KEYS = Object.keys(ASSETS);
+  const normalize = p => String(p).split('\\\\').join('/');
+  const lookup = p => {
+    const norm = normalize(p);
+    for (const key of KEYS) {
+      if (norm === key || norm.endsWith('/' + key)) return ASSETS[key];
+    }
+    return undefined;
+  };
+  const realReadFileSync = fs.readFileSync.bind(fs);
+  const realExistsSync = fs.existsSync.bind(fs);
+  fs.readFileSync = function (target, options) {
+    if (typeof target === 'string') {
+      const hit = lookup(target);
+      if (hit !== undefined) {
+        const enc = typeof options === 'string' ? options : options && options.encoding;
+        return enc ? hit : Buffer.from(hit, 'utf8');
+      }
+    }
+    return realReadFileSync(target, options);
+  };
+  fs.existsSync = function (target) {
+    if (typeof target === 'string' && lookup(target) !== undefined) return true;
+    return realExistsSync(target);
+  };
+})();
+`;
+}
+
+function run(cmd, args, options = {}) {
+  const res = spawnSync(cmd, args, { encoding: 'utf8', ...options });
+  if (res.error) fail(`${cmd} failed: ${res.error.message}`);
+  if (res.status !== 0) fail(`${cmd} exited ${res.status}: ${res.stderr || res.stdout}`);
+  return res;
+}
+
+async function bundleServer() {
+  let esbuild;
+  try { esbuild = require('esbuild'); }
+  catch { fail('esbuild is required (npm install) but was not found'); }
+  const result = await esbuild.build({
+    entryPoints: [path.join(root, 'src', 'index.js')],
+    bundle: true,
+    platform: 'node',
+    format: 'cjs',
+    target: 'node20',
+    write: false,
+    logLevel: 'silent',
+    // Collapse every module's import.meta.url to one stable base so runtime
+    // file reads produce predictable suffixes the embedded-asset fs shim can
+    // match. The value is never opened on disk in the SEA.
+    define: { 'import.meta.url': JSON.stringify(IMPORT_META_URL) },
+  });
+  return result.outputFiles[0].text;
+}
+
+function makeSeaBlob() {
+  run(process.execPath, ['--experimental-sea-config', path.join(root, 'packaging', 'sea-config.json')]);
+  const blob = path.join(buildDir, 'sea-blob.blob');
+  if (!existsSync(blob)) fail('SEA blob was not produced');
+  return blob;
+}
+
+function injectExecutable(blob) {
+  const exePath = path.join(buildDir, EXE_NAME);
+  copyFileSync(process.execPath, exePath);
+  let postjectBin;
+  try { postjectBin = require.resolve('postject/dist/cli.js'); }
+  catch { fail('postject is required (npm install) but was not found'); }
+  run(process.execPath, [
+    postjectBin, exePath, 'NODE_SEA_BLOB', blob,
+    '--sentinel-fuse', 'NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
+  ]);
+  return exePath;
+}
+
+/** Smoke the built executable over stdio; assert the production surface. */
+function verifyExecutable(exePath) {
+  const rpc = (id, method, params) => JSON.stringify({ jsonrpc: '2.0', id, method, params });
+  const input = [
+    rpc(1, 'initialize', { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'build-verify', version: '1' } }),
+    rpc(2, 'tools/list', {}),
+    rpc(3, 'prompts/list', {}),
+    rpc(4, 'resources/list', {}),
+  ].join('\n') + '\n';
+  const res = spawnSync(exePath, [], { input, encoding: 'utf8', timeout: 60_000 });
+  if (res.status !== 0 && res.status !== null) fail(`executable exited ${res.status}: ${res.stderr}`);
+  const responses = (res.stdout || '').split(/\r?\n/).filter(l => l.startsWith('{')).map(JSON.parse);
+  const tools = responses.find(r => r.id === 2)?.result?.tools;
+  if (!tools || tools.length !== 32) fail(`executable advertised ${tools ? tools.length : 'no'} tools, expected 32`);
+  const prompts = responses.find(r => r.id === 3)?.result?.prompts ?? [];
+  if (!prompts.some(p => p.name === 'develop-pentaho-job')) fail('develop-pentaho-job prompt missing from executable');
+  const resources = responses.find(r => r.id === 4)?.result?.resources ?? [];
+  if (resources.some(r => /learning|promotion/i.test(r.uri))) fail('executable exposes learning/promotion resources');
+  if (!resources.length) fail('executable exposes no lifecycle resources');
+}
+
+function assembleRelease(exePath, version) {
+  const staging = path.join(buildDir, 'release');
+  rmrf(staging);
+  mkdirSync(staging, { recursive: true });
+
+  copyFileSync(exePath, path.join(staging, EXE_NAME));
+  copyFileSync(path.join(root, 'README.md'), path.join(staging, 'README.md'));
+  copyFileSync(path.join(root, 'packaging', 'config.example.yaml'), path.join(staging, 'config.example.yaml'));
+  for (const script of ['install.ps1', 'uninstall.ps1', 'doctor.ps1']) {
+    copyFileSync(path.join(root, 'packaging', script), path.join(staging, script));
+  }
+  writeFileSync(path.join(staging, 'VERSION'), `${version}\n`, 'utf8');
+
+  mkdirSync(distDir, { recursive: true });
+  const zipName = `dte-pentaho-mcp-${version}-win-x64.zip`;
+  const zipPath = path.join(distDir, zipName);
+  rmSync(zipPath, { force: true, maxRetries: 10, retryDelay: 100 });
+  // tar.exe ships with Windows 10/11 and produces a standard ZIP with -a -cf.
+  const entries = readdirSync(staging).sort();
+  run('tar.exe', ['-a', '-c', '-f', zipPath, '-C', staging, ...entries]);
+  if (!existsSync(zipPath)) fail('release ZIP was not produced');
+
+  const digest = createHash('sha256').update(readFileSync(zipPath)).digest('hex');
+  writeFileSync(path.join(distDir, 'checksums.sha256'), `${digest}  ${zipName}\n`, 'utf8');
+  return { zipPath, digest };
+}
+
+async function main() {
+  const version = parseVersion(process.argv.slice(2));
+
+  rmrf(buildDir);
+  mkdirSync(buildDir, { recursive: true });
+
+  const rawBundle = await bundleServer();
+  // esbuild preserves the entry's shebang at the top of the bundle; strip it so
+  // the prologue can lead the composed single-file SEA entry.
+  const serverBundle = rawBundle.replace(/^#![^\n]*\n/, '');
+  const prologue = generatePrologue(collectEmbeddedAssets());
+  writeFileSync(path.join(buildDir, 'sea-entry.cjs'), `${prologue}\n${serverBundle}`, 'utf8');
+
+  const blob = makeSeaBlob();
+  const exePath = injectExecutable(blob);
+  verifyExecutable(exePath);
+  const { zipPath, digest } = assembleRelease(exePath, version);
+
+  console.log(`built ${path.basename(zipPath)} (${statSync(zipPath).size} bytes)`);
+  console.log(`sha256 ${digest}`);
+}
+
+main().catch(err => fail(err?.stack ?? String(err)));
