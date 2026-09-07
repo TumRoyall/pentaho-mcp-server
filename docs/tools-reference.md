@@ -1,6 +1,6 @@
 # Tham chiếu tool MCP
 
-Catalog đầy đủ 32 tool production. Nguồn sự thật: `src/tools/*.tools.js`, `src/server.js`, `test/`. Mọi kết quả là `text` chứa `{ "ok": true, "data": ... }` hoặc `{ "ok": false, "error": "..." }`.
+Catalog đầy đủ 31 tool production. Nguồn sự thật: `src/tools/*.tools.js`, `src/server.js`, `test/`. Mọi kết quả là `text` chứa `{ "ok": true, "data": ... }` hoặc `{ "ok": false, "error": "..." }`.
 
 ## Quy ước chung
 
@@ -39,7 +39,7 @@ Catalog đầy đủ 32 tool production. Nguồn sự thật: `src/tools/*.tools
 - Output: danh sách match. Chỉ đọc.
 - Ví dụ: `{ "query": "customer", "kind": "table" }`
 
-## Nhóm edit (10)
+## Nhóm edit (9)
 
 ### `kettle_create_file`
 
@@ -56,17 +56,12 @@ Catalog đầy đủ 32 tool production. Nguồn sự thật: `src/tools/*.tools
 - Output: `{diff, catalogStatus, manualReviewRequired}`. Ghi file.
 - Ví dụ: `{ "path": "etl-pentaho/load.ktr", "type": "TableInput", "name": "Read customer" }`
 
-### `kettle_set_sql`
-
-- Mục đích: thay SQL của TableInput/ExecSQL step hoặc SQL job entry.
-- Tham số: `path`, `name`, `sql` (bắt buộc). Trả `{diff}`.
-- Ví dụ: `{ "path": "etl-pentaho/load.ktr", "name": "Table input", "sql": "SELECT id FROM customer" }`
-
 ### `kettle_set_field`
 
-- Mục đích: đặt một child value trên step/entry; tạo child nếu vắng.
+- Mục đích: đặt một child value trên step/entry; tạo child nếu vắng. SQL chỉ là một child field bình thường (`<sql>`), nên sửa SQL của TableInput/ExecSQL step hay SQL job entry bằng chính tool này với `field: "sql"`.
 - Tham số: `path`, `name`, `field`, `value` (bắt buộc). Trả `{diff}`.
 - Ví dụ: `{ "path": "etl-pentaho/load.ktr", "name": "Table input", "field": "limit", "value": "1000" }`
+- Ví dụ sửa SQL: `{ "path": "etl-pentaho/load.ktr", "name": "Read customer", "field": "sql", "value": "SELECT * FROM CUSTOMER" }`
 
 ### `kettle_set_field_path`
 
@@ -240,7 +235,7 @@ Tất cả yêu cầu `workspaceRoot` + `requirementFolder` (`REQ_<ID>_<UPPER_SN
 | Tìm text/bảng/connection/variable/type | `kettle_search` |
 | Tạo file mới | `kettle_create_file` |
 | Thêm step/entry từ catalog | `kettle_add_element` |
-| Sửa SQL | `kettle_set_sql` |
+| Sửa SQL trong element có `<sql>` | `kettle_set_field` với `field: "sql"` |
 | Sửa một field / nested path / list | `kettle_set_field`, `kettle_set_field_path`, `kettle_set_fields` |
 | Sửa hop thường | `kettle_edit_hops` |
 | Thêm error hop transformation | `kettle_add_error_hop` |
@@ -259,5 +254,5 @@ Tất cả yêu cầu `workspaceRoot` + `requirementFolder` (`REQ_<ID>_<UPPER_SN
 | Lớp | Tool |
 |-----|------|
 | Chỉ đọc (không ghi workspace, không chạy process) | `kettle_list`, `kettle_summary`, `kettle_get_element`, `kettle_search`, `kettle_validate`, `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage`, `pentaho_project_inspect`, `pentaho_workflow_start`, `pentaho_workflow_status`, `pentaho_validate_project`, `kettle_runtime_detect`, `kettle_runtime_logs` |
-| Ghi workspace (không chạy process) | 10 edit tool + `pentaho_requirement_write`, `pentaho_design_write`, `pentaho_generate`, `pentaho_sync_changes`, `pentaho_finalize` (ghi state khi `COMPLETE`) |
+| Ghi workspace (không chạy process) | 9 edit tool + `pentaho_requirement_write`, `pentaho_design_write`, `pentaho_generate`, `pentaho_sync_changes`, `pentaho_finalize` (ghi state khi `COMPLETE`) |
 | Chạy process (Kitchen/Pan, sau validation tĩnh) | `kettle_runtime_loadcheck`, `kettle_runtime_execute` |

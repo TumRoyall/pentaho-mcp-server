@@ -2,7 +2,7 @@
 
 > Tài liệu nội bộ cho người rà soát. Nguồn sự thật là mã nguồn và test trong `src/`, `test/`, `scripts/`, `packaging/`, `package.json`. Không dùng `README.md` hay `docs/install.md` hiện tại làm căn cứ khi có xung đột.
 
-Ngày lập: 2026-09-06. Hồ sơ production đã kiểm chứng: `production profile OK: 32 tools, 5 resources, 1 prompt(s), no learning/promotion surface` (`node scripts/verify-production-profile.mjs`).
+Ngày lập: 2026-09-06. Hồ sơ production đã kiểm chứng: `production profile OK: 31 tools, 5 resources, 1 prompt(s), no learning/promotion surface` (`node scripts/verify-production-profile.mjs`).
 
 Bề mặt công cộng đã thu thập bằng lệnh (Task 1 Step 1):
 
@@ -10,7 +10,7 @@ Bề mặt công cộng đã thu thập bằng lệnh (Task 1 Step 1):
 node --input-type=module -e "import { buildTools } from './src/tools/registry.js'; const tools=buildTools({root:process.cwd(),resolve:p=>p}); console.log(JSON.stringify(tools.map(({name,description,inputSchema})=>({name,description,inputSchema})),null,2));"
 ```
 
-Kết quả: mảng JSON gồm 32 tool, bao gồm `kettle_add_error_hop`. Danh sách đầy đủ xem `docs/tools-reference.md`.
+Kết quả: mảng JSON gồm 31 tool, bao gồm `kettle_add_error_hop`. Danh sách đầy đủ xem `docs/tools-reference.md`.
 
 ## 1. Nhận dạng sản phẩm
 
@@ -40,9 +40,9 @@ Kết quả: mảng JSON gồm 32 tool, bao gồm `kettle_add_error_hop`. Danh s
 
 | Fact | Nguồn authoritative | Đích tài liệu |
 |------|---------------------|----------------|
-| Tổng cộng đúng 32 tool: read 4, edit 10, validate 1, knowledge 4, lifecycle 9, runtime 4 | `src/tools/registry.js`, `src/tools/*.tools.js`, `scripts/verify-production-profile.mjs:20` | `README.md`, `docs/tools-reference.md` |
+| Tổng cộng đúng 31 tool: read 4, edit 9, validate 1, knowledge 4, lifecycle 9, runtime 4 | `src/tools/registry.js`, `src/tools/*.tools.js`, `scripts/verify-production-profile.mjs:20` | `README.md`, `docs/tools-reference.md` |
 | Nhóm read (4): `kettle_list`, `kettle_summary`, `kettle_get_element`, `kettle_search` | `src/tools/read.tools.js` | `docs/tools-reference.md` |
-| Nhóm edit (10): `kettle_create_file`, `kettle_add_element`, `kettle_set_sql`, `kettle_set_field`, `kettle_set_field_path`, `kettle_set_fields`, `kettle_edit_hops`, `kettle_add_error_hop`, `kettle_rename_element`, `kettle_clone` | `src/tools/edit.tools.js` | `docs/tools-reference.md` |
+| Nhóm edit (9): `kettle_create_file`, `kettle_add_element`, `kettle_set_field`, `kettle_set_field_path`, `kettle_set_fields`, `kettle_edit_hops`, `kettle_add_error_hop`, `kettle_rename_element`, `kettle_clone` (SQL sửa qua `kettle_set_field` với `field: "sql"`) | `src/tools/edit.tools.js` | `docs/tools-reference.md` |
 | Nhóm validate (1): `kettle_validate` | `src/tools/validate.tools.js` | `docs/tools-reference.md` |
 | Nhóm knowledge (4): `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage` | `src/tools/knowledge.tools.js` | `docs/tools-reference.md` |
 | Nhóm lifecycle (9): `pentaho_project_inspect`, `pentaho_workflow_start`, `pentaho_workflow_status`, `pentaho_requirement_write`, `pentaho_design_write`, `pentaho_generate`, `pentaho_sync_changes`, `pentaho_validate_project`, `pentaho_finalize` | `src/tools/lifecycle.tools.js` | `docs/tools-reference.md`, `docs/workflow-guide.md` |
@@ -127,8 +127,8 @@ Kết quả: mảng JSON gồm 32 tool, bao gồm `kettle_add_error_hop`. Danh s
 
 | # | Mô tả xung đột | Nguồn đúng | Đích sửa | Trạng thái |
 |---|----------------|------------|----------|------------|
-| 1 | `README.md` ghi 31 tool, thực tế 32 | `src/tools/registry.js`, `scripts/verify-production-profile.mjs` | `README.md`, `docs/tools-reference.md` | Chưa sửa |
-| 2 | Nhóm edit có 10 tool vì `kettle_add_error_hop` thuộc bề mặt công cộng | `src/tools/edit.tools.js:125-157` | `README.md`, `docs/tools-reference.md` | Chưa sửa |
+| 1 | Số tool: sau khi gỡ `kettle_set_sql` dư thừa, bề mặt là đúng 31 tool; `README.md` và `docs/tools-reference.md` đã đồng bộ | `src/tools/registry.js`, `scripts/verify-production-profile.mjs` | `README.md`, `docs/tools-reference.md` | Đã sửa |
+| 2 | Nhóm edit có 9 tool (`kettle_add_error_hop` thuộc bề mặt công cộng; `kettle_set_sql` đã gỡ, SQL sửa qua `kettle_set_field`) | `src/tools/edit.tools.js` | `README.md`, `docs/tools-reference.md` | Đã sửa |
 | 3 | Ngôn ngữ package/README nói “no execution”, nhưng đã có load-check/execution PDI tùy chọn có kiểm soát | `src/tools/runtime.tools.js`, `src/runtime/*.js` | `README.md`, `docs/operations.md` | Chưa sửa |
 | 4 | `docs/install.md` nói 2 runtime dependency, thực tế 3 (`@modelcontextprotocol/sdk`, `fast-xml-parser`, `yaml`) | `package.json:22-26` | `docs/install.md` | Chưa sửa |
 | 5 | `packaging/config.example.yaml` biểu diễn `environment` dạng scalar, trong khi `src/project/config.js` chờ `environment.name` | `src/project/config.js:61-65,88` | `packaging/config.example.yaml`, `docs/configuration.md` | Chưa sửa |

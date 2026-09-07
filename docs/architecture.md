@@ -97,7 +97,7 @@ Tool failure là payload model đọc được, không phải protocol error. Ed
 
 - Parse bằng `fast-xml-parser` với `XMLValidator` trước; trích bytes gốc bằng `findAllSpans` để giữ thứ tự field, CRLF, và khác biệt serialization không liên quan.
 - `addElement` tra catalog trước cả khi có `templateXml` (chặn bypass custom template); `observed` cần `allowObserved: true` và prefix đúng một marker `<!-- MANUAL_REVIEW: ... -->`, trả `{diff, catalogStatus, manualReviewRequired}`.
-- `setSql`/`setField`/`setFieldPath`/`setFields` phẫu thuật đúng node; `editHops` giữ ngữ nghĩa job hop (`evaluation`, `unconditional`, auto-`unconditional=Y` từ START); `kettle_add_error_hop` ghi cả block `<error>` trong `<step_error_handling>` và hop thường trong một edit atomic (chỉ transformation).
+- `setField`/`setFieldPath`/`setFields` phẫu thuật đúng node (SQL chỉ là child field `<sql>`, sửa qua `setField(..., 'sql', value)`); `editHops` giữ ngữ nghĩa job hop (`evaluation`, `unconditional`, auto-`unconditional=Y` từ START); `kettle_add_error_hop` ghi cả block `<error>` trong `<step_error_handling>` và hop thường trong một edit atomic (chỉ transformation).
 - `createFile`/`cloneFile` từ chối ghi đè; mọi đường ghi đều qua `assertInsideRoots`.
 
 ## Tri thức: nạp catalog và eligibility

@@ -6,12 +6,12 @@ MCP stdio server cho file Pentaho Kettle `.kjb` và `.ktr`: kiểm tra/chỉnh s
 
 ## Khả năng
 
-Bề mặt production đúng **32 tool**, chia 6 nhóm:
+Bề mặt production đúng **31 tool**, chia 6 nhóm:
 
 | Nhóm | Số lượng | Tool |
 |------|----------|------|
 | Read | 4 | `kettle_list`, `kettle_summary`, `kettle_get_element`, `kettle_search` |
-| Edit | 10 | `kettle_create_file`, `kettle_add_element`, `kettle_set_sql`, `kettle_set_field`, `kettle_set_field_path`, `kettle_set_fields`, `kettle_edit_hops`, `kettle_add_error_hop`, `kettle_rename_element`, `kettle_clone` |
+| Edit | 9 | `kettle_create_file`, `kettle_add_element`, `kettle_set_field`, `kettle_set_field_path`, `kettle_set_fields`, `kettle_edit_hops`, `kettle_add_error_hop`, `kettle_rename_element`, `kettle_clone` |
 | Validate | 1 | `kettle_validate` |
 | Knowledge | 4 | `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage` |
 | Lifecycle | 9 | `pentaho_project_inspect`, `pentaho_workflow_start`, `pentaho_workflow_status`, `pentaho_requirement_write`, `pentaho_design_write`, `pentaho_generate`, `pentaho_sync_changes`, `pentaho_validate_project`, `pentaho_finalize` |
@@ -61,7 +61,7 @@ node --test
 node scripts/verify-production-profile.mjs
 ```
 
-Chuẩn mực thành công: toàn bộ suite pass và `production profile OK: 32 tools, 5 resources, 1 prompt(s), no learning/promotion surface`.
+Chuẩn mực thành công: toàn bộ suite pass và `production profile OK: 31 tools, 5 resources, 1 prompt(s), no learning/promotion surface`.
 
 ### Bản Windows tự chứa (cho end user)
 
@@ -129,7 +129,7 @@ Schema đầy đủ và chính sách `DEV`/`TEST` xem `docs/configuration.md`.
 |----------|-----------|
 | `docs/architecture.md` | Kiến trúc hệ thống, module, luồng MCP, biên an toàn |
 | `docs/configuration.md` | Schema `.pentaho-mcp.yaml`, biến môi trường, biên đọc/ghi, chính sách thực thi |
-| `docs/tools-reference.md` | Catalog 32 tool: tham số, output, ví dụ, bảng chọn tool |
+| `docs/tools-reference.md` | Catalog 31 tool: tham số, output, ví dụ, bảng chọn tool |
 | `docs/workflow-guide.md` | Playbook lifecycle end-to-end cho operator và agent |
 | `docs/development.md` | Setup repo, test, thêm tool/type, build release, checklist đóng góp |
 | `docs/operations.md` | Triển khai, verify, upgrade/rollback, `doctor.ps1`, log, sự cố |

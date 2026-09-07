@@ -16,14 +16,14 @@ node --test
 node scripts/verify-production-profile.mjs
 ```
 
-Chuẩn mực baseline: toàn suite pass, profile `32 tools, 5 resources, 1 prompt(s), no learning/promotion surface`.
+Chuẩn mực baseline: toàn suite pass, profile `31 tools, 5 resources, 1 prompt(s), no learning/promotion surface`.
 
 ## npm script
 
 | Script | Ý nghĩa |
 |--------|---------|
 | `npm test` (`node --test`) | Toàn suite `node:test` + fixture (gồm file 9.4 thật) |
-| `npm run verify:profile` | Chặn learning/promotion surface, assert 32 tool + prompt `develop-pentaho-job` |
+| `npm run verify:profile` | Chặn learning/promotion surface, assert 31 tool + prompt `develop-pentaho-job` |
 | `npm run build:release -- --version <semver>` | Bundle + SEA + ZIP versioned + checksum (chỉ Windows) |
 
 ## Tổ chức test
@@ -66,7 +66,7 @@ Trạng thái catalog:
 
 ## Giới hạn production-profile
 
-`scripts/verify-production-profile.mjs` fail nếu tool/resource/prompt chứa `learn|promot|intake|catalog_add/write/promote`, thiếu `develop-pentaho-job`, hoặc khác 32 tool. Không thêm bề mặt ghi/promote tri thức vào production.
+`scripts/verify-production-profile.mjs` fail nếu tool/resource/prompt chứa `learn|promot|intake|catalog_add/write/promote`, thiếu `develop-pentaho-job`, hoặc khác 31 tool. Không thêm bề mặt ghi/promote tri thức vào production.
 
 ## Release build internals
 
@@ -75,7 +75,7 @@ Trạng thái catalog:
 1. esbuild bundle `src/index.js` thành một CJS, collapse `import.meta.url` về base ổn định.
 2. Nhúng mọi text asset bất biến (`src/knowledge/pentaho/**`, `src/lifecycle/*.md`) vào module generated; fs shim serve read theo suffix, fallback fs thật. Source Task 1–9 không đổi.
 3. `node --experimental-sea-config packaging/sea-config.json` tạo blob; copy Node exe và inject bằng postject.
-4. Smoke `.exe` qua stdio (initialize/tools/prompts/resources, assert 32 tool, prompt, không learning/promotion).
+4. Smoke `.exe` qua stdio (initialize/tools/prompts/resources, assert 31 tool, prompt, không learning/promotion).
 5. Stage ZIP versioned + `checksums.sha256`. Thiếu esbuild/postject/SEA toolchain → fail to, không fallback cần system Node.
 
 ## Danh mục phát hành

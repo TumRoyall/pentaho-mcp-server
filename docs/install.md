@@ -68,7 +68,7 @@ node --test
 node scripts/verify-production-profile.mjs
 ```
 
-Kỳ vọng: toàn suite pass và `production profile OK: 32 tools, 5 resources, 1 prompt(s), no learning/promotion surface`.
+Kỳ vọng: toàn suite pass và `production profile OK: 31 tools, 5 resources, 1 prompt(s), no learning/promotion surface`.
 
 ## Mạng nội bộ hạn chế (không ra npm)
 

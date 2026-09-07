@@ -18,7 +18,7 @@ Cả hai đều đọc `.pentaho-mcp.yaml` và `KETTLE_ROOT`; hành vi tool đ�
 node scripts/verify-production-profile.mjs
 ```
 
-`doctor.ps1` bắt tay MCP (initialize/tools/prompts/resources), validate `.pentaho-mcp.yaml`, dò PDI tùy chọn. Thiếu PDI chỉ báo riêng, không fail. Kỳ vọng: 32 tool, 5 resource, 1 prompt, không learning/promotion.
+`doctor.ps1` bắt tay MCP (initialize/tools/prompts/resources), validate `.pentaho-mcp.yaml`, dò PDI tùy chọn. Thiếu PDI chỉ báo riêng, không fail. Kỳ vọng: 31 tool, 5 resource, 1 prompt, không learning/promotion.
 
 Kiểm tra handshake thủ công: `tools/list` phải có `kettle_add_error_hop` và 4 `kettle_runtime_*`; `prompts/list` có `develop-pentaho-job`.
 
