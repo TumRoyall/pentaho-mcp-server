@@ -35,7 +35,7 @@ test('versioned Windows release has exact inventory, checksum, and working MCP e
   const listing = spawnSync('tar.exe', ['-tf', zip], { encoding: 'utf8' });
   assert.equal(listing.status, 0, listing.stderr);
   assert.deepEqual(listing.stdout.trim().split(/\r?\n/).sort(), [
-    'README.md', 'VERSION', 'config.example.yaml', 'doctor.ps1', 'dte-pentaho-mcp.exe', 'install.ps1', 'uninstall.ps1',
+    'README.md', 'VERSION', 'doctor.ps1', 'dte-pentaho-mcp.exe', 'install.ps1', 'uninstall.ps1',
     'skills/',
     'skills/developing-pentaho-jobs/',
     'skills/developing-pentaho-jobs/references/',

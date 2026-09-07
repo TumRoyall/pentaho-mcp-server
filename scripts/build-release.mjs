@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build a self-contained Windows release of the DTE Pentaho lifecycle MCP.
+ * Build a self-contained Windows release of the DTE Pentaho Kettle MCP.
  *
  * Pipeline:
  *   1. Bundle src/index.js (all src/**) into one CommonJS file with esbuild.
@@ -218,7 +218,6 @@ function assembleRelease(exePath, version) {
 
   copyFileSync(exePath, path.join(staging, EXE_NAME));
   copyFileSync(path.join(root, 'README.md'), path.join(staging, 'README.md'));
-  copyFileSync(path.join(root, 'packaging', 'config.example.yaml'), path.join(staging, 'config.example.yaml'));
   for (const script of ['install.ps1', 'uninstall.ps1', 'doctor.ps1']) {
     copyFileSync(path.join(root, 'packaging', script), path.join(staging, script));
   }
