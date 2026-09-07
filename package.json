@@ -1,7 +1,7 @@
 {
   "name": "pentaho-mcp-server",
   "version": "0.1.0",
-  "description": "MCP server for Pentaho Kettle jobs/transformations with an embedded PDI knowledge base (read, edit, validate, scaffold). No PDI install, no execution.",
+  "description": "MCP server for knowledge-first Pentaho Kettle job/transformation inspection, editing, static validation, and optional local PDI runtime tools.",
   "type": "module",
   "bin": {
     "pentaho-mcp-server": "src/index.js"

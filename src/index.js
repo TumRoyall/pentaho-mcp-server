@@ -3,9 +3,9 @@
  * pentaho-mcp-server entry point.
  *
  * MCP stdio server for Pentaho Kettle .kjb/.ktr files with an embedded
- * PDI knowledge base. Read, summarize, search, validate, edit, scaffold — no
- * PDI install and no execution. See src/server.js for wiring and src/tools for
- * the tool surface.
+ * PDI knowledge base. Read, summarize, search, validate, edit, scaffold;
+ * optional local PDI runtime tools remain outside the recommended static
+ * workflow. See src/server.js for wiring and src/tools for the tool surface.
  */
 import { startServer } from './server.js';
 

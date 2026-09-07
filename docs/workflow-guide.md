@@ -51,7 +51,7 @@ flowchart LR
 
 - Không gọi tool runtime (`kettle_runtime_*`) — chúng nằm ngoài workflow và đã hoãn.
 - Không sinh testcase, không truy cập database, không deploy artifact.
-- Không dùng các tool lifecycle BA legacy đã gỡ đăng ký (project inspection, workflow state, requirement/design write, generate, sync, validate-project, finalize) — chúng không thuộc bề mặt production.
+- Không dùng bề mặt lifecycle BA đã gỡ bỏ (project inspection, workflow state, requirement/design write, generate, sync, validate-project, finalize) — các call này không tồn tại trên bề mặt production.
 - Không mutate Git trừ khi user yêu cầu rõ; không ghi credential literal; không đọc/sửa `source_old`.
 
 ## Ví dụ end-to-end

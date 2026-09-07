@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Remove the DTE Pentaho lifecycle MCP entry from the Kiro user MCP config.
+  Remove the DTE Pentaho Kettle MCP entry from the Kiro user MCP config.
 
 .DESCRIPTION
   Deletes only the "dte-pentaho" server from $HOME\.kiro\settings\mcp.json and
