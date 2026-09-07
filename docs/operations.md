@@ -24,7 +24,12 @@ Kiểm tra handshake thủ công: `tools/list` phải có `kettle_add_error_hop`
 
 ## Companion skill
 
-Bản packaged kèm companion skill dưới `skills/developing-pentaho-jobs/` (gồm `SKILL.md` và `references/pentaho-spec-template.md`). Một agent tương thích Superpowers phát hiện skill bằng cách quét thư mục `skills/` trong bản giải nén. Ở source-mode, skill nằm ngay tại `skills/` trong repo.
+Bản packaged kèm companion skill dưới `skills/developing-pentaho-jobs/` (gồm `SKILL.md` và hai mẫu `references/pentaho-spec-template.md`, `references/pentaho-plan-template.md`). **Việc phát hiện skill không tự động chỉ vì thư mục `skills/` có trong bản giải nén.** Cách nạp cho từng client:
+
+- **Kiro:** copy `skills/developing-pentaho-jobs/` vào `.kiro/skills/` của workspace (hoặc `~/.kiro/skills/` cho phạm vi user).
+- **Codex / agent tương thích Superpowers:** đặt skill dưới thư mục skills của runtime (ví dụ `~/.agents/skills/`) theo tài liệu client.
+
+Ở source-mode, skill nằm ngay tại `skills/` trong repo; vẫn cần copy vào vị trí skills của client như trên để client khám phá được.
 
 ## Nâng cấp/rollback
 
@@ -33,17 +38,18 @@ Bản packaged kèm companion skill dưới `skills/developing-pentaho-jobs/` (g
 
 ## `doctor.ps1`
 
-Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime đã hoãn, thiếu PDI không fail). Dùng sau mỗi cài đặt, nâng cấp, đổi `KETTLE_ROOT`.
+Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime phase-gated, thiếu PDI không fail). Dùng sau mỗi cài đặt, nâng cấp, đổi `KETTLE_ROOT`.
 
-## Log và khử nhạy cảm (runtime đã hoãn)
+## Log và khử nhạy cảm (runtime phase-gated)
 
 - Runtime log khử nhạy cảm nằm trong `runtime-logs/` (`<timestamp>-<kind>-<mode>.log`), gồm status/exitCode/signal + STDOUT/STDERR đã cắt 256KB và redact credential/tham số nhạy cảm. Đọc bằng `kettle_runtime_logs`.
 - Server log stderr (`kettle-mcp-dte running on stdio ...`); tool failure là payload `{ok:false}` trong `text`, không phải protocol error.
 
-## Timeout và xác nhận thực thi (runtime đã hoãn)
+## Timeout và xác nhận thực thi (runtime phase-gated)
 
 - `timeoutMs` mặc định 120s, tối thiểu 1ms; timeout → `TIMEOUT` + SIGTERM, log vẫn lưu.
-- `DEV`/`TEST` tự chạy; mọi môi trường khác (kể cả `UNKNOWN`) cần `confirmed: true`, nếu không trả `CONFIRM_REQUIRED` mà không chạm PDI.
+- `kettle_runtime_execute` **luôn** cần `confirmed: true`, nếu không trả `CONFIRM_REQUIRED` mà không chạm PDI. Không có auto theo tên môi trường (không `DEV`/`TEST`/`UNKNOWN`).
+- Runtime là bước verification phase-gated: chỉ dùng sau validation tĩnh; `execute` còn cần user duyệt riêng cho lần chạy đó.
 - `loadcheck`/`execute` luôn validation tĩnh trước; structural error → `STATIC_VALIDATION_FAILED`.
 
 ## Biên filesystem và backup

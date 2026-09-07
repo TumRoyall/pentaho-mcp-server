@@ -14,9 +14,9 @@ Bề mặt production đúng **22 tool**, chia 5 nhóm:
 | Edit | 9 | `kettle_create_file`, `kettle_add_element`, `kettle_set_field`, `kettle_set_field_path`, `kettle_set_fields`, `kettle_edit_hops`, `kettle_add_error_hop`, `kettle_rename_element`, `kettle_clone` |
 | Validate | 1 | `kettle_validate` |
 | Knowledge | 4 | `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage` |
-| Runtime (PDI tùy chọn, hoãn) | 4 | `kettle_runtime_detect`, `kettle_runtime_loadcheck`, `kettle_runtime_execute`, `kettle_runtime_logs` |
+| Runtime (PDI tùy chọn, phase-gated) | 4 | `kettle_runtime_detect`, `kettle_runtime_loadcheck`, `kettle_runtime_execute`, `kettle_runtime_logs` |
 
-Nhóm Runtime tạm giữ lại nhưng **nằm ngoài workflow mới** và được hoãn cho một đợt refactor sau. MCP **không quảng bá bất kỳ prompt hay resource nào**; `initialize` chỉ khai báo `capabilities = { tools: {} }`.
+Nhóm Runtime **thuộc workflow** nhưng bị **giới hạn theo pha** (phase-gated): chỉ dùng sau khi validation tĩnh pass; `kettle_runtime_execute` còn cần user duyệt riêng cho lần chạy đó và `confirmed: true`. Chi tiết xem `docs/workflow-guide.md`. MCP **không quảng bá bất kỳ prompt hay resource nào**; `initialize` chỉ khai báo `capabilities = { tools: {} }`.
 
 Chi tiết đầy đủ xem `docs/tools-reference.md`.
 
@@ -25,27 +25,36 @@ Chi tiết đầy đủ xem `docs/tools-reference.md`.
 - Server **không deploy** và không thay đổi Git (không commit/push/amend). Quyết định commit thuộc về bạn.
 - Production knowledge **bất biến, chỉ đọc**; không có tool learning/promotion tại runtime.
 - Validation gồm hai lớp: structural (lỗi làm Kettle không load/chạy được) và catalog (warning/info về độ phủ tri thức). Server **không** kiểm chứng đúng đắn nghiệp vụ/dữ liệu.
-- Thực thi Kitchen/Pan và sinh testcase tự động **nằm ngoài workflow này** và được hoãn để hardening sau. Ranh giới hoàn tất là validation tĩnh (`kettle_validate` zero structural error cho từng artifact và toàn cây).
+- Thực thi Kitchen/Pan là bước verification **phase-gated** trong workflow (chỉ sau validation tĩnh, execute cần user duyệt), **không** phải bước build. Ranh giới hoàn tất của phần build là validation tĩnh (`kettle_validate` zero structural error cho từng artifact và toàn cây). Sinh testcase tự động và truy cập database nằm ngoài workflow.
 
 ## Workflow khuyến nghị
 
-Superpowers là workflow suy luận **được khuyến nghị**, nhưng các tool MCP nguyên thủy vẫn **gọi trực tiếp được** bởi client khác. Luồng end-to-end:
+Superpowers là workflow suy luận **được khuyến nghị**, nhưng các tool MCP nguyên thủy vẫn **gọi trực tiếp được** bởi client khác. Luồng end-to-end năm pha:
 
 ```mermaid
 flowchart LR
-    Idea[Ý tưởng người dùng] --> BS[superpowers:brainstorming]
-    BS --> Spec[Đặc tả triển khai Pentaho đã duyệt]
+    BA[BA requirement] --> BS[superpowers:brainstorming]
+    BS --> Spec[Đặc tả Pentaho đã duyệt]
     Spec --> Plan[superpowers:writing-plans]
-    Plan --> Edit[Chỉnh sửa KJB/KTR knowledge-first bằng tool MCP nguyên thủy]
+    Plan --> Exec[superpowers:executing-plans]
+    Exec --> Edit[MCP tạo/sửa KJB/KTR knowledge-first]
     Edit --> Val[Validation tĩnh - kettle_validate]
-    Val --> Handoff[Handoff]
+    Val --> RT[PDI loadcheck/execute tùy chọn, phase-gated]
+    RT --> Handoff[Handoff]
 ```
 
-Nguyên tắc knowledge-first: gọi `kettle_knowledge_get(kind, type)` trước khi thêm/cấu hình mỗi type; ranh giới hoàn tất là validation tĩnh.
+**Cổng mutation:** không tool edit MCP nào chạy cho tới khi **cả** đặc tả viết ra **và** kế hoạch triển khai được duyệt rõ ràng (duyệt thiết kế đơn thuần chưa đủ). Knowledge-first: gọi `kettle_knowledge_get(kind, type)` trước khi thêm/cấu hình mỗi type. Runtime phase-gated: `loadcheck` chỉ sau validation tĩnh; `execute` cần thêm user duyệt và `confirmed: true`.
 
 ## Companion skill
 
-Skill đi kèm nằm ở `skills/developing-pentaho-jobs/SKILL.md` (cùng `references/pentaho-spec-template.md`). Skill được đưa vào `files` của npm package (mục `"skills"`) và copy vào ZIP release Windows. Một agent tương thích Superpowers phát hiện skill bằng cách quét thư mục `skills/`; ở bản packaged, skill nằm trong ZIP giải nén dưới `skills/developing-pentaho-jobs/`.
+Skill đi kèm nằm ở `skills/developing-pentaho-jobs/SKILL.md`, cùng hai mẫu tham chiếu `references/pentaho-spec-template.md` và `references/pentaho-plan-template.md`. Skill được đưa vào `files` của npm package (mục `"skills"`) và copy vào ZIP release Windows.
+
+**Phát hiện skill (discovery) không tự động chỉ vì `skills/` nằm trong ZIP.** Cách nạp tùy client:
+
+- **Kiro:** copy thư mục `skills/developing-pentaho-jobs/` vào `.kiro/skills/` của workspace (hoặc `~/.kiro/skills/` cho phạm vi user), rồi Kiro sẽ khám phá được skill.
+- **Codex / agent tương thích Superpowers dùng alias chung:** đặt skill dưới thư mục skills của runtime đó (ví dụ `~/.agents/skills/`) hoặc thư mục skills mà runtime quét; xem tài liệu client để biết đường dẫn chính xác.
+
+Ở bản packaged, skill nằm trong ZIP giải nén dưới `skills/developing-pentaho-jobs/`; bạn vẫn cần copy vào vị trí skills của client như trên.
 
 ## Bắt đầu nhanh
 
@@ -110,7 +119,7 @@ flowchart LR
     Server --> Registry[src/tools/registry.js]
     Registry --> Core[src/core - XML/graph thuần túy]
     Registry --> Knowledge[src/knowledge - catalog nhúng]
-    Registry --> Runtime[src/runtime - Kitchen/Pan tùy chọn, hoãn]
+    Registry --> Runtime[src/runtime - Kitchen/Pan tùy chọn, phase-gated]
     Registry --> Boundary[src/workspace/boundary.js - chính sách biên]
     Core --> Workspace[(workspace .kjb/.ktr)]
     Runtime --> PDI[(PDI cục bộ)]
@@ -118,7 +127,7 @@ flowchart LR
 
 Superpowers nằm **ngoài** MCP. Bề mặt và phần cài đặt lifecycle BA đã được **gỡ bỏ** khỏi source; hồ sơ thiết kế lịch sử vẫn lưu tại `docs/superpowers/`. `KETTLE_ROOT` mặc định là `process.cwd()` khi unset và **luôn được enforce** (canonical containment) qua `src/workspace/boundary.js`.
 
-Luồng chi tiết, module map, và quy ước lỗi/kết quả xem `docs/architecture.md`. Playbook idea-to-static-job xem `docs/workflow-guide.md`.
+Luồng chi tiết, module map, và quy ước lỗi/kết quả xem `docs/architecture.md`. Playbook workflow phát triển Pentaho năm pha xem `docs/workflow-guide.md`.
 
 ## Cấu hình tối thiểu
 
@@ -134,7 +143,7 @@ Chi tiết xem `docs/configuration.md`.
 | `docs/architecture.md` | Kiến trúc hệ thống, module, luồng MCP, biên an toàn |
 | `docs/configuration.md` | `KETTLE_ROOT` và biên workspace, biến môi trường, `PENTAHO_HOME` runtime tùy chọn |
 | `docs/tools-reference.md` | Catalog 22 tool: tham số, output, ví dụ, bảng chọn tool |
-| `docs/workflow-guide.md` | Workflow idea-to-static-job và hợp đồng đặc tả |
+| `docs/workflow-guide.md` | Workflow phát triển Pentaho năm pha, hợp đồng đặc tả, cổng mutation, runtime phase-gated |
 | `docs/development.md` | Setup repo, test, thêm tool/type, build release, checklist đóng góp |
 | `docs/operations.md` | Triển khai, verify, upgrade/rollback, `doctor.ps1`, log, sự cố |
 | `docs/install.md` | Quy trình cài đặt source-mode và packaged-mode |

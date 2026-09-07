@@ -4,9 +4,9 @@ Tài liệu khái niệm cho operator, maintainer và người dùng tool. Ngu�
 
 ## Bối cảnh hệ thống
 
-`pentaho-mcp-server` là MCP stdio server: client gọi **tool** qua stdio; server kiểm tra, chỉnh sửa và validate file `.kjb`/`.ktr` trong workspace, và (tùy chọn, đã hoãn) nhờ PDI cục bộ load-check/execute. Server không quảng bá prompt/resource, không deploy, không sửa Git.
+`pentaho-mcp-server` là MCP stdio server: client gọi **tool** qua stdio; server kiểm tra, chỉnh sửa và validate file `.kjb`/`.ktr` trong workspace, và (tùy chọn, phase-gated) nhờ PDI cục bộ load-check/execute sau khi validation tĩnh pass. Server không quảng bá prompt/resource, không deploy, không sửa Git.
 
-Việc suy luận — brainstorming, duyệt thiết kế, đặc tả, lập kế hoạch — do **Superpowers** đảm nhận **bên ngoài** MCP. MCP chỉ cung cấp các tool nguyên thủy deterministic; các tool này vẫn gọi trực tiếp được bởi client khác.
+Việc suy luận — brainstorming, duyệt thiết kế, đặc tả, lập kế hoạch, thực thi kế hoạch — do **Superpowers** đảm nhận **bên ngoài** MCP. MCP chỉ cung cấp các tool nguyên thủy deterministic; các tool này vẫn gọi trực tiếp được bởi client khác.
 
 ```mermaid
 flowchart LR
@@ -46,7 +46,7 @@ Cơ chế `assertWritable` cũ (dựa biến môi trường trong `src/core/edit
 | `src/workspace/boundary.js` | `createWorkspaceBoundary` — chính sách biên workspace chia sẻ (canonical containment) | `src/workspace/boundary.js` |
 | `src/core/` | `model.js`, `span.js`, `edit.js`, `search.js`, `validate.js`, `summarize.js`, `knowledge-intake.js`, `knowledge-coverage.js` — engine thuần túy, filesystem op | `src/core/*.js` |
 | `src/knowledge/` | `loader.js` (parse `catalog.yaml`, resolve reference, `KETTLE_KNOWLEDGE_DIR` override), `catalog-check.js` | `src/knowledge/loader.js` |
-| `src/runtime/` | `detect.js`, `policy.js`, `run.js`, `redact.js` — dò PDI theo `PENTAHO_HOME`, chính sách thực thi confirm-only, spawn có timeout, khử nhạy cảm; **tùy chọn, ngoài workflow tĩnh**, dùng chung biên `KETTLE_ROOT` | `src/runtime/*.js` |
+| `src/runtime/` | `detect.js`, `policy.js`, `run.js`, `redact.js` — dò PDI theo `PENTAHO_HOME`, chính sách thực thi confirm-only, spawn có timeout, khử nhạy cảm; **tùy chọn, phase-gated** (chỉ sau validation tĩnh), dùng chung biên `KETTLE_ROOT` | `src/runtime/*.js` |
 | `scripts/`, `packaging/` | `build-release.mjs` (esbuild + SEA + postject + ZIP), `verify-production-profile.mjs`, `install.ps1`/`uninstall.ps1`/`doctor.ps1` | `scripts/*`, `packaging/*` |
 
 ```mermaid
@@ -108,9 +108,9 @@ Tool failure là payload model đọc được, không phải protocol error. Ed
 - `kettle_knowledge_analyze_xml` chỉ đọc: bọc block đơn trong document tối thiểu trong bộ nhớ để parse model, giữ bytes gốc, trả candidate + findings (`ABSOLUTE_PATH`, `POSSIBLE_SECRET`, …), không ghi/promote.
 - `kettle_knowledge_coverage` duyệt `walkKettleFiles`, chỉ đếm `model.elements` (bỏ field lồng `<type>String</type>`), key `${kind}\0${type}`, sắp xếp missing → observed → canonical rồi usage desc, resilient trước file hỏng.
 
-## Runtime PDI tùy chọn (đã hoãn)
+## Runtime PDI tùy chọn (phase-gated)
 
-Runtime nằm **ngoài workflow mới** và được hoãn cho một đợt refactor sau. `detectPdi` resolve `Kitchen.bat`/`Pan.bat` dưới PDI home, probe help/version bằng argument array `shell: false` (trừ Windows `.bat` phải qua shell có quote), cache theo home/version, phân biệt unavailable vs failed. `runPdi` validation tĩnh trước, loadcheck dùng list/load behavior theo version PDI, execute chỉ khi policy cho phép, giới hạn cwd/tham số/env/output/timeout, log khử nhạy cảm.
+Runtime **thuộc workflow** nhưng bị giới hạn theo pha: chỉ dùng sau khi validation tĩnh pass, và `execute` cần thêm user duyệt. `detectPdi` resolve `Kitchen.bat`/`Pan.bat` dưới PDI home (`realpathSync` chống thoát home), phân biệt unavailable vs failed. `runPdi` validation tĩnh trước, execute chỉ khi `confirmed: true` (không tên môi trường nào bỏ qua), giới hạn cwd/tham số/env, cắt output 256KB, timeout mặc định 120s, log khử nhạy cảm. Trên Windows, `.bat` phải chạy qua shell có quote (Node ≥18 từ chối spawn trực tiếp `.bat`/`.cmd` theo bản vá CVE-2024-27980).
 
 ## Quy ước lỗi/kết quả
 
@@ -119,7 +119,7 @@ Runtime nằm **ngoài workflow mới** và được hoãn cho một đợt refa
 ## Biên an toàn
 
 - Mọi đường ghi/đọc giới hạn trong `KETTLE_ROOT` (mặc định `process.cwd()`, luôn enforce) qua `src/workspace/boundary.js`; chặn absolute ngoài root, `..`, sibling-prefix, symlink/junction escape.
-- Runtime (đã hoãn): thực thi chỉ `DEV`/`TEST` auto; còn lại cần confirm; spawn giới hạn, output 256KB, timeout mặc định 120s, redaction credential/tham số nhạy cảm.
+- Runtime (phase-gated): `execute` **luôn** cần `confirmed: true` (không có auto theo tên môi trường); `loadcheck`/`execute` luôn validation tĩnh trước; spawn giới hạn, output 256KB, timeout mặc định 120s, redaction credential/tham số nhạy cảm.
 - Git chỉ đọc; không commit/push/amend.
 
 ## Non-goals có chủ ý

@@ -6,7 +6,7 @@ Hướng dẫn maintainer. Nguồn sự thật: `package.json`, `scripts/*.mjs`,
 
 - Node.js 20+ (ESM, `node:test`, SEA toolchain cho release Windows).
 - Windows 10/11 để build `.exe` (dùng `tar.exe` hệ thống để đóng ZIP).
-- Không cần PDI để phát triển tính năng lõi; chỉ cần PDI khi kiểm thủ công `kettle_runtime_*` (nhóm đã hoãn, ngoài workflow).
+- Không cần PDI để phát triển tính năng lõi; chỉ cần PDI khi kiểm thủ công `kettle_runtime_*` (nhóm phase-gated: chỉ sau validation tĩnh).
 
 ## Setup repo
 
@@ -28,7 +28,7 @@ Chuẩn mực baseline: toàn suite pass, profile `production profile OK: 22 too
 
 ## Bề mặt production
 
-Registry (`src/tools/registry.js`) đăng ký đúng **5 factory**: read/edit/validate/knowledge/runtime → tổng **22 tool**. Nhóm runtime giữ lại nhưng nằm ngoài workflow mới (đã hoãn).
+Registry (`src/tools/registry.js`) đăng ký đúng **5 factory**: read/edit/validate/knowledge/runtime → tổng **22 tool**. Nhóm runtime thuộc workflow nhưng phase-gated (Pha 5, chỉ sau validation tĩnh).
 
 Phần cài đặt lifecycle BA cũ đã **gỡ bỏ khỏi source** cùng toàn bộ test riêng của nó; không còn module nào như vậy trên đĩa. `test/legacy-removal.test.js` giữ vai trò guard, fail nếu bất kỳ đường dẫn legacy nào quay lại. MCP cũng không quảng bá prompt/resource nào; `initialize` chỉ khai báo `capabilities = { tools: {} }`.
 

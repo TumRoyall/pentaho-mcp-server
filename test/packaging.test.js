@@ -56,6 +56,7 @@ test('versioned Windows release has exact inventory, checksum, and working MCP e
     'skills/developing-pentaho-jobs/references/',
     'skills/developing-pentaho-jobs/SKILL.md',
     'skills/developing-pentaho-jobs/references/pentaho-spec-template.md',
+    'skills/developing-pentaho-jobs/references/pentaho-plan-template.md',
   ].sort());
 
   const extract = path.join(root, 'dist', 'verify-extract');

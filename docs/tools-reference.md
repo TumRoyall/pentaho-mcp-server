@@ -143,9 +143,9 @@ MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai bá
 - Output: `{summary: {files, parsedFiles, scanIssues, typeUsages, distinctTypes, canonical, observed, missing}, types, issues}`. Chỉ đọc, resilient trước file hỏng.
 - Ví dụ: `{ "directory": "etl-pentaho" }`
 
-## Nhóm runtime (4, ngoài workflow, tùy chọn)
+## Nhóm runtime (4, phase-gated, tùy chọn PDI)
 
-> Nhóm runtime tạm giữ lại nhưng **nằm ngoài workflow idea-to-static-job**. Không dùng trong luồng knowledge-first. Các tool này dùng đúng biên `KETTLE_ROOT` và không nhận tham số chọn project riêng cho từng lời gọi.
+> Nhóm runtime **thuộc workflow** nhưng **phase-gated**: chỉ dùng **sau khi validation tĩnh pass**; `kettle_runtime_execute` còn cần user duyệt riêng cho lần chạy đó và `confirmed: true`. Các tool này dùng đúng biên `KETTLE_ROOT` và không nhận tham số chọn project riêng cho từng lời gọi. Xem `docs/workflow-guide.md` Pha 5.
 
 ### `kettle_runtime_detect`
 
@@ -191,7 +191,7 @@ MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai bá
 | Rename/clone | `kettle_rename_element`, `kettle_clone` |
 | Lint file/cây (ranh giới hoàn tất) | `kettle_validate` |
 | Hỏi catalog / lấy template / intake unknown / coverage | `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage` |
-| Dò PDI / loadcheck / execute / đọc log (ngoài workflow, đã hoãn) | `kettle_runtime_detect`, `kettle_runtime_loadcheck`, `kettle_runtime_execute`, `kettle_runtime_logs` |
+| Dò PDI / loadcheck / execute / đọc log (phase-gated, sau validation tĩnh) | `kettle_runtime_detect`, `kettle_runtime_loadcheck`, `kettle_runtime_execute`, `kettle_runtime_logs` |
 
 ## Chỉ đọc vs ghi workspace vs chạy process
 
@@ -199,4 +199,4 @@ MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai bá
 |-----|------|
 | Chỉ đọc (không ghi workspace, không chạy process) | `kettle_list`, `kettle_summary`, `kettle_get_element`, `kettle_search`, `kettle_validate`, `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage`, `kettle_runtime_detect`, `kettle_runtime_logs` |
 | Ghi workspace (không chạy process) | 9 edit tool |
-| Chạy process (Kitchen/Pan, sau validation tĩnh; ngoài workflow, đã hoãn) | `kettle_runtime_loadcheck`, `kettle_runtime_execute` |
+| Chạy process (Kitchen/Pan, phase-gated: chỉ sau validation tĩnh; execute cần user duyệt) | `kettle_runtime_loadcheck`, `kettle_runtime_execute` |
