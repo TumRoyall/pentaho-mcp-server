@@ -17,8 +17,16 @@ import {
 import { buildTools } from './tools/registry.js';
 import { createWorkspaceBoundary } from './workspace/boundary.js';
 
-export function makeContext({ root = process.env.KETTLE_ROOT ?? process.cwd() } = {}) {
-  return createWorkspaceBoundary(root);
+export function makeContext({
+  root = process.env.KETTLE_ROOT ?? process.cwd(),
+  pentahoHome = process.env.PENTAHO_HOME,
+} = {}) {
+  return {
+    ...createWorkspaceBoundary(root),
+    pentahoHome: typeof pentahoHome === 'string' && pentahoHome.trim()
+      ? pentahoHome.trim()
+      : null,
+  };
 }
 
 function textResult(payload) {
