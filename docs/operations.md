@@ -1,15 +1,15 @@
 # Vận hành
 
-Runbook cho operator. Nguồn sự thật: `packaging/*.ps1`, `scripts/*.mjs`, `src/runtime/*`, `src/project/*`.
+Runbook cho operator. Nguồn sự thật: `packaging/*.ps1`, `scripts/*.mjs`, `src/runtime/*`, `src/workspace/boundary.js`.
 
 ## Mô hình triển khai
 
 | Mô hình | Khi dùng | Runtime |
 |---------|----------|---------|
-| Windows `.exe` tự chứa | End user, máy offline | Không cần system Node; knowledge/lifecycle nhúng |
+| Windows `.exe` tự chứa | End user, máy offline | Không cần system Node; knowledge + companion skill kèm theo |
 | Source-mode Node 20+ | Developer, CI | `npm install`; knowledge từ repo |
 
-Cả hai đều đọc `.pentaho-mcp.yaml` và `KETTLE_ROOT`; hành vi tool đồng nhất.
+Cả hai đều tôn trọng `KETTLE_ROOT` (mặc định `process.cwd()`, luôn enforce); hành vi tool đồng nhất.
 
 ## Xác minh cài đặt
 
@@ -18,9 +18,13 @@ Cả hai đều đọc `.pentaho-mcp.yaml` và `KETTLE_ROOT`; hành vi tool đ�
 node scripts/verify-production-profile.mjs
 ```
 
-`doctor.ps1` bắt tay MCP (initialize/tools/prompts/resources), validate `.pentaho-mcp.yaml`, dò PDI tùy chọn. Thiếu PDI chỉ báo riêng, không fail. Kỳ vọng: 31 tool, 5 resource, 1 prompt, không learning/promotion.
+`doctor.ps1` bắt tay MCP bằng **initialize + tools/list** (không kiểm prompt/resource), assert đúng **22 tool** và từ chối mọi tool `pentaho_*` (lifecycle legacy không được đăng ký). Kỳ vọng profile: `production profile OK: 22 tools, no lifecycle prompt/resource surface, no learning/promotion surface`.
 
-Kiểm tra handshake thủ công: `tools/list` phải có `kettle_add_error_hop` và 4 `kettle_runtime_*`; `prompts/list` có `develop-pentaho-job`.
+Kiểm tra handshake thủ công: `tools/list` phải có `kettle_add_error_hop` và 4 `kettle_runtime_*`, tổng 22 tool, và **không** có tool `pentaho_*` nào; MCP không quảng bá prompt/resource.
+
+## Companion skill
+
+Bản packaged kèm companion skill dưới `skills/developing-pentaho-jobs/` (gồm `SKILL.md` và `references/pentaho-spec-template.md`). Một agent tương thích Superpowers phát hiện skill bằng cách quét thư mục `skills/` trong bản giải nén. Ở source-mode, skill nằm ngay tại `skills/` trong repo.
 
 ## Nâng cấp/rollback
 
@@ -29,14 +33,14 @@ Kiểm tra handshake thủ công: `tools/list` phải có `kettle_add_error_hop`
 
 ## `doctor.ps1`
 
-Thoát nonzero khi install/config/handshake invalid; báo PDI riêng. Dùng sau mỗi cài đặt, nâng cấp, đổi config, đổi `KETTLE_ROOT`.
+Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime đã hoãn, thiếu PDI không fail). Dùng sau mỗi cài đặt, nâng cấp, đổi `KETTLE_ROOT`.
 
-## Log và khử nhạy cảm
+## Log và khử nhạy cảm (runtime đã hoãn)
 
-- Runtime log khử nhạy cảm nằm trong `<REQ>/runtime-logs/` (`<timestamp>-<kind>-<mode>.log`), gồm status/exitCode/signal + STDOUT/STDERR đã cắt 256KB và redact credential/tham số nhạy cảm. Đọc bằng `kettle_runtime_logs`.
+- Runtime log khử nhạy cảm nằm trong `runtime-logs/` (`<timestamp>-<kind>-<mode>.log`), gồm status/exitCode/signal + STDOUT/STDERR đã cắt 256KB và redact credential/tham số nhạy cảm. Đọc bằng `kettle_runtime_logs`.
 - Server log stderr (`kettle-mcp-dte running on stdio ...`); tool failure là payload `{ok:false}` trong `text`, không phải protocol error.
 
-## Timeout và xác nhận thực thi
+## Timeout và xác nhận thực thi (runtime đã hoãn)
 
 - `timeoutMs` mặc định 120s, tối thiểu 1ms; timeout → `TIMEOUT` + SIGTERM, log vẫn lưu.
 - `DEV`/`TEST` tự chạy; mọi môi trường khác (kể cả `UNKNOWN`) cần `confirmed: true`, nếu không trả `CONFIRM_REQUIRED` mà không chạm PDI.
@@ -44,9 +48,8 @@ Thoát nonzero khi install/config/handshake invalid; báo PDI riêng. Dùng sau 
 
 ## Biên filesystem và backup
 
-- Ghi giới hạn trong `paths.requirements`/`paths.pentaho`; chặn absolute/escape và ghi `input/`.
+- Ghi/đọc giới hạn trong `KETTLE_ROOT` (mặc định `process.cwd()`, luôn enforce) qua `src/workspace/boundary.js`; chặn absolute ngoài root, `..`, sibling-prefix, symlink/junction escape.
 - `install.ps1` backup `%USERPROFILE%\.kiro\settings\mcp.json` thành `mcp.json.bak-<timestamp>` trước khi ghi, giữ server khác.
-- Ghi lifecycle compare-and-swap: hash stale → `CONCURRENT_CHANGE`, không mất dữ liệu.
 
 ## Gỡ cài đặt
 
@@ -56,27 +59,23 @@ Thoát nonzero khi install/config/handshake invalid; báo PDI riêng. Dùng sau 
 
 `.exe` mới có thể bị SmartScreen/AV chặn → handshake fail. Unblock file (Properties → Unblock), retry `doctor.ps1`. Không tắt AV toàn cục.
 
-## Lỗi config
+## Lỗi biên workspace
 
 | Triệu chứng | Xử lý |
 |-------------|-------|
-| `Missing .pentaho-mcp.yaml` | Copy `config.example.yaml` thành `.pentaho-mcp.yaml` ở root |
-| `schema_version must be 1` | Đặt `schema_version: 1` |
-| `environment must be a YAML mapping` | Dùng `environment:\n  name: UNKNOWN`, không scalar |
-| Path absolute/escape | Đổi thành tương đối trong workspace |
-| `BA input is read-only` | Không ghi vào `input/` |
-| Sai tên folder requirement | Đặt `REQ_<ID>_<UPPER_SNAKE>` con trực tiếp |
+| Đường ngoài `KETTLE_ROOT` bị từ chối | Đưa target vào trong root; tránh `..`, sibling-prefix, symlink/junction escape |
+| Tuyệt đối bị từ chối | Dùng tương đối, hoặc tuyệt đối bên trong root |
+| Thiếu `.pentaho-mcp.yaml` khi gọi runtime | Chỉ cần cho nhóm runtime đã hoãn; tạo file runtime-only tối thiểu |
 
-Chi tiết schema xem `docs/configuration.md`.
+Chi tiết biên xem `docs/configuration.md`.
 
-## Thiếu PDI
+## Thiếu PDI (runtime đã hoãn)
 
-`kettle_runtime_detect` trả `available: false` + reason. Tính năng lõi vẫn chạy; `loadcheck`/`execute` trả `UNAVAILABLE`. Cài PDI rồi đặt `pentaho.home` trỏ thư mục chứa `Kitchen.bat`/`Pan.bat`.
+`kettle_runtime_detect` trả `available: false` + reason. Tính năng lõi (read/edit/validate/knowledge) vẫn chạy; `loadcheck`/`execute` trả `UNAVAILABLE`. Cài PDI rồi đặt `pentaho.home` trỏ thư mục chứa `Kitchen.bat`/`Pan.bat`.
 
 ## Triage sự cố
 
 1. `doctor.ps1` fail handshake → kiểm tra `.exe` bị chặn, `mcp.json` trỏ đúng path, reconnect MCP.
-2. Tool trả `{ok:false}` → đọc `error`: out-of-root/input read-only/hash stale/validation fail → inspect lại, lấy `expectedHashes` mới, sửa artifact.
-3. Runtime `FAIL`/`TIMEOUT` → `kettle_runtime_logs` xem log khử; kiểm tra `environment`/`confirmed`, `timeoutMs`, PDI home, structural validation.
-4. Nghi config → validate `.pentaho-mcp.yaml` theo `docs/configuration.md`; chạy `pentaho_project_inspect`.
-5. Giữ `git status --short` sạch khỏi artifact tạm; server không bao giờ commit/push.
+2. Tool trả `{ok:false}` → đọc `error`: đường ngoài `KETTLE_ROOT` / validation fail → sửa path hoặc artifact.
+3. Runtime `FAIL`/`TIMEOUT` (đã hoãn) → `kettle_runtime_logs` xem log khử; kiểm tra `environment`/`confirmed`, `timeoutMs`, PDI home, structural validation.
+4. Giữ `git status --short` sạch khỏi artifact tạm; server không bao giờ commit/push.

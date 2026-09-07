@@ -17,6 +17,7 @@
   "files": [
     "src",
     "docs",
+    "skills",
     "README.md"
   ],
   "dependencies": {

@@ -1,13 +1,14 @@
 # Tham chiếu tool MCP
 
-Catalog đầy đủ 31 tool production. Nguồn sự thật: `src/tools/*.tools.js`, `src/server.js`, `test/`. Mọi kết quả là `text` chứa `{ "ok": true, "data": ... }` hoặc `{ "ok": false, "error": "..." }`.
+Catalog đầy đủ 22 tool production. Nguồn sự thật: `src/tools/*.tools.js`, `src/tools/registry.js`, `src/server.js`, `test/`. Mọi kết quả là `text` chứa `{ "ok": true, "data": ... }` hoặc `{ "ok": false, "error": "..." }`.
+
+MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai báo `capabilities = { tools: {} }`. Superpowers (ngoài MCP) là workflow suy luận khuyến nghị, nhưng các tool dưới đây gọi trực tiếp được bởi client bất kỳ.
 
 ## Quy ước chung
 
-- **Đường dẫn tương đối** resolve theo `KETTLE_ROOT` (`src/server.js:26-30`). Đường tuyệt đối giữ nguyên. Ghi ngoài `KETTLE_ROOT`/root project → từ chối.
+- **Biên workspace**: mọi đường dẫn hoặc tương đối `KETTLE_ROOT`, hoặc tuyệt đối **nằm trong** `KETTLE_ROOT`. `KETTLE_ROOT` mặc định `process.cwd()` khi unset và luôn được enforce (`src/workspace/boundary.js`). Đường ngoài `KETTLE_ROOT` (absolute ngoài root, `..`, sibling-prefix, symlink/junction escape) → từ chối.
 - **Transport**: stdio JSON-RPC. `tools/list` liệt kê `{name, description, inputSchema}`; `tools/call` trả envelope trên.
 - **Edit tool** trả unified diff của đúng bytes đã đổi và validate trước khi commit nơi áp dụng được. `kettle_add_element` trả thêm `{diff, catalogStatus, manualReviewRequired}`.
-- **Ghi lifecycle** dùng `expectedHashes` compare-and-swap; stale → `CONCURRENT_CHANGE`, không ghi.
 
 ## Nhóm read (4)
 
@@ -106,7 +107,7 @@ Catalog đầy đủ 31 tool production. Nguồn sự thật: `src/tools/*.tools
 
 ### `kettle_validate`
 
-- Mục đích: lint một file (hoặc toàn cây `KETTLE_ROOT` khi bỏ `path`). Structural + catalog coverage.
+- Mục đích: lint một file (hoặc toàn cây `KETTLE_ROOT` khi bỏ `path`). Structural + catalog coverage. Đây là ranh giới hoàn tất của workflow: zero structural error cho từng artifact và toàn cây.
 - Tham số: `path?`; `checkCatalog?` (boolean, mặc định `true`).
 - Structural (error): XML hỏng, tên trùng, hop thiếu đích, job thiếu đúng một start, file tham chiếu thiếu, connection chưa khai báo, stale step reference, unreachable, biến chưa khai báo.
 - Catalog (mềm): unknown type → warning; documented-nhưng-không-canonical → info; không bao giờ error.
@@ -123,7 +124,7 @@ Catalog đầy đủ 31 tool production. Nguồn sự thật: `src/tools/*.tools
 
 ### `kettle_knowledge_get`
 
-- Mục đích: reference đầy đủ của một type (template XML, bảng field, mapping YAML→XML, gotcha). Nhận `xml_type` hoặc alias (ví dụ `TableInput` hoặc `TABLE_INPUT`).
+- Mục đích: reference đầy đủ của một type (template XML, bảng field, mapping YAML→XML, gotcha). Nhận `xml_type` hoặc alias (ví dụ `TableInput` hoặc `TABLE_INPUT`). **Gọi trước khi thêm/cấu hình mỗi type** (knowledge-first).
 - Tham số: `kind`, `type` (bắt buộc).
 - Output: `{kind, requested, entry, generator_eligible, file, content}`. Chỉ đọc. Lỗi: unknown type.
 - Ví dụ: `{ "kind": "trans", "type": "TableInput" }`
@@ -142,61 +143,9 @@ Catalog đầy đủ 31 tool production. Nguồn sự thật: `src/tools/*.tools
 - Output: `{summary: {files, parsedFiles, scanIssues, typeUsages, distinctTypes, canonical, observed, missing}, types, issues}`. Chỉ đọc, resilient trước file hỏng.
 - Ví dụ: `{ "directory": "etl-pentaho" }`
 
-## Nhóm lifecycle (9)
+## Nhóm runtime (4, ngoài workflow / đã hoãn)
 
-Tất cả yêu cầu `workspaceRoot` + `requirementFolder` (`REQ_<ID>_<UPPER_SNAKE>`). Ghi dùng `expectedHashes`.
-
-### `pentaho_project_inspect`
-
-- Mục đích: inspect root đã cấu hình và phục hồi chặng hiện tại từ bytes.
-- Ví dụ: `{ "workspaceRoot": "C:/ws", "requirementFolder": "REQ_001_CUSTOMER_EXPORT" }`
-
-### `pentaho_workflow_start`
-
-- Mục đích: start/resume một BA request sau khi inspect toàn artifact. Trả thêm `resources: ['dte-pentaho://skills/developing-pentaho-jobs']`.
-- Ví dụ: như trên.
-
-### `pentaho_workflow_status`
-
-- Mục đích: dựng lại status; state lưu là advisory, state invalid được báo, không tin mù quáng. Trả `project`, `inspection`, `decision`, `expectedHashes`.
-- Ví dụ: như trên.
-
-### `pentaho_requirement_write`
-
-- Mục đích: validate và ghi atomic `requirement.md` do agent soạn.
-- Tham số thêm: `content` (bắt buộc), `expectedHashes?`.
-- Từ chối: input unsupported, evidence thiếu, hash stale, validation fail, path ngoài root.
-- Ví dụ: `{ "workspaceRoot": "C:/ws", "requirementFolder": "REQ_001_CUSTOMER_EXPORT", "content": "# Requirement\n", "expectedHashes": {} }`
-
-### `pentaho_design_write`
-
-- Mục đích: stage, render diagram, validate và ghi atomic package design đầy đủ.
-- Tham số thêm: `files` (map path tương đối `design/` → content, gồm `design.md` + `manifest.yaml`), `expectedHashes?`.
-- Ví dụ: `{ "workspaceRoot": "C:/ws", "requirementFolder": "REQ_001_CUSTOMER_EXPORT", "files": { "design.md": "# Design\n", "manifest.yaml": "schema_version: 1\n" }, "expectedHashes": {} }`
-
-### `pentaho_generate`
-
-- Mục đích: sinh và validation tĩnh toàn project Pentaho từ design đã validate. Tính inventory, SQL escaping, field, hop, connection, param, relative path, tọa độ deterministic; từ chối đích non-empty unmanaged; thất bại để lại output chẩn đoán incomplete.
-- Tham số thêm: `expectedHashes?`.
-- Ví dụ: `{ "workspaceRoot": "C:/ws", "requirementFolder": "REQ_001_CUSTOMER_EXPORT", "expectedHashes": {} }`
-
-### `pentaho_sync_changes`
-
-- Mục đích: so KJB/KTR sửa tay với design, bỏ qua visual-only drift, sync technical delta an toàn. Trả `UNCHANGED` khi không delta; semantic conflict → `USER_DECISION_REQUIRED`.
-- Tham số thêm: `expectedHashes?`.
-- Ví dụ: như trên.
-
-### `pentaho_validate_project`
-
-- Mục đích: tổng hợp requirement, design, generation, Kettle tĩnh, reconciliation, PDI load/execution mà không gộp `NOT_RUN` thành pass. Trả inventory, changed path, diff gọn, blocker, version, next action.
-- Ví dụ: như trên.
-
-### `pentaho_finalize`
-
-- Mục đích: reinspect toàn bytes, trả final report, chỉ mark `COMPLETE` khi check bắt buộc pass.
-- Ví dụ: như trên.
-
-## Nhóm runtime (4)
+> Nhóm runtime tạm giữ lại nhưng **nằm ngoài workflow idea-to-static-job** và được **hoãn** cho một đợt refactor sau. Không dùng trong luồng knowledge-first.
 
 ### `kettle_runtime_detect`
 
@@ -240,19 +189,14 @@ Tất cả yêu cầu `workspaceRoot` + `requirementFolder` (`REQ_<ID>_<UPPER_SN
 | Sửa hop thường | `kettle_edit_hops` |
 | Thêm error hop transformation | `kettle_add_error_hop` |
 | Rename/clone | `kettle_rename_element`, `kettle_clone` |
-| Lint file/cây | `kettle_validate` |
+| Lint file/cây (ranh giới hoàn tất) | `kettle_validate` |
 | Hỏi catalog / lấy template / intake unknown / coverage | `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage` |
-| Inspect/start/status workflow | `pentaho_project_inspect`, `pentaho_workflow_start`, `pentaho_workflow_status` |
-| Ghi requirement/design | `pentaho_requirement_write`, `pentaho_design_write` |
-| Sinh project | `pentaho_generate` |
-| Sync sửa tay | `pentaho_sync_changes` |
-| Validate/finalize project | `pentaho_validate_project`, `pentaho_finalize` |
-| Dò PDI / loadcheck / execute / đọc log | `kettle_runtime_detect`, `kettle_runtime_loadcheck`, `kettle_runtime_execute`, `kettle_runtime_logs` |
+| Dò PDI / loadcheck / execute / đọc log (ngoài workflow, đã hoãn) | `kettle_runtime_detect`, `kettle_runtime_loadcheck`, `kettle_runtime_execute`, `kettle_runtime_logs` |
 
 ## Chỉ đọc vs ghi workspace vs chạy process
 
 | Lớp | Tool |
 |-----|------|
-| Chỉ đọc (không ghi workspace, không chạy process) | `kettle_list`, `kettle_summary`, `kettle_get_element`, `kettle_search`, `kettle_validate`, `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage`, `pentaho_project_inspect`, `pentaho_workflow_start`, `pentaho_workflow_status`, `pentaho_validate_project`, `kettle_runtime_detect`, `kettle_runtime_logs` |
-| Ghi workspace (không chạy process) | 9 edit tool + `pentaho_requirement_write`, `pentaho_design_write`, `pentaho_generate`, `pentaho_sync_changes`, `pentaho_finalize` (ghi state khi `COMPLETE`) |
-| Chạy process (Kitchen/Pan, sau validation tĩnh) | `kettle_runtime_loadcheck`, `kettle_runtime_execute` |
+| Chỉ đọc (không ghi workspace, không chạy process) | `kettle_list`, `kettle_summary`, `kettle_get_element`, `kettle_search`, `kettle_validate`, `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage`, `kettle_runtime_detect`, `kettle_runtime_logs` |
+| Ghi workspace (không chạy process) | 9 edit tool |
+| Chạy process (Kitchen/Pan, sau validation tĩnh; ngoài workflow, đã hoãn) | `kettle_runtime_loadcheck`, `kettle_runtime_execute` |

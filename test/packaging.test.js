@@ -19,6 +19,11 @@ test('production profile excludes learning and installer scripts are portable an
   }
 });
 
+test('package metadata ships the companion skill in the npm files list', () => {
+  const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
+  assert.ok(pkg.files.includes('skills'), 'package.json files must include skills');
+});
+
 test('versioned Windows release has exact inventory, checksum, and working MCP executable', async () => {
   rmSync(path.join(root, 'dist'), { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   const build = spawnSync(process.execPath, ['scripts/build-release.mjs', '--version', version], { cwd: root, encoding: 'utf8', timeout: 120_000 });
@@ -31,6 +36,11 @@ test('versioned Windows release has exact inventory, checksum, and working MCP e
   assert.equal(listing.status, 0, listing.stderr);
   assert.deepEqual(listing.stdout.trim().split(/\r?\n/).sort(), [
     'README.md', 'VERSION', 'config.example.yaml', 'doctor.ps1', 'dte-pentaho-mcp.exe', 'install.ps1', 'uninstall.ps1',
+    'skills/',
+    'skills/developing-pentaho-jobs/',
+    'skills/developing-pentaho-jobs/references/',
+    'skills/developing-pentaho-jobs/SKILL.md',
+    'skills/developing-pentaho-jobs/references/pentaho-spec-template.md',
   ].sort());
 
   const extract = path.join(root, 'dist', 'verify-extract');

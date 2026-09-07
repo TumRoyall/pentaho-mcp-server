@@ -24,7 +24,7 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
-  copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync,
+  copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync,
   rmSync, statSync, writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
@@ -222,6 +222,8 @@ function assembleRelease(exePath, version) {
   for (const script of ['install.ps1', 'uninstall.ps1', 'doctor.ps1']) {
     copyFileSync(path.join(root, 'packaging', script), path.join(staging, script));
   }
+  // Ship the companion Superpowers skill so a compatible agent can discover it.
+  cpSync(path.join(root, 'skills'), path.join(staging, 'skills'), { recursive: true });
   writeFileSync(path.join(staging, 'VERSION'), `${version}\n`, 'utf8');
 
   mkdirSync(distDir, { recursive: true });
