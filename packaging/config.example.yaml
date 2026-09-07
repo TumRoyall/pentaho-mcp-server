@@ -19,7 +19,8 @@ paths:
 
 # Deployment environment. DEV and TEST allow Kitchen/Pan to auto-execute;
 # every other value (including UNKNOWN) requires an explicit confirmation.
-environment: UNKNOWN
+environment:
+  name: UNKNOWN
 
 pentaho:
   # Optional: path to a local PDI (Kitchen.bat/Pan.bat live beneath it). Leave

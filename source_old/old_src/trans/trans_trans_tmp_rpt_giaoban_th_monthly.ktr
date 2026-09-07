@@ -1,0 +1,2312 @@
+<transformation>
+  <info>
+    <name>trans_trans_tmp_rpt_giaoban_th_monthly</name>
+    <description/>
+    <extended_description/>
+    <trans_version/>
+    <trans_type>Normal</trans_type>
+    <trans_status>0</trans_status>
+    <directory>/engine_tckt/batch/trans</directory>
+    <parameters>
+      <parameter>
+        <name>PRD_ID</name>
+        <default_value>20230930</default_value>
+        <description/>
+      </parameter>
+    </parameters>
+    <log>
+      <trans-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <size_limit_lines/>
+        <interval/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>TRANSNAME</id>
+          <enabled>Y</enabled>
+          <name>TRANSNAME</name>
+        </field>
+        <field>
+          <id>STATUS</id>
+          <enabled>Y</enabled>
+          <name>STATUS</name>
+        </field>
+        <field>
+          <id>LINES_READ</id>
+          <enabled>Y</enabled>
+          <name>LINES_READ</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_WRITTEN</id>
+          <enabled>Y</enabled>
+          <name>LINES_WRITTEN</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_UPDATED</id>
+          <enabled>Y</enabled>
+          <name>LINES_UPDATED</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_INPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_INPUT</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_OUTPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_OUTPUT</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_REJECTED</id>
+          <enabled>Y</enabled>
+          <name>LINES_REJECTED</name>
+          <subject/>
+        </field>
+        <field>
+          <id>ERRORS</id>
+          <enabled>Y</enabled>
+          <name>ERRORS</name>
+        </field>
+        <field>
+          <id>STARTDATE</id>
+          <enabled>Y</enabled>
+          <name>STARTDATE</name>
+        </field>
+        <field>
+          <id>ENDDATE</id>
+          <enabled>Y</enabled>
+          <name>ENDDATE</name>
+        </field>
+        <field>
+          <id>LOGDATE</id>
+          <enabled>Y</enabled>
+          <name>LOGDATE</name>
+        </field>
+        <field>
+          <id>DEPDATE</id>
+          <enabled>Y</enabled>
+          <name>DEPDATE</name>
+        </field>
+        <field>
+          <id>REPLAYDATE</id>
+          <enabled>Y</enabled>
+          <name>REPLAYDATE</name>
+        </field>
+        <field>
+          <id>LOG_FIELD</id>
+          <enabled>Y</enabled>
+          <name>LOG_FIELD</name>
+        </field>
+        <field>
+          <id>EXECUTING_SERVER</id>
+          <enabled>N</enabled>
+          <name>EXECUTING_SERVER</name>
+        </field>
+        <field>
+          <id>EXECUTING_USER</id>
+          <enabled>N</enabled>
+          <name>EXECUTING_USER</name>
+        </field>
+        <field>
+          <id>CLIENT</id>
+          <enabled>N</enabled>
+          <name>CLIENT</name>
+        </field>
+      </trans-log-table>
+      <perf-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <interval/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>SEQ_NR</id>
+          <enabled>Y</enabled>
+          <name>SEQ_NR</name>
+        </field>
+        <field>
+          <id>LOGDATE</id>
+          <enabled>Y</enabled>
+          <name>LOGDATE</name>
+        </field>
+        <field>
+          <id>TRANSNAME</id>
+          <enabled>Y</enabled>
+          <name>TRANSNAME</name>
+        </field>
+        <field>
+          <id>STEPNAME</id>
+          <enabled>Y</enabled>
+          <name>STEPNAME</name>
+        </field>
+        <field>
+          <id>STEP_COPY</id>
+          <enabled>Y</enabled>
+          <name>STEP_COPY</name>
+        </field>
+        <field>
+          <id>LINES_READ</id>
+          <enabled>Y</enabled>
+          <name>LINES_READ</name>
+        </field>
+        <field>
+          <id>LINES_WRITTEN</id>
+          <enabled>Y</enabled>
+          <name>LINES_WRITTEN</name>
+        </field>
+        <field>
+          <id>LINES_UPDATED</id>
+          <enabled>Y</enabled>
+          <name>LINES_UPDATED</name>
+        </field>
+        <field>
+          <id>LINES_INPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_INPUT</name>
+        </field>
+        <field>
+          <id>LINES_OUTPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_OUTPUT</name>
+        </field>
+        <field>
+          <id>LINES_REJECTED</id>
+          <enabled>Y</enabled>
+          <name>LINES_REJECTED</name>
+        </field>
+        <field>
+          <id>ERRORS</id>
+          <enabled>Y</enabled>
+          <name>ERRORS</name>
+        </field>
+        <field>
+          <id>INPUT_BUFFER_ROWS</id>
+          <enabled>Y</enabled>
+          <name>INPUT_BUFFER_ROWS</name>
+        </field>
+        <field>
+          <id>OUTPUT_BUFFER_ROWS</id>
+          <enabled>Y</enabled>
+          <name>OUTPUT_BUFFER_ROWS</name>
+        </field>
+      </perf-log-table>
+      <channel-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>LOGGING_OBJECT_TYPE</id>
+          <enabled>Y</enabled>
+          <name>LOGGING_OBJECT_TYPE</name>
+        </field>
+        <field>
+          <id>OBJECT_NAME</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_NAME</name>
+        </field>
+        <field>
+          <id>OBJECT_COPY</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_COPY</name>
+        </field>
+        <field>
+          <id>REPOSITORY_DIRECTORY</id>
+          <enabled>Y</enabled>
+          <name>REPOSITORY_DIRECTORY</name>
+        </field>
+        <field>
+          <id>FILENAME</id>
+          <enabled>Y</enabled>
+          <name>FILENAME</name>
+        </field>
+        <field>
+          <id>OBJECT_ID</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_ID</name>
+        </field>
+        <field>
+          <id>OBJECT_REVISION</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_REVISION</name>
+        </field>
+        <field>
+          <id>PARENT_CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>PARENT_CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>ROOT_CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>ROOT_CHANNEL_ID</name>
+        </field>
+      </channel-log-table>
+      <step-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>TRANSNAME</id>
+          <enabled>Y</enabled>
+          <name>TRANSNAME</name>
+        </field>
+        <field>
+          <id>STEPNAME</id>
+          <enabled>Y</enabled>
+          <name>STEPNAME</name>
+        </field>
+        <field>
+          <id>STEP_COPY</id>
+          <enabled>Y</enabled>
+          <name>STEP_COPY</name>
+        </field>
+        <field>
+          <id>LINES_READ</id>
+          <enabled>Y</enabled>
+          <name>LINES_READ</name>
+        </field>
+        <field>
+          <id>LINES_WRITTEN</id>
+          <enabled>Y</enabled>
+          <name>LINES_WRITTEN</name>
+        </field>
+        <field>
+          <id>LINES_UPDATED</id>
+          <enabled>Y</enabled>
+          <name>LINES_UPDATED</name>
+        </field>
+        <field>
+          <id>LINES_INPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_INPUT</name>
+        </field>
+        <field>
+          <id>LINES_OUTPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_OUTPUT</name>
+        </field>
+        <field>
+          <id>LINES_REJECTED</id>
+          <enabled>Y</enabled>
+          <name>LINES_REJECTED</name>
+        </field>
+        <field>
+          <id>ERRORS</id>
+          <enabled>Y</enabled>
+          <name>ERRORS</name>
+        </field>
+        <field>
+          <id>LOG_FIELD</id>
+          <enabled>N</enabled>
+          <name>LOG_FIELD</name>
+        </field>
+      </step-log-table>
+      <metrics-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>METRICS_DATE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_DATE</name>
+        </field>
+        <field>
+          <id>METRICS_CODE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_CODE</name>
+        </field>
+        <field>
+          <id>METRICS_DESCRIPTION</id>
+          <enabled>Y</enabled>
+          <name>METRICS_DESCRIPTION</name>
+        </field>
+        <field>
+          <id>METRICS_SUBJECT</id>
+          <enabled>Y</enabled>
+          <name>METRICS_SUBJECT</name>
+        </field>
+        <field>
+          <id>METRICS_TYPE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_TYPE</name>
+        </field>
+        <field>
+          <id>METRICS_VALUE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_VALUE</name>
+        </field>
+      </metrics-log-table>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <capture_step_performance>N</capture_step_performance>
+    <step_performance_capturing_delay>1000</step_performance_capturing_delay>
+    <step_performance_capturing_size_limit>100</step_performance_capturing_size_limit>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+      <partitionschema>
+        <name>MySQL EC2 Schema</name>
+        <partition>
+          <id>P4</id>
+        </partition>
+        <partition>
+          <id>P5</id>
+        </partition>
+        <partition>
+          <id>P2</id>
+        </partition>
+        <partition>
+          <id>P3</id>
+        </partition>
+        <dynamic>N</dynamic>
+        <partitions_per_slave/>
+      </partitionschema>
+      <partitionschema>
+        <name>Partitioning schema</name>
+        <partition>
+          <id>PartDB2</id>
+        </partition>
+        <partition>
+          <id>PartDB5</id>
+        </partition>
+        <partition>
+          <id>PartDB1</id>
+        </partition>
+        <partition>
+          <id>PartDB3</id>
+        </partition>
+        <partition>
+          <id>PartDB4</id>
+        </partition>
+        <dynamic>N</dynamic>
+        <partitions_per_slave/>
+      </partitionschema>
+      <partitionschema>
+        <name>dynamic</name>
+        <dynamic>Y</dynamic>
+        <partitions_per_slave>1</partitions_per_slave>
+      </partitionschema>
+      <partitionschema>
+        <name>makh_num</name>
+        <partition>
+          <id>num_1</id>
+        </partition>
+        <partition>
+          <id>num_5</id>
+        </partition>
+        <partition>
+          <id>num_6</id>
+        </partition>
+        <partition>
+          <id>num_7</id>
+        </partition>
+        <partition>
+          <id>num_8</id>
+        </partition>
+        <partition>
+          <id>num_9</id>
+        </partition>
+        <partition>
+          <id>num_2</id>
+        </partition>
+        <partition>
+          <id>num_3</id>
+        </partition>
+        <partition>
+          <id>num_4</id>
+        </partition>
+        <partition>
+          <id>num_0</id>
+        </partition>
+        <dynamic>N</dynamic>
+        <partitions_per_slave>10</partitions_per_slave>
+      </partitionschema>
+      <partitionschema>
+        <name>partition_id</name>
+        <partition>
+          <id>partition1</id>
+        </partition>
+        <partition>
+          <id>partition2</id>
+        </partition>
+        <dynamic>N</dynamic>
+        <partitions_per_slave/>
+      </partitionschema>
+    </partitionschemas>
+    <slaveservers>
+      <slaveserver>
+        <name>Slave2</name>
+        <hostname>localhost</hostname>
+        <port>8083</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave1</name>
+        <hostname>localhost</hostname>
+        <port>8082</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>master</name>
+        <hostname>oathena.cipal.be</hostname>
+        <port>10001</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8084</name>
+        <hostname>localhost</hostname>
+        <port>8084</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8083</name>
+        <hostname>localhost</hostname>
+        <port>8083</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8080 master</name>
+        <hostname>localhost</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8082</name>
+        <hostname>localhost</hostname>
+        <port>8082</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8081</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8080</name>
+        <hostname>localhost</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>server8080</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>server8090</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8090</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>server9000</name>
+        <hostname>127.0.0.1</hostname>
+        <port>9000</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8080:Master</name>
+        <hostname>localhost</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_2</name>
+        <hostname>domU-12-31-33-00-01-F1.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_4</name>
+        <hostname>domU-12-31-33-00-02-55.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_3</name>
+        <hostname>domU-12-31-33-00-03-FB.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_MASTER_1</name>
+        <hostname>domU-12-31-33-00-03-9C.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_5</name>
+        <hostname>domU-12-31-33-00-03-EA.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Localhost 8081</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_1</name>
+        <hostname>dfjqsjfmkdsjfm.qsdfqsdf.Qdsfdsqdf.dsqf.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>sam 8080</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>sam 8081 slave</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>sam 8082 slave</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Warmath</name>
+        <hostname>liveinalpharetta.com</hostname>
+        <port>8083</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Mike ETL Server</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Wayne ETL Server</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>test</name>
+        <hostname>localhost</hostname>
+        <port>8080</port>
+        <webAppName>pentaho-pdi</webAppName>
+        <username>thuynt12</username>
+        <password>Encrypted 2be98afc86aa7f2e4bf11bb69d086fe88</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>test2</name>
+        <hostname>localhost</hostname>
+        <port>9080</port>
+        <webAppName>pentaho-pdi</webAppName>
+        <username>thuynt12</username>
+        <password>Encrypted 2be98afc86aa7f2e4bf11bb69d086fe88</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>slave1-8081</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>10.1.26.43</name>
+        <hostname>10.1.26.111</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>etl</username>
+        <password>Encrypted 2be98afc86ae490978409a0508cc4fbc2</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave3</name>
+        <hostname>localhost</hostname>
+        <port>8084</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>DI Server</name>
+        <hostname>localhost</hostname>
+        <port>9080</port>
+        <webAppName>pentaho-di</webAppName>
+        <username>joe</username>
+        <password>Encrypted 2be98afc86aa7f2e4bb18bd63c99dbdde</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>10.1.62.62</name>
+        <hostname>10.1.62.62</hostname>
+        <port>9001</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>62_2</name>
+        <hostname>10.1.62.62</hostname>
+        <port>9003</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>62_1</name>
+        <hostname>10.1.62.62</hostname>
+        <port>9002</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>master_1</name>
+        <hostname>localhost</hostname>
+        <port>8001</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>slave_1</name>
+        <hostname>localhost</hostname>
+        <port>8002</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>slave_2</name>
+        <hostname>localhost</hostname>
+        <port>8003</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave5</name>
+        <hostname>localhost</hostname>
+        <port>8086</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave4</name>
+        <hostname>localhost</hostname>
+        <port>8085</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>cptlx007</name>
+        <hostname>cptlx007.cipal.be</hostname>
+        <port>10001</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave</name>
+        <hostname>localhost</hostname>
+        <port>1991</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+    </slaveservers>
+    <clusterschemas>
+      <clusterschema>
+        <name>ClusterSchema</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+          <name>master</name>
+          <name>Slave2</name>
+          <name>Slave1</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>ClusterSchema_dynamic</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>Y</dynamic>
+        <slaveservers>
+          <name>master</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>EC2</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>100000</sockets_buffer_size>
+        <sockets_flush_interval>0</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+          <name>EC_SLAVE_4</name>
+          <name>EC_SLAVE_3</name>
+          <name>EC_MASTER_1</name>
+          <name>EC_SLAVE_2</name>
+          <name>EC_SLAVE_5</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>Sam</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+          <name>sam 8080</name>
+          <name>sam 8081 slave</name>
+          <name>sam 8082 slave</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>YarnCluster</name>
+        <base_port>4000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>N</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>cluster_test</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>Y</dynamic>
+        <slaveservers>
+          <name>62_1</name>
+          <name>62_2</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>demo</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>N</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+          <name>master_1</name>
+          <name>slave_1</name>
+          <name>slave_2</name>
+        </slaveservers>
+      </clusterschema>
+    </clusterschemas>
+    <created_user/>
+    <created_date>2026/07/28 10:01:01.039</created_date>
+    <modified_user>admin</modified_user>
+    <modified_date>2024/04/05 16:43:27.462</modified_date>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
+    <is_key_private>N</is_key_private>
+  </info>
+  <notepads>
+  </notepads>
+  <connection>
+    <name>tckt_dc</name>
+    <server/>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 10.1.8.22)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = 10.1.8.209)(PORT = 1521))(load_balance=YES)(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = tckt)))</database>
+    <port>-1</port>
+    <username>etl</username>
+    <password>Encrypted 2be98afc86aa7f2a9a95aff228db3add9</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>-1</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>STRICT_NUMBER_38_INTERPRETATION</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
+  <order>
+    <hop>
+      <from>Table input 3</from>
+      <to>TRANS_TMP_RPT_GIAOBAN_TH</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Table input 4</from>
+      <to>TRANS_TMP_RPT_GIAOBAN_TH</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>PL HOPNHAT</from>
+      <to>TRANS_TMP_RPT_GIAOBAN_TH</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>BS HOPNHAT</from>
+      <to>TRANS_TMP_RPT_GIAOBAN_TH</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <step>
+    <name>BS HOPNHAT</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <sql>with tmp_v6 as (
+select 
+  LAST_DAY(transaction_date) transaction_date, 
+  sum(nvl(CUOIKY_CREDIT, 0)) - sum(nvl(CUOIKY_DEBIT, 0)) QUY_DU_TRU_BS_VDL
+from APPS.MB_GL_V6_BALANCES
+where TRANSACTION_DATE = to_date('${PRD_ID}','YYYYMMDD')
+  and LINE_GL = '541000'
+group by transaction_date
+),
+
+tmp_bs_hopnhat as (
+select *
+from
+(select 
+  LAST_DAY(transaction_date) transaction_date, 
+  IND_CODE, 
+  ALL_QD
+from APPS.MB_GL_BSHOPNHAT_BSPL
+where TRANSACTION_DATE = LAST_DAY(to_date('${PRD_ID}', 'YYYYMMDD')))
+pivot (
+  sum(all_qd)
+  for ind_code in (
+    'A' A,
+    'A1' A1,
+    'A2' A2,
+    'A3' A3,
+    'A31' A31,
+    'A32' A32,
+    'A4' A4,
+    'A41' A41,
+    'A411' A411,
+    'A412' A412,
+    'A42' A42,
+    'A5' A5,
+    'A51' A51,
+    'A511' A511,
+    'A512' A512,
+    'A513' A513,
+    'A514' A514,
+    'A52' A52,
+    'A6' A6,
+    'A61' A61,
+    'A611' A611,
+    'A612' A612,
+    'A613' A613,
+    'A62' A62,
+    'A7' A7,
+    'A71' A71,
+    'A72' A72,
+    'A8' A8,
+    'A81' A81,
+    'A82' A82,
+    'A83' A83,
+    'A84' A84,
+    'A85' A85,
+    'A86' A86,
+    'A87' A87,
+    'A9' A9,
+    'A91' A91,
+    'A92' A92,
+    'B' B,
+    'B1' B1,
+    'B2' B2,
+    'B21' B21,
+    'B22' B22,
+    'B23' B23,
+    'B3' B3,
+    'B4' B4,
+    'B41' B41,
+    'B42' B42,
+    'B43' B43,
+    'B5' B5,
+    'B51' B51,
+    'B52' B52,
+    'B6' B6,
+    'B61' B61,
+    'B62' B62,
+    'B63' B63,
+    'B64' B64,
+    'B7' B7,
+    'B71' B71,
+    'B72' B72,
+    'B73' B73,
+    'B74' B74,
+    'B75' B75,
+    'B76' B76,
+    'B77' B77,
+    'C' C,
+    'C1' C1,
+    'C2' C2,
+    'C3' C3,
+    'C4' C4,
+    'C5' C5,
+    'D' D,
+    'D1' D1,
+    'D2' D2,
+    'D21' D21,
+    'D22' D22,
+    'D23' D23,
+    'D24' D24,
+    'D25' D25,
+    'D26' D26,
+    'D27' D27,
+    'D28' D28,
+    'D3' D3,
+    'D4' D4,
+    'D5' D5,
+    'D6' D6
+  )
+)),
+
+tmp_bs_hopnhat_his as (
+select *
+from (
+  select transaction_date, IND_CODE, ALL_QD
+  from APPS.MB_GL_BSHOPNHAT_BSPL
+  where TRANSACTION_DATE = trunc(to_date('${PRD_ID}','YYYYMMDD'), 'Y') - 1)
+  pivot (
+    sum(all_qd)
+    for ind_code in (
+      'A' A,
+      'A1' A1,
+      'A2' A2,
+      'A3' A3,
+      'A31' A31,
+      'A32' A32,
+      'A4' A4,
+      'A41' A41,
+      'A411' A411,
+      'A412' A412,
+      'A42' A42,
+      'A5' A5,
+      'A51' A51,
+      'A511' A511,
+      'A512' A512,
+      'A513' A513,
+      'A514' A514,
+      'A52' A52,
+      'A6' A6,
+      'A61' A61,
+      'A611' A611,
+      'A612' A612,
+      'A613' A613,
+      'A62' A62,
+      'A7' A7,
+      'A71' A71,
+      'A72' A72,
+      'A8' A8,
+      'A81' A81,
+      'A82' A82,
+      'A83' A83,
+      'A84' A84,
+      'A85' A85,
+      'A86' A86,
+      'A87' A87,
+      'A9' A9,
+      'A91' A91,
+      'A92' A92,
+      'B' B,
+      'B1' B1,
+      'B2' B2,
+      'B21' B21,
+      'B22' B22,
+      'B23' B23,
+      'B3' B3,
+      'B4' B4,
+      'B41' B41,
+      'B42' B42,
+      'B43' B43,
+      'B5' B5,
+      'B51' B51,
+      'B52' B52,
+      'B6' B6,
+      'B61' B61,
+      'B62' B62,
+      'B63' B63,
+      'B64' B64,
+      'B7' B7,
+      'B71' B71,
+      'B72' B72,
+      'B73' B73,
+      'B74' B74,
+      'B75' B75,
+      'B76' B76,
+      'B77' B77,
+      'C' C,
+      'C1' C1,
+      'C2' C2,
+      'C3' C3,
+      'C4' C4,
+      'C5' C5,
+      'D' D,
+      'D1' D1,
+      'D2' D2,
+      'D21' D21,
+      'D22' D22,
+      'D23' D23,
+      'D24' D24,
+      'D25' D25,
+      'D26' D26,
+      'D27' D27,
+      'D28' D28,
+      'D3' D3,
+      'D4' D4,
+      'D5' D5,
+      'D6' D6
+    )
+  )
+),
+
+tmp_bs_fin as (
+select 
+  a.transaction_date,
+  nvl(a.B42,0) HDV_TD_CKH,
+  nvl(a.B43,0) HDV_TD_CDS,
+  nvl(a.B41,0) / nvl(a.B4,0) TY_LE_CASA_QUAN_TRI,
+  nvl(a.B41,0)/ (nvl(a.B41,0) + (nvl(a.B42, 0))) TY_LE_CASA_BCTC,
+  nvl(a.B5,0) HDV_TD_TRAIPHIEU,
+  nvl(a.B7,0) / nvl(a.B71,0)*10000 BVPS,
+  nvl(a.B7,0) / nvl(a.B,0) TY_LE_VCSH_TTS,
+  nvl(a.B71,0) / nvl(a.B7,0) TY_LE_VDL_VCSH,
+  (nvl(a.A1,0) + nvl(a.A7,0) + nvl(a.A8,0) - nvl(a.A82,0))/nvl(a.A,0) TY_LE_TS_KSL_TTS,
+  nvl(a.A7,0) / (nvl(a.B71,0) + nvl(b.QUY_DU_TRU_BS_VDL,0)) TY_LE_TSCD_VDL,
+  nvl(a.A61,0) / (nvl(a.B71,0) + nvl(b.QUY_DU_TRU_BS_VDL,0) * 3) TY_LE_GVMCP_VDL,
+  case when nvl(c.A,0) &lt;&gt; 0 then (nvl(a.A,0)/nvl(c.A,0)-1) end TANG_TRUONG_TTS,
+  case when nvl(c.A4,0) &lt;&gt; 0 then (nvl(a.A4,0)/nvl(c.A4,0)-1) end TANG_TRUONG_CV,
+  case when nvl(c.B4,0) &lt;&gt; 0 then(nvl(a.B4,0)/nvl(c.B4,0)-1) end TANG_TRUONG_HDV,
+  (nvl(c.A,0) + nvl(a.A,0)) / 2 TSBQ,
+  (nvl(c.A4,0) + nvl(a.A4,0)) / 2 TDBQ,
+  (nvl(c.B7,0) + nvl(a.B7,0)) / 2 VCSHBQ,
+  (nvl(c.A1,0) + nvl(c.A7,0) + nvl(c.A8,0) - nvl(c.A82,0) + nvl(a.A1,0) + nvl(a.A7,0) + nvl(a.A8,0) - nvl(a.A82,0)) / 2 TSKSLBQ
+from tmp_bs_hopnhat a
+left join tmp_v6 b on a.transaction_date = b.transaction_date
+left join tmp_bs_hopnhat_his c on trunc(a.transaction_date, 'Y') - 1 = c.transaction_date
+)
+
+select 
+  LAST_DAY(transaction_date) TRANSACTION_DATE, 
+  ma_ct, 
+  'TOAN_HANG' line, 
+  value
+from tmp_bs_fin
+unpivot (
+  value
+  for ma_ct in (
+    HDV_TD_CKH as 'HDV_TD_CKH',
+    HDV_TD_CDS as 'HDV_TD_CCTG',
+    TY_LE_CASA_QUAN_TRI as 'TY_LE_CASA_QUAN_TRI',
+    TY_LE_CASA_BCTC as 'TY_LE_CASA_BCTC',
+  HDV_TD_TRAIPHIEU as 'HDV_TD_TRAIPHIEU',
+    BVPS as 'BVPS',
+    TY_LE_VCSH_TTS as 'TY_LE_VCSH_TTS',
+    TY_LE_VDL_VCSH as 'TY_LE_VDL_VCSH',
+    TY_LE_TS_KSL_TTS as 'TY_LE_TS_KSL_TTS',
+    TY_LE_TSCD_VDL as 'TY_LE_TSCD_VDL',
+    TY_LE_GVMCP_VDL as 'TY_LE_GVMCP_VDL',
+    TANG_TRUONG_TTS as 'TANG_TRUONG_TTS',
+    TANG_TRUONG_CV as 'TANG_TRUONG_CV',
+    TANG_TRUONG_HDV as 'TANG_TRUONG_HDV',
+    TSBQ as 'TTS_BQ',
+    TDBQ as 'TD_BQ',
+    VCSHBQ as 'VCSH_BQ',
+  TSKSLBQ as 'TSKSLBQ'
+  )
+)  </sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>BS HOPNHAT</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>19</length>
+        <precision>-1</precision>
+        <origin>BS HOPNHAT</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>9</length>
+        <precision>-1</precision>
+        <origin>BS HOPNHAT</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>BS HOPNHAT</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>198</xloc>
+      <yloc>250</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>PL HOPNHAT</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <sql>with tmp_pl_toanhang as (
+select
+    LAST_DAY(transaction_date) transaction_date,
+    sum(case when ind_code = 'A' then nvl(a.ALL_DUCUOI,0) end) DTTTRR,
+    sum(case when ind_code in ('A1','A2') then nvl(a.ALL_DUCUOI,0) end) THU_THUAN_KINH_DOANH,
+    sum(case when ind_code in ('A1') then nvl(a.ALL_DUCUOI,0) end) THU_THUAN_TU_LAI,
+    sum(case when ind_code in ('A11') then nvl(a.ALL_DUCUOI,0) end) THU_LAI_CHO_VAY,
+    sum(case when ind_code in ('A13') then nvl(a.ALL_DUCUOI,0) end) THU_LAI_TCTD,
+    sum(case when ind_code in ('A15') then nvl(a.ALL_DUCUOI,0) end) THU_LAI_TRAI_PHIEU,
+    sum(case when ind_code in ('A12','A14','A16') then nvl(-a.ALL_DUCUOI,0) end) TONG_CHI_LAI,
+    sum(case when ind_code in ('A12') then nvl(-a.ALL_DUCUOI,0) end) CHI_LAI_HDV,
+    sum(case when ind_code in ('A14') then nvl(-a.ALL_DUCUOI,0) end) CHI_LAI_TCTD,
+    sum(case when ind_code in ('A16') then nvl(-a.ALL_DUCUOI,0) end) CHI_LAI_TRAI_PHIEU,
+    sum(case when ind_code in ('A2') then nvl(a.ALL_DUCUOI,0) end) THU_THUAN_NGOAI_LAI,
+    sum(case when ind_code in ('A21','A22') then nvl(a.ALL_DUCUOI,0) end) THU_DV_BL,
+    sum(case when ind_code in ('A21') then nvl(a.ALL_DUCUOI,0) end) THU_BL,
+    sum(case when ind_code in ('A22') then nvl(a.ALL_DUCUOI,0) end) THU_DV,
+    sum(case when ind_code in ('A221','A224') then nvl(a.ALL_DUCUOI,0) end) THU_THUAN_TTQT,
+    sum(case when ind_code in ('A223') then nvl(a.ALL_DUCUOI,0) end) THU_THUAN_THE,
+    sum(case when ind_code in ('A227') then nvl(a.ALL_DUCUOI,0) end) THU_THUAN_IB,
+    sum(case when ind_code in ('A228') then nvl(a.ALL_DUCUOI,0) end) THU_THUAN_BANCAS,
+    sum(case when ind_code in ('A23') then nvl(a.ALL_DUCUOI,0) end) THU_FX_PS_VANG,
+    sum(case when ind_code in ('A241') then nvl(a.ALL_DUCUOI,0) end) THU_CO_TUC,
+    sum(case when ind_code in ('A242') then nvl(a.ALL_DUCUOI,0) end) THU_KDCK,
+    sum(case when ind_code in ('A25') then nvl(a.ALL_DUCUOI,0) end) THU_TU_HDKD_KHAC,
+    sum(case when ind_code in ('A3') then nvl(a.ALL_DUCUOI,0) end) THU_NO_NGOAI_BANG,
+    sum(case when ind_code in ('B') then nvl(-a.ALL_DUCUOI,0) end) CHI_PHI_DP,
+    sum(case when ind_code in ('C') then nvl(a.ALL_DUCUOI,0) end) DTTSRR,
+    sum(case when ind_code in ('D') then nvl(-a.ALL_DUCUOI,0) end) CHI_PHI_HD,
+    sum(case when ind_code in ('D1') then nvl(-a.ALL_DUCUOI,0) end) CHI_LUONG,
+    sum(case when ind_code in ('D2') then nvl(-a.ALL_DUCUOI,0) end) CHI_TAI_SAN,
+    sum(case when ind_code in ('D3') then nvl(-a.ALL_DUCUOI,0) end) CHI_MARKETING,
+    sum(case when ind_code in ('D4') then nvl(-a.ALL_DUCUOI,0) end) CHI_QLCV_CDT,
+    sum(case when ind_code in ('G') then nvl(a.ALL_DUCUOI,0) end) LNTT,
+    sum(case when ind_code in ('H') then nvl(-a.ALL_DUCUOI,0) end) THUE_TNDN,
+    sum(case when ind_code in ('I') then nvl(a.ALL_DUCUOI,0) end) LNST
+from APPS.MB_GL_PLHOPNHAT_BSPL a
+where transaction_date = LAST_DAY(to_date('${PRD_ID}','YYYYMMDD'))
+group by transaction_date 
+),
+
+tmp_pl_khoi as (
+select
+    LAST_DAY(transaction_date) transaction_date,
+    sum(case when b.IND_CODE in ('A11146') then nvl(b.TOTAL,0) end) THU_LAI_MUA_NO,
+    sum(case when b.IND_CODE in ('A12321','A12322') then nvl(b.TOTAL,0) end) CHI_LAI_KHAC,
+    sum(case when b.IND_CODE in ('A2148','A2149','A215') then nvl(b.TOTAL,0) end) THU_THUAN_LK_DOI_TAC,
+    sum(case when b.IND_CODE in ('A2148','A2149') then nvl(b.TOTAL,0) end) THU_VI_DIEN_TU,
+    sum(case when b.IND_CODE in ('A215') then nvl(b.TOTAL,0) end) THU_LK_CHIEN_LUOC,
+    sum(case when b.IND_CODE in ('A211') then nvl(b.TOTAL,0) end) THU_THUAN_DVTK,
+    sum(case when b.IND_CODE in ('A2111') then nvl(b.TOTAL,0) end) THU_NHDT,
+    sum(case when b.IND_CODE in ('A2112') then nvl(b.TOTAL,0) end) CHI_NHDT,
+    sum(case when b.IND_CODE in ('A204') then nvl(b.TOTAL,0) end) THU_THUAN_CHUYEN_TIEN,
+    sum(case when b.IND_CODE in ('A2147') then nvl(b.TOTAL,0) end) THU_THUAN_TSDK,
+    sum(case when b.IND_CODE in ('A41','A42','A45') then nvl(b.TREASURY,0) end) THU_KDCK_TRE,
+    sum(case when b.IND_CODE in ('D421','D422') then nvl(b.TOTAL,0) end) CHI_DAO_TAO
+from APPS.MB_GL_PL_KHOI_BSPL b
+where transaction_date = LAST_DAY(to_date('${PRD_ID}','YYYYMMDD'))
+group by transaction_date 
+),
+
+tmp_import as (
+select 
+    transaction_date, 
+    value
+from etl.TRANS_FINANCE_IMPORT_DATA
+where transaction_date = to_date('${PRD_ID}','YYYYMMDD')
+and ma_ct = 'PHI_HD_UT_OB'
+),
+
+tmp_fin as (
+select
+    LAST_DAY(a.TRANSACTION_DATE) TRANSACTION_DATE,
+    nvl(DTTTRR,0) DTTTRR,
+    nvl(THU_THUAN_KINH_DOANH,0) THU_THUAN_KINH_DOANH,
+    nvl(THU_THUAN_TU_LAI,0) THU_THUAN_TU_LAI,
+    nvl(THU_THUAN_TU_LAI,0) - nvl(CHI_LAI_HDV,0) - nvl(CHI_LAI_TCTD,0) - nvl(CHI_LAI_TRAI_PHIEU,0) - nvl(CHI_LAI_KHAC,0) - nvl(c.value,0) TONG_THU_LAI,
+    nvl(THU_LAI_CHO_VAY,0) + nvl(THU_LAI_MUA_NO,0) THU_LAI_CHO_VAY,
+    nvl(THU_LAI_TCTD,0) THU_LAI_TCTD,
+    nvl(THU_LAI_TRAI_PHIEU,0) THU_LAI_TRAI_PHIEU,
+    nvl(THU_THUAN_TU_LAI,0) - nvl(CHI_LAI_HDV,0) - nvl(CHI_LAI_TCTD,0) - nvl(CHI_LAI_TRAI_PHIEU,0) - nvl(CHI_LAI_KHAC,0) - nvl(c.value,0) - nvl(THU_LAI_CHO_VAY,0) - nvl(THU_LAI_MUA_NO,0) - nvl(THU_LAI_TCTD,0) - nvl(THU_LAI_TRAI_PHIEU,0) THU_LAI_KHAC,
+    nvl(TONG_CHI_LAI,0) + nvl(CHI_LAI_KHAC,0) TONG_CHI_LAI,
+    nvl(CHI_LAI_HDV,0) CHI_LAI_HDV,
+    nvl(CHI_LAI_TCTD,0) CHI_LAI_TCTD,
+    nvl(CHI_LAI_TRAI_PHIEU,0) CHI_LAI_TRAI_PHIEU,
+    nvl(CHI_LAI_KHAC,0) CHI_LAI_KHAC,
+    nvl(THU_THUAN_NGOAI_LAI,0) THU_THUAN_NGOAI_LAI,
+    nvl(THU_DV_BL,0) THU_DV_BL,
+    nvl(THU_BL,0) THU_BL,
+    nvl(THU_DV,0) THU_DV,
+    nvl(THU_THUAN_TTQT,0) THU_THUAN_TTQT,
+    nvl(THU_THUAN_THE,0) THU_THUAN_THE,
+    nvl(THU_THUAN_LK_DOI_TAC,0) THU_THUAN_LK_DOI_TAC,
+    nvl(THU_VI_DIEN_TU,0) THU_VI_DIEN_TU,
+    nvl(THU_LK_CHIEN_LUOC,0) THU_LK_CHIEN_LUOC,
+    nvl(THU_THUAN_IB,0) THU_THUAN_IB,
+    nvl(THU_THUAN_BANCAS,0) THU_THUAN_BANCAS,
+    nvl(THU_THUAN_DVTK,0) THU_THUAN_DVTK,
+    nvl(THU_NHDT,0) THU_NHDT,
+    nvl(CHI_NHDT,0) CHI_NHDT,
+    nvl(THU_DV,0) - nvl(THU_THUAN_TTQT,0) - nvl(THU_THUAN_THE,0) - nvl(THU_THUAN_LK_DOI_TAC,0) - nvl(THU_THUAN_DVTK, 0) - nvl(THU_THUAN_IB,0) - nvl(THU_THUAN_BANCAS,0) THU_THUAN_DICH_VU_KHAC,
+    nvl(THU_THUAN_CHUYEN_TIEN,0) THU_THUAN_CHUYEN_TIEN,
+    nvl(THU_THUAN_TSDK,0) THU_THUAN_TSDK,
+    nvl(THU_DV,0) - nvl(THU_THUAN_TTQT,0) - nvl(THU_THUAN_THE,0) - nvl(THU_THUAN_LK_DOI_TAC,0) - nvl(THU_THUAN_DVTK,0) - nvl(THU_THUAN_IB,0) - nvl(THU_THUAN_BANCAS,0) - nvl(THU_THUAN_CHUYEN_TIEN,0) - nvl(THU_THUAN_TSDK,0) THU_DV_KHAC,
+    nvl(THU_FX_PS_VANG,0) THU_FX_PS_VANG,
+    nvl(THU_CO_TUC,0) THU_CO_TUC,
+    nvl(THU_KDCK,0) THU_KDCK,
+    nvl(THU_KDCK,0) - nvl(THU_KDCK_TRE,0) THU_KD_TP_THU_CAP,
+    nvl(THU_KDCK_TRE,0) THU_KDCK_TRE,
+    nvl(THU_TU_HDKD_KHAC,0) THU_TU_HDKD_KHAC,
+    nvl(THU_NO_NGOAI_BANG,0) THU_NO_NGOAI_BANG,
+    nvl(CHI_PHI_DP,0) CHI_PHI_DP,
+    nvl(DTTSRR,0) DTTSRR,
+    nvl(CHI_PHI_HD,0) CHI_PHI_HD,
+    nvl(CHI_LUONG,0) CHI_LUONG,
+    nvl(CHI_TAI_SAN,0) CHI_TAI_SAN,
+    nvl(CHI_MARKETING,0) CHI_MARKETING,
+    nvl(CHI_DAO_TAO,0) CHI_DAO_TAO,
+    nvl(CHI_QLCV_CDT,0) - nvl(CHI_DAO_TAO,0) CHI_QLCV,
+    nvl(LNTT,0) LNTT,
+    nvl(THUE_TNDN,0) THUE_TNDN,
+    nvl(LNST,0) LNST, 
+    -nvl(CHI_PHI_DP,0)/nvl(DTTTRR,0) PIR,
+    -nvl(CHI_PHI_HD,0)/nvl(DTTTRR,0) CIR,
+    -nvl(CHI_LUONG,0)/nvl(DTTSRR,0) TY_LE_LUONG_DTTSRR,
+    -nvl(CHI_MARKETING,0)/nvl(DTTTRR,0) TY_LE_MAR_DTTSRR,
+    nvl(THU_DV_BL,0)/nvl(THU_THUAN_KINH_DOANH,0) TY_LE_TNL_TTNHD,
+    nvl(THU_DV,0)/nvl(THU_THUAN_KINH_DOANH,0) TY_LE_THUDV_TTKD,
+    nvl(THU_THUAN_NGOAI_LAI,0)/nvl(THU_THUAN_KINH_DOANH,0) TY_LE_THUNL_TTKD
+from tmp_pl_toanhang a
+left join tmp_pl_khoi b
+    on a.transaction_date = b.transaction_date
+left join tmp_import c
+    on a.transaction_date = c.transaction_date
+)
+
+select 
+    TRANSACTION_DATE,
+    ma_ct, 
+    'TOAN_HANG' line, 
+    value
+from tmp_fin
+unpivot (
+    value 
+    for ma_ct in (
+        DTTTRR as 'DTTTRR',
+        THU_THUAN_KINH_DOANH as 'THU_THUAN_KINH_DOANH',
+        THU_THUAN_TU_LAI as 'THU_THUAN_TU_LAI',
+        TONG_THU_LAI as 'TONG_THU_LAI',
+        THU_LAI_CHO_VAY as 'THU_LAI_CHO_VAY',
+        THU_LAI_TCTD as 'THU_LAI_TCTD',
+        THU_LAI_TRAI_PHIEU as 'THU_LAI_TRAI_PHIEU',
+        THU_LAI_KHAC as 'THU_LAI_KHAC',
+        TONG_CHI_LAI as 'TONG_CHI_LAI',
+        CHI_LAI_HDV as 'CHI_LAI_HDV',
+        CHI_LAI_TCTD as 'CHI_LAI_TCTD',
+        CHI_LAI_TRAI_PHIEU as 'CHI_LAI_TRAI_PHIEU',
+        CHI_LAI_KHAC as 'CHI_LAI_KHAC',
+        THU_THUAN_NGOAI_LAI as 'THU_THUAN_NGOAI_LAI',
+        THU_DV_BL as 'THU_THUAN_DV_BL',
+        THU_BL as 'THU_THUAN_BL',
+        THU_DV as 'THU_THUAN_DV',
+        THU_THUAN_TTQT as 'THU_THUAN_TTQT',
+        THU_THUAN_THE as 'THU_THUAN_THE',
+        THU_THUAN_LK_DOI_TAC as 'THU_THUAN_LK_DOI_TAC',
+        THU_VI_DIEN_TU as 'THU_VI_DIEN_TU',
+        THU_LK_CHIEN_LUOC as 'THU_LK_CHIEN_LUOC',
+        THU_THUAN_IB as 'THU_THUAN_IB',
+        THU_THUAN_BANCAS as 'THU_THUAN_BANCAS',
+        THU_THUAN_DVTK as 'THU_THUAN_NHDT',
+        THU_NHDT as 'THU_NHDT',
+        CHI_NHDT as 'CHI_NHDT',
+        THU_THUAN_DICH_VU_KHAC as 'THU_THUAN_CT_TKSD_DVK',
+        THU_THUAN_CHUYEN_TIEN as 'THU_THUAN_CHUYEN_TIEN',
+        THU_THUAN_TSDK as 'THU_THUAN_TKSD',
+        THU_DV_KHAC as 'THU_THUAN_DV_KHAC',
+        THU_FX_PS_VANG as 'THU_FX_PS_VANG',
+        THU_CO_TUC as 'THU_CO_TUC',
+        THU_KDCK as 'THU_KDCK',
+        THU_KD_TP_THU_CAP as 'THU_KD_TP_THU_CAP',
+        THU_KDCK_TRE as 'THU_KDCK_TRE',
+        THU_TU_HDKD_KHAC as 'THU_TU_HDKD_KHAC',
+        THU_NO_NGOAI_BANG as 'THU_NO_NGOAI_BANG',
+        CHI_PHI_DP as 'CHI_PHI_DP',
+        DTTSRR as 'DTTSRR',
+        CHI_PHI_HD as 'CHI_PHI_HD',
+        CHI_LUONG as 'CHI_LUONG',
+        CHI_TAI_SAN as 'CHI_TAI_SAN',
+        CHI_MARKETING as 'CHI_MARKETING',
+        CHI_DAO_TAO as 'CHI_DAO_TAO',
+        CHI_QLCV as 'CHI_QLCV',
+        LNTT as 'LNTT',
+        THUE_TNDN as 'THUE_TNDN',
+        LNST as 'LNST',
+        TY_LE_TNL_TTNHD as 'TY_LE_TNL_TTKD',
+        TY_LE_THUDV_TTKD as 'TY_LE_THUDV_TTKD',
+        TY_LE_THUNL_TTKD as 'TY_LE_THUNL_TTKD',
+        PIR as 'PIR',
+        CIR as 'CIR',
+        TY_LE_LUONG_DTTSRR as 'TY_LE_LUONG_DTTSRR',
+        TY_LE_MAR_DTTSRR as 'TY_LE_MAR_DTTSRR'
+    )
+)</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>PL HOPNHAT</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>21</length>
+        <precision>-1</precision>
+        <origin>PL HOPNHAT</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>9</length>
+        <precision>-1</precision>
+        <origin>PL HOPNHAT</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>PL HOPNHAT</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>184</xloc>
+      <yloc>132</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TRANS_TMP_RPT_GIAOBAN_TH</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>ETL</schema>
+    <table>TRANS_TMP_RPT_GIAOBAN_TH</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>550</xloc>
+      <yloc>285</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table input 3</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <sql>select 
+	transaction_date, 
+	ma_ct, 
+	'TOAN_HANG' line,
+	value
+from (
+	select 
+		data_date transaction_date,
+		count(*) SLKH_LK,
+		sum(case when lc_st_fin = 'ACTIVE' then 1 end) SLKH_ACTIVE,
+		sum(case when lc_st_fin = 'ACTIVE' then 1 end) / count(*) TY_LE_KH_ACTIVE,
+		sum(case when CREATION_DATE between trunc(DATA_DATE,'MM') and DATA_DATE then 1 end) SLKH_MTD,
+		sum(case when CREATION_DATE between trunc(DATA_DATE,'YY') and DATA_DATE then 1 end) SLKH_YTD
+	from etl.ors_tr_khachhang_active_m
+	where DATA_DATE = LAST_DAY(to_date('${PRD_ID}','YYYYMMDD'))
+	group by data_date
+)
+unpivot (
+	value
+	for ma_ct in
+	(SLKH_LK as 'SLKH_LK',
+	SLKH_ACTIVE as 'SLKH_ACTIVE',
+	TY_LE_KH_ACTIVE as 'TY_LE_KH_ACTIVE',
+	SLKH_MTD as 'SLKH_NEW_MTD',
+	SLKH_YTD as 'SLKH_NEW_YTD')
+)</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>Table input 3</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>15</length>
+        <precision>-1</precision>
+        <origin>Table input 3</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>9</length>
+        <precision>-1</precision>
+        <origin>Table input 3</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>Table input 3</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>186</xloc>
+      <yloc>377</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table input 4</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <sql>SELECT
+  TRANSACTION_DATE,
+  MA_CT,
+  LINE,
+  VALUE
+FROM ETL.TRANS_FINANCE_IMPORT_DATA
+where TRANSACTION_DATE = to_date('${PRD_ID}','YYYYMMDD')</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Timestamp</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>Table input 4</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>2000</length>
+        <precision>-1</precision>
+        <origin>Table input 4</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>2000</length>
+        <precision>-1</precision>
+        <origin>Table input 4</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>Table input 4</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>185</xloc>
+      <yloc>496</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step_error_handling>
+  </step_error_handling>
+  <slave-step-copy-partition-distribution>
+  </slave-step-copy-partition-distribution>
+  <slave_transformation>N</slave_transformation>
+  <attributes/>
+</transformation>

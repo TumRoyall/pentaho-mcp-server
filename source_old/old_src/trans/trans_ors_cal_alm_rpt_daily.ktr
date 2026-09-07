@@ -1,0 +1,4919 @@
+<transformation>
+  <info>
+    <name>trans_ors_cal_alm_rpt_daily</name>
+    <description/>
+    <extended_description/>
+    <trans_version/>
+    <trans_type>Normal</trans_type>
+    <trans_status>0</trans_status>
+    <directory>/engine_tckt/batch/trans</directory>
+    <parameters>
+      <parameter>
+        <name>PRD_ID</name>
+        <default_value>20240430</default_value>
+        <description/>
+      </parameter>
+    </parameters>
+    <log>
+      <trans-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <size_limit_lines/>
+        <interval/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>TRANSNAME</id>
+          <enabled>Y</enabled>
+          <name>TRANSNAME</name>
+        </field>
+        <field>
+          <id>STATUS</id>
+          <enabled>Y</enabled>
+          <name>STATUS</name>
+        </field>
+        <field>
+          <id>LINES_READ</id>
+          <enabled>Y</enabled>
+          <name>LINES_READ</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_WRITTEN</id>
+          <enabled>Y</enabled>
+          <name>LINES_WRITTEN</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_UPDATED</id>
+          <enabled>Y</enabled>
+          <name>LINES_UPDATED</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_INPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_INPUT</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_OUTPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_OUTPUT</name>
+          <subject/>
+        </field>
+        <field>
+          <id>LINES_REJECTED</id>
+          <enabled>Y</enabled>
+          <name>LINES_REJECTED</name>
+          <subject/>
+        </field>
+        <field>
+          <id>ERRORS</id>
+          <enabled>Y</enabled>
+          <name>ERRORS</name>
+        </field>
+        <field>
+          <id>STARTDATE</id>
+          <enabled>Y</enabled>
+          <name>STARTDATE</name>
+        </field>
+        <field>
+          <id>ENDDATE</id>
+          <enabled>Y</enabled>
+          <name>ENDDATE</name>
+        </field>
+        <field>
+          <id>LOGDATE</id>
+          <enabled>Y</enabled>
+          <name>LOGDATE</name>
+        </field>
+        <field>
+          <id>DEPDATE</id>
+          <enabled>Y</enabled>
+          <name>DEPDATE</name>
+        </field>
+        <field>
+          <id>REPLAYDATE</id>
+          <enabled>Y</enabled>
+          <name>REPLAYDATE</name>
+        </field>
+        <field>
+          <id>LOG_FIELD</id>
+          <enabled>Y</enabled>
+          <name>LOG_FIELD</name>
+        </field>
+        <field>
+          <id>EXECUTING_SERVER</id>
+          <enabled>N</enabled>
+          <name>EXECUTING_SERVER</name>
+        </field>
+        <field>
+          <id>EXECUTING_USER</id>
+          <enabled>N</enabled>
+          <name>EXECUTING_USER</name>
+        </field>
+        <field>
+          <id>CLIENT</id>
+          <enabled>N</enabled>
+          <name>CLIENT</name>
+        </field>
+      </trans-log-table>
+      <perf-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <interval/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>SEQ_NR</id>
+          <enabled>Y</enabled>
+          <name>SEQ_NR</name>
+        </field>
+        <field>
+          <id>LOGDATE</id>
+          <enabled>Y</enabled>
+          <name>LOGDATE</name>
+        </field>
+        <field>
+          <id>TRANSNAME</id>
+          <enabled>Y</enabled>
+          <name>TRANSNAME</name>
+        </field>
+        <field>
+          <id>STEPNAME</id>
+          <enabled>Y</enabled>
+          <name>STEPNAME</name>
+        </field>
+        <field>
+          <id>STEP_COPY</id>
+          <enabled>Y</enabled>
+          <name>STEP_COPY</name>
+        </field>
+        <field>
+          <id>LINES_READ</id>
+          <enabled>Y</enabled>
+          <name>LINES_READ</name>
+        </field>
+        <field>
+          <id>LINES_WRITTEN</id>
+          <enabled>Y</enabled>
+          <name>LINES_WRITTEN</name>
+        </field>
+        <field>
+          <id>LINES_UPDATED</id>
+          <enabled>Y</enabled>
+          <name>LINES_UPDATED</name>
+        </field>
+        <field>
+          <id>LINES_INPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_INPUT</name>
+        </field>
+        <field>
+          <id>LINES_OUTPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_OUTPUT</name>
+        </field>
+        <field>
+          <id>LINES_REJECTED</id>
+          <enabled>Y</enabled>
+          <name>LINES_REJECTED</name>
+        </field>
+        <field>
+          <id>ERRORS</id>
+          <enabled>Y</enabled>
+          <name>ERRORS</name>
+        </field>
+        <field>
+          <id>INPUT_BUFFER_ROWS</id>
+          <enabled>Y</enabled>
+          <name>INPUT_BUFFER_ROWS</name>
+        </field>
+        <field>
+          <id>OUTPUT_BUFFER_ROWS</id>
+          <enabled>Y</enabled>
+          <name>OUTPUT_BUFFER_ROWS</name>
+        </field>
+      </perf-log-table>
+      <channel-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>LOGGING_OBJECT_TYPE</id>
+          <enabled>Y</enabled>
+          <name>LOGGING_OBJECT_TYPE</name>
+        </field>
+        <field>
+          <id>OBJECT_NAME</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_NAME</name>
+        </field>
+        <field>
+          <id>OBJECT_COPY</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_COPY</name>
+        </field>
+        <field>
+          <id>REPOSITORY_DIRECTORY</id>
+          <enabled>Y</enabled>
+          <name>REPOSITORY_DIRECTORY</name>
+        </field>
+        <field>
+          <id>FILENAME</id>
+          <enabled>Y</enabled>
+          <name>FILENAME</name>
+        </field>
+        <field>
+          <id>OBJECT_ID</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_ID</name>
+        </field>
+        <field>
+          <id>OBJECT_REVISION</id>
+          <enabled>Y</enabled>
+          <name>OBJECT_REVISION</name>
+        </field>
+        <field>
+          <id>PARENT_CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>PARENT_CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>ROOT_CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>ROOT_CHANNEL_ID</name>
+        </field>
+      </channel-log-table>
+      <step-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>TRANSNAME</id>
+          <enabled>Y</enabled>
+          <name>TRANSNAME</name>
+        </field>
+        <field>
+          <id>STEPNAME</id>
+          <enabled>Y</enabled>
+          <name>STEPNAME</name>
+        </field>
+        <field>
+          <id>STEP_COPY</id>
+          <enabled>Y</enabled>
+          <name>STEP_COPY</name>
+        </field>
+        <field>
+          <id>LINES_READ</id>
+          <enabled>Y</enabled>
+          <name>LINES_READ</name>
+        </field>
+        <field>
+          <id>LINES_WRITTEN</id>
+          <enabled>Y</enabled>
+          <name>LINES_WRITTEN</name>
+        </field>
+        <field>
+          <id>LINES_UPDATED</id>
+          <enabled>Y</enabled>
+          <name>LINES_UPDATED</name>
+        </field>
+        <field>
+          <id>LINES_INPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_INPUT</name>
+        </field>
+        <field>
+          <id>LINES_OUTPUT</id>
+          <enabled>Y</enabled>
+          <name>LINES_OUTPUT</name>
+        </field>
+        <field>
+          <id>LINES_REJECTED</id>
+          <enabled>Y</enabled>
+          <name>LINES_REJECTED</name>
+        </field>
+        <field>
+          <id>ERRORS</id>
+          <enabled>Y</enabled>
+          <name>ERRORS</name>
+        </field>
+        <field>
+          <id>LOG_FIELD</id>
+          <enabled>N</enabled>
+          <name>LOG_FIELD</name>
+        </field>
+      </step-log-table>
+      <metrics-log-table>
+        <connection/>
+        <schema/>
+        <table/>
+        <timeout_days/>
+        <field>
+          <id>ID_BATCH</id>
+          <enabled>Y</enabled>
+          <name>ID_BATCH</name>
+        </field>
+        <field>
+          <id>CHANNEL_ID</id>
+          <enabled>Y</enabled>
+          <name>CHANNEL_ID</name>
+        </field>
+        <field>
+          <id>LOG_DATE</id>
+          <enabled>Y</enabled>
+          <name>LOG_DATE</name>
+        </field>
+        <field>
+          <id>METRICS_DATE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_DATE</name>
+        </field>
+        <field>
+          <id>METRICS_CODE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_CODE</name>
+        </field>
+        <field>
+          <id>METRICS_DESCRIPTION</id>
+          <enabled>Y</enabled>
+          <name>METRICS_DESCRIPTION</name>
+        </field>
+        <field>
+          <id>METRICS_SUBJECT</id>
+          <enabled>Y</enabled>
+          <name>METRICS_SUBJECT</name>
+        </field>
+        <field>
+          <id>METRICS_TYPE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_TYPE</name>
+        </field>
+        <field>
+          <id>METRICS_VALUE</id>
+          <enabled>Y</enabled>
+          <name>METRICS_VALUE</name>
+        </field>
+      </metrics-log-table>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <capture_step_performance>N</capture_step_performance>
+    <step_performance_capturing_delay>1000</step_performance_capturing_delay>
+    <step_performance_capturing_size_limit>100</step_performance_capturing_size_limit>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+      <partitionschema>
+        <name>MySQL EC2 Schema</name>
+        <partition>
+          <id>P4</id>
+        </partition>
+        <partition>
+          <id>P5</id>
+        </partition>
+        <partition>
+          <id>P2</id>
+        </partition>
+        <partition>
+          <id>P3</id>
+        </partition>
+        <dynamic>N</dynamic>
+        <partitions_per_slave/>
+      </partitionschema>
+      <partitionschema>
+        <name>Partitioning schema</name>
+        <partition>
+          <id>PartDB2</id>
+        </partition>
+        <partition>
+          <id>PartDB5</id>
+        </partition>
+        <partition>
+          <id>PartDB1</id>
+        </partition>
+        <partition>
+          <id>PartDB3</id>
+        </partition>
+        <partition>
+          <id>PartDB4</id>
+        </partition>
+        <dynamic>N</dynamic>
+        <partitions_per_slave/>
+      </partitionschema>
+      <partitionschema>
+        <name>dynamic</name>
+        <dynamic>Y</dynamic>
+        <partitions_per_slave>1</partitions_per_slave>
+      </partitionschema>
+      <partitionschema>
+        <name>makh_num</name>
+        <partition>
+          <id>num_1</id>
+        </partition>
+        <partition>
+          <id>num_5</id>
+        </partition>
+        <partition>
+          <id>num_6</id>
+        </partition>
+        <partition>
+          <id>num_7</id>
+        </partition>
+        <partition>
+          <id>num_8</id>
+        </partition>
+        <partition>
+          <id>num_9</id>
+        </partition>
+        <partition>
+          <id>num_2</id>
+        </partition>
+        <partition>
+          <id>num_3</id>
+        </partition>
+        <partition>
+          <id>num_4</id>
+        </partition>
+        <partition>
+          <id>num_0</id>
+        </partition>
+        <dynamic>N</dynamic>
+        <partitions_per_slave>10</partitions_per_slave>
+      </partitionschema>
+      <partitionschema>
+        <name>partition_id</name>
+        <partition>
+          <id>partition1</id>
+        </partition>
+        <partition>
+          <id>partition2</id>
+        </partition>
+        <dynamic>N</dynamic>
+        <partitions_per_slave/>
+      </partitionschema>
+    </partitionschemas>
+    <slaveservers>
+      <slaveserver>
+        <name>Slave2</name>
+        <hostname>localhost</hostname>
+        <port>8083</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave1</name>
+        <hostname>localhost</hostname>
+        <port>8082</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>master</name>
+        <hostname>oathena.cipal.be</hostname>
+        <port>10001</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8084</name>
+        <hostname>localhost</hostname>
+        <port>8084</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8083</name>
+        <hostname>localhost</hostname>
+        <port>8083</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8080 master</name>
+        <hostname>localhost</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8082</name>
+        <hostname>localhost</hostname>
+        <port>8082</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8081</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8080</name>
+        <hostname>localhost</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>server8080</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>server8090</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8090</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>server9000</name>
+        <hostname>127.0.0.1</hostname>
+        <port>9000</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>localhost:8080:Master</name>
+        <hostname>localhost</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_2</name>
+        <hostname>domU-12-31-33-00-01-F1.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_4</name>
+        <hostname>domU-12-31-33-00-02-55.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_3</name>
+        <hostname>domU-12-31-33-00-03-FB.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_MASTER_1</name>
+        <hostname>domU-12-31-33-00-03-9C.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_5</name>
+        <hostname>domU-12-31-33-00-03-EA.usma1.compute.amazonaws.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Localhost 8081</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>EC_SLAVE_1</name>
+        <hostname>dfjqsjfmkdsjfm.qsdfqsdf.Qdsfdsqdf.dsqf.com</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>sam 8080</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>sam 8081 slave</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>sam 8082 slave</name>
+        <hostname>127.0.0.1</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Warmath</name>
+        <hostname>liveinalpharetta.com</hostname>
+        <port>8083</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Mike ETL Server</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Wayne ETL Server</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>test</name>
+        <hostname>localhost</hostname>
+        <port>8080</port>
+        <webAppName>pentaho-pdi</webAppName>
+        <username>thuynt12</username>
+        <password>Encrypted 2be98afc86aa7f2e4bf11bb69d086fe88</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>test2</name>
+        <hostname>localhost</hostname>
+        <port>9080</port>
+        <webAppName>pentaho-pdi</webAppName>
+        <username>thuynt12</username>
+        <password>Encrypted 2be98afc86aa7f2e4bf11bb69d086fe88</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>slave1-8081</name>
+        <hostname>localhost</hostname>
+        <port>8081</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>10.1.26.43</name>
+        <hostname>10.1.26.111</hostname>
+        <port>8080</port>
+        <webAppName/>
+        <username>etl</username>
+        <password>Encrypted 2be98afc86ae490978409a0508cc4fbc2</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave3</name>
+        <hostname>localhost</hostname>
+        <port>8084</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>DI Server</name>
+        <hostname>localhost</hostname>
+        <port>9080</port>
+        <webAppName>pentaho-di</webAppName>
+        <username>joe</username>
+        <password>Encrypted 2be98afc86aa7f2e4bb18bd63c99dbdde</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>10.1.62.62</name>
+        <hostname>10.1.62.62</hostname>
+        <port>9001</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>62_2</name>
+        <hostname>10.1.62.62</hostname>
+        <port>9003</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>62_1</name>
+        <hostname>10.1.62.62</hostname>
+        <port>9002</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>master_1</name>
+        <hostname>localhost</hostname>
+        <port>8001</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>slave_1</name>
+        <hostname>localhost</hostname>
+        <port>8002</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>slave_2</name>
+        <hostname>localhost</hostname>
+        <port>8003</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave5</name>
+        <hostname>localhost</hostname>
+        <port>8086</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave4</name>
+        <hostname>localhost</hostname>
+        <port>8085</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>cptlx007</name>
+        <hostname>cptlx007.cipal.be</hostname>
+        <port>10001</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>Y</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+      <slaveserver>
+        <name>Slave</name>
+        <hostname>localhost</hostname>
+        <port>1991</port>
+        <webAppName/>
+        <username>cluster</username>
+        <password>Encrypted 2be98afc86aa7f2e4cb1aa265cd86aac8</password>
+        <proxy_hostname/>
+        <proxy_port/>
+        <non_proxy_hosts/>
+        <master>N</master>
+        <sslMode>N</sslMode>
+      </slaveserver>
+    </slaveservers>
+    <clusterschemas>
+      <clusterschema>
+        <name>ClusterSchema</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+          <name>master</name>
+          <name>Slave2</name>
+          <name>Slave1</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>ClusterSchema_dynamic</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>Y</dynamic>
+        <slaveservers>
+          <name>master</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>EC2</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>100000</sockets_buffer_size>
+        <sockets_flush_interval>0</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+          <name>EC_SLAVE_4</name>
+          <name>EC_SLAVE_3</name>
+          <name>EC_MASTER_1</name>
+          <name>EC_SLAVE_2</name>
+          <name>EC_SLAVE_5</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>Sam</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+          <name>sam 8080</name>
+          <name>sam 8081 slave</name>
+          <name>sam 8082 slave</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>YarnCluster</name>
+        <base_port>4000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>N</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>cluster_test</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>Y</sockets_compressed>
+        <dynamic>Y</dynamic>
+        <slaveservers>
+          <name>62_1</name>
+          <name>62_2</name>
+        </slaveservers>
+      </clusterschema>
+      <clusterschema>
+        <name>demo</name>
+        <base_port>40000</base_port>
+        <sockets_buffer_size>2000</sockets_buffer_size>
+        <sockets_flush_interval>5000</sockets_flush_interval>
+        <sockets_compressed>N</sockets_compressed>
+        <dynamic>N</dynamic>
+        <slaveservers>
+          <name>master_1</name>
+          <name>slave_1</name>
+          <name>slave_2</name>
+        </slaveservers>
+      </clusterschema>
+    </clusterschemas>
+    <created_user/>
+    <created_date>2026/07/28 10:00:57.530</created_date>
+    <modified_user>admin</modified_user>
+    <modified_date>2025/04/15 14:17:07.562</modified_date>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
+    <is_key_private>N</is_key_private>
+  </info>
+  <notepads>
+  </notepads>
+  <connection>
+    <name>ods_dc</name>
+    <server/>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>(DESCRIPTION =   (CONNECT_TIMEOUT=5)(TRANSPORT_CONNECT_TIMEOUT=3)(RETRY_COUNT=3)   (ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = 10.1.9.133)(PORT = 1521))    (load_balance=YES)    )   (FAILOVER=YES)   (CONNECT_DATA =   (SERVER = DEDICATED)   (SERVICE_NAME = ods_batch)   ) )</database>
+    <port>-1</port>
+    <username>etl_tckt</username>
+    <password>Encrypted 2be98afc82fd39e90a812ba338cc2fd8c</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>-1</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>STRICT_NUMBER_38_INTERPRETATION</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>ors_dc</name>
+    <server/>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 10.1.8.126)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = 10.1.8.129)(PORT = 1521))(load_balance=YES)(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = aictrpt)))</database>
+    <port>-1</port>
+    <username>etl</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ab64d2c3fd89</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>-1</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>tckt_dc</name>
+    <server/>
+    <type>ORACLE</type>
+    <access>Native</access>
+    <database>(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 10.1.8.22)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = 10.1.8.209)(PORT = 1521))(load_balance=YES)(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = tckt)))</database>
+    <port>-1</port>
+    <username>etl</username>
+    <password>Encrypted 2be98afc86aa7f2a9a95aff228db3add9</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>-1</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>STRICT_NUMBER_38_INTERPRETATION</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
+  <order>
+    <hop>
+      <from>rep_doanhso_td</from>
+      <to>Table output</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>TR_TK</from>
+      <to>Table output 3 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>COF_CKH_NEW</from>
+      <to>Table output 3 2 2 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>HDV_BQ</from>
+      <to>Table output 3</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>RPT_CEO_DAILY</from>
+      <to>ODS_RPT_CEO_DAILY</to>
+      <enabled>N</enabled>
+    </hop>
+    <hop>
+      <from>DN_BQ</from>
+      <to>Table output 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>TPDN_BQ 2</from>
+      <to>Table output 2 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>tk_tattoan 2</from>
+      <to>Table output 4</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>HD33 2</from>
+      <to>Table output 3 2 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>FIN_RPT_CEO_DAILY</from>
+      <to>ODS_RPT_CEO_DAILY</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <step>
+    <name>COF_CKH_NEW</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ors_dc</connection>
+    <sql>select to_date ('${PRD_ID}', 'YYYYMMDD') TRANSACTION_DATE, 
+        'COF_CKH_NEW' ma_ct, 
+        'COF deal CKH phát sinh trong kỳ' ten_ct,
+        'ALL' line,
+       sum (DUCUOI_VND * LS)/ sum (ducuoi_vnd) VALUE
+from
+(select
+DUCUOI_VND, LS
+from apps.tr_tk partition for (to_date ('${PRD_ID}', 'YYYYMMDD')) 
+where /*TRANSACTION_DATE between trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'MONTH') and to_date ('${PRD_ID}', 'YYYYMMDD')
+and*/ substr (GL,1,2) in ('42', '43')
+and substr (PRODUCT_CODE,1,2) in ('11', '12', '13')
+and TRANSACTION_DATE = NGAYMS
+and NTE = 'VND'
+and nvl (NHOMSP, '0') &lt;&gt; '18510'
+union all
+select FACE_AMOUNT, INTEREST_RATE/100 from apps.MB_QTRR_HD33
+where TRANSACTION_DATE between trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'MONTH') and to_date ('${PRD_ID}', 'YYYYMMDD')
+and TRANSACTION_DATE = ISSUE_DATE
+and substr (PRODUCT,1,2) in ('11', '12', '13'))</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>COF_CKH_NEW</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>11</length>
+        <precision>-1</precision>
+        <origin>COF_CKH_NEW</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>31</length>
+        <precision>-1</precision>
+        <origin>COF_CKH_NEW</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>3</length>
+        <precision>-1</precision>
+        <origin>COF_CKH_NEW</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>COF_CKH_NEW</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>592</xloc>
+      <yloc>512</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>DN_BQ</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ors_dc</connection>
+    <sql>with v_chovay_bq_daily as (
+    select
+        case
+            when khoi = 'NHS' then 'INDIV'
+            else khoi
+        end as line,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and (
+                to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            ) then sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD'))
+            )
+        end value,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT' then sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                ) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                )
+            )
+        end value_lk
+    from
+        (
+            select
+                sum (SODU_VND) * to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) / 1e9 ducuoi_vnd,
+                khoi,
+                to_date('${PRD_ID}', 'YYYYMMDD') TRANSACTION_DATE
+            from
+                apps.mb_tr_chovay_bq_daily
+            where
+                TRANSACTION_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+            group by
+                khoi
+        )
+    group by
+        case
+            when khoi = 'NHS' then 'INDIV'
+            else khoi
+        end
+),
+v_tr_ku as (
+    select
+        case
+            when khoi = 'NHS' then 'INDIV'
+            else khoi
+        end as line,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and (
+                to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            ) then sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD'))
+            )
+        end value,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT' then sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                ) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                )
+            )
+        end value_lk
+    from
+        (
+            select
+                nvl(sum(DUCUOI_VND) / 1e9, 0) ducuoi_vnd,
+                khoi
+            from
+                apps.tr_ku
+            where
+                TRANSACTION_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+                and substr(gl, 1, 1) = '2'
+                and substr(gl, 1, 2) &lt;&gt; '20'
+                and to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+                and to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+                and khoi IN ('CIB', 'SME', 'INDIV', 'NHS')
+            group by
+                khoi
+        )
+    group by
+        case
+            when khoi = 'NHS' then 'INDIV'
+            else khoi
+        end
+),
+v_tr_chovay_bq as (
+    select
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and (
+                to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            ) then SUM (
+                SODU_VND * (to_number (to_char (transaction_date, 'DD'))) /(
+                    to_number (
+                        to_char (to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                    ) + 1
+                )
+            ) / 1e9
+            else SUM (
+                SODU_VND * (to_number (to_char (transaction_date, 'DD'))) /(
+                    to_number (
+                        to_char (to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                    )
+                )
+            ) / 1e9
+        end as value_lk,
+        case
+            when khoi = 'NHS' then 'INDIV'
+            else khoi
+        end as line
+    from
+        apps.TR_CHOVAY_BQ
+    where
+        TRANSACTION_DATE between trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'YEAR')
+        and trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'MONTH') - 1 --and khoi IN ('CIB', 'SME', 'INDIV', 'NHS')
+    group by
+        case
+            when khoi = 'NHS' then 'INDIV'
+            else khoi
+        end
+)
+select
+    TO_DATE('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'DN_BQ' ma_ct,
+    'Quy mô dư nợ bình quân tháng' ten_ct,
+    line,
+    sum(value) as value
+from
+    (
+        select
+            line,
+            value
+        from
+            v_chovay_bq_daily
+        union
+        all
+        select
+            line,
+            value
+        from
+            v_tr_ku
+    )
+group by
+    line
+UNION
+ALL
+select
+    TO_DATE('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'DN_BQ' ma_ct,
+    'Quy mô dư nợ bình quân tháng' ten_ct,
+    'ALL' line,
+    sum(value) as value
+from
+    (
+        select
+            nvl(a.line, b.line) line,
+            nvl(a.value, b.value) value
+        from
+            v_chovay_bq_daily a full
+            join v_tr_ku b on 1 = 2
+    )
+UNION
+ALL
+select
+    TO_DATE('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'DN_BQ_LK' ma_ct,
+    'Quy mô dư nợ bình quân lũy kế' ten_ct,
+    line,
+    sum(value_lk) as value
+from
+    (
+        select
+            coalesce(a.line, b.line, c.line) line,
+            sum(coalesce(a.value_lk, b.value_lk, c.value_lk)) as value_lk
+        from
+            v_tr_chovay_bq a full
+            join v_chovay_bq_daily b on 1 = 2 full
+            join v_tr_ku c on 1 = 2
+        where
+            coalesce(a.line, b.line, c.line) IN ('CIB', 'SME', 'INDIV', 'NHS')
+        group by
+            coalesce(a.line, b.line, c.line)
+    )
+group by
+    line
+UNION
+ALL
+select
+    TO_DATE('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'DN_BQ_LK' ma_ct,
+    'Quy mô dư nợ bình quân lũy kế' ten_ct,
+    'ALL' line,
+    sum(value_lk) as value
+from
+    (
+        select
+            coalesce(a.line, b.line, c.line) line,
+            sum(coalesce(a.value_lk, b.value_lk, c.value_lk)) as value_lk
+        from
+            v_tr_chovay_bq a full
+            join v_chovay_bq_daily b on 1 = 2 full
+            join v_tr_ku c on 1 = 2
+        group by
+            coalesce(a.line, b.line, c.line)
+    )</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>DN_BQ</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>8</length>
+        <precision>-1</precision>
+        <origin>DN_BQ</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>29</length>
+        <precision>-1</precision>
+        <origin>DN_BQ</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>50</length>
+        <precision>-1</precision>
+        <origin>DN_BQ</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>DN_BQ</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>81</xloc>
+      <yloc>256</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>FIN_RPT_CEO_DAILY</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <sql>SELECT
+TXN_DATE TRANSACTION_DATE,
+IND MA_CT,
+IND_NAME TEN_CT,
+KHOI LINE,
+VAL VALUE
+FROM 
+apps.FIN_RPT_CEO_DAILY
+WHERE TXN_DATE = TO_DATE('${PRD_ID}', 'YYYYMMDD')</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>RPT_CEO_DAILY 2</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>50</length>
+        <precision>-1</precision>
+        <origin>RPT_CEO_DAILY 2</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>250</length>
+        <precision>-1</precision>
+        <origin>RPT_CEO_DAILY 2</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>50</length>
+        <precision>-1</precision>
+        <origin>RPT_CEO_DAILY 2</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>RPT_CEO_DAILY 2</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>83</xloc>
+      <yloc>738</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>HD33 2</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ors_dc</connection>
+    <sql>with tmp_cd
+as
+(select
+a.*, case
+when MATURITY_DATE - ISSUE_DATE between 0 and 27 then 'BL_1M'
+when MATURITY_DATE - ISSUE_DATE between 28 and 59 then '1M'
+when MATURITY_DATE - ISSUE_DATE between 60 and 119 then '2M_3M'
+when MATURITY_DATE - ISSUE_DATE between 120 and 179 then '4M_5M'
+when MATURITY_DATE - ISSUE_DATE between 180 and 209 then '6M'
+when MATURITY_DATE - ISSUE_DATE between 210 and 364 then '7M_11M'
+when MATURITY_DATE - ISSUE_DATE between 365 and 389 then '12M'
+when MATURITY_DATE - ISSUE_DATE between 390 and 729 then '13M_18M'
+when MATURITY_DATE - ISSUE_DATE >= 730 then 'ABV_18M'
+end nhom_kyhan
+from apps.MB_QTRR_HD33 a
+where a.transaction_date = to_date (${PRD_ID}, 'YYYYMMDD')
+)
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ORS' data_source,
+khoi LINE,
+'CD_TD_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'CDs thời điểm &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'CDs thời điểm > 18M'
+ELSE 'CDs thời điểm từ '||nhom_kyhan END TEN_CT,
+sum (face_amount)/1e9 value
+from tmp_cd
+GROUP BY khoi, nhom_kyhan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ORS' data_source,
+'ALL' khoi,
+'CD_TD_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'CDs thời điểm &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'CDs thời điểm > 18M'
+ELSE 'CDs thời điểm từ '||nhom_kyhan END TEN_CT,
+sum (face_amount)/1e9 value
+FROM tmp_cd
+GROUP BY nhom_kyhan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ORS' data_source,
+'ALL' LINE,
+'HDV_TD_CD_ONLINE' MA_CT,
+'HDV thời điểm CDs online' TEN_CT,
+sum (face_amount)/1e9 value
+FROM tmp_cd
+
+
+/*
+with v_hd33 as(
+    select
+        to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+        case
+            when term between 0
+            and 179 then 'CD_TD_1M_5M'
+            when term between 180
+            and 209 then 'CD_TD_6M'
+            when term between 210
+            and 364 then 'CD_TD_7M_11M'
+            when term between 365
+            and 389 then 'CD_TD_12M'
+            when term between 390
+            and 449 then 'CD_TD_13M'
+            when term >= 450 then 'CD_TD_ABV_13M'
+        end ma_ct,
+        case
+            when term between 0
+            and 179 then 'CDs thời điểm từ 1-5M'
+            when term between 180
+            and 209 then 'CDs thời điểm từ 6M'
+            when term between 210
+            and 364 then 'CDs thời điểm từ 7M-11M'
+            when term between 365
+            and 389 then 'CDs thời điểm từ 12M'
+            when term between 390
+            and 449 then 'CDs thời điểm từ 13M'
+            when term >= 450 then 'CDs thời điểm > 13 tháng'
+        end ten_ct,
+        'ALL' line,
+        sum (FACE_AMOUNT) / 1e9 value
+    from
+        apps.MB_QTRR_HD33
+    where
+        TRANSACTION_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+    group by
+        case
+            when term between 0
+            and 179 then 'CD_TD_1M_5M'
+            when term between 180
+            and 209 then 'CD_TD_6M'
+            when term between 210
+            and 364 then 'CD_TD_7M_11M'
+            when term between 365
+            and 389 then 'CD_TD_12M'
+            when term between 390
+            and 449 then 'CD_TD_13M'
+            when term >= 450 then 'CD_TD_ABV_13M'
+        end,
+        case
+            when term between 0
+            and 179 then 'CDs thời điểm từ 1-5M'
+            when term between 180
+            and 209 then 'CDs thời điểm từ 6M'
+            when term between 210
+            and 364 then 'CDs thời điểm từ 7M-11M'
+            when term between 365
+            and 389 then 'CDs thời điểm từ 12M'
+            when term between 390
+            and 449 then 'CDs thời điểm từ 13M'
+            when term >= 450 then 'CDs thời điểm > 13 tháng'
+        end
+)
+select
+    *
+from
+    v_hd33
+union
+all
+select
+    a.transaction_date,
+    'HDV_TD_CD_ONLINE' ma_ct,
+    'HDV thời điểm CDs online' ten_ct,
+    'ALL' line,
+    sum(value) value
+from
+    v_hd33 a
+group by
+    a.transaction_date
+*/</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>HD33 2</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>DATA_SOURCE</name>
+        <length>3</length>
+        <precision>-1</precision>
+        <origin>HD33 2</origin>
+        <comments>DATA_SOURCE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>20</length>
+        <precision>-1</precision>
+        <origin>HD33 2</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>16</length>
+        <precision>-1</precision>
+        <origin>HD33 2</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>24</length>
+        <precision>-1</precision>
+        <origin>HD33 2</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>HD33 2</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>592</xloc>
+      <yloc>368</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>HDV_BQ</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ors_dc</connection>
+    <sql>WITH v_HDV_BQ as (
+    select
+        khoi,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and (
+                to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            ) then SUM (
+                SODU_VND * (to_number (to_char (transaction_date, 'DD'))) /(
+                    to_number (
+                        to_char (to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                    ) + 1
+                )
+            ) / 1e9
+            else SUM (
+                SODU_VND * (to_number (to_char (transaction_date, 'DD'))) /(
+                    to_number (
+                        to_char (to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                    )
+                )
+            ) / 1e9
+        end value_lk
+    from
+        apps.tr_hdv_bq
+    where
+        TRANSACTION_DATE between trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'YEAR')
+        and trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'MONTH') -1
+        and substr (GL, 1, 2) in ('42', '43')
+        and substr (PRODUCT_CODE, 1, 2) in ('11', '12', '13')
+    group by
+        khoi
+),
+v_MB_TR_HDV_BQ_DAILY_201804 as (
+    select
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD')) then sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD'))
+            )
+        end value,
+        khoi,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT' then sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                ) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                )
+            )
+        end value_lk
+    from
+        (
+            select
+                khoi,
+                sum (SODU_VND) * to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) / 1e9 ducuoi_vnd
+            from
+                apps.MB_TR_HDV_BQ_DAILY_201804
+            where
+                TRANSACTION_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+                and substr (GL, 1, 2) in ('42', '43')
+                and substr (PRODUCT_CODE, 1, 2) in ('11', '12', '13')
+            group by
+                khoi
+        )
+    group by
+        khoi
+),
+v_tr_tk as (
+    select
+        khoi,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD')) then sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD'))
+            )
+        end value,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT' then sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                ) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                )
+            )
+        end value_lk
+    from
+        (
+            select
+                nvl(sum (DUCUOI_VND) / 1e9, 0) ducuoi_vnd,
+                khoi
+            from
+                apps.tr_tk
+            where
+                TRANSACTION_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+                and substr (GL, 1, 2) in ('42', '43')
+                and substr (PRODUCT_CODE, 1, 2) in ('11', '12', '13')
+                and to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+                and to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            group by
+                khoi
+        )
+    group by
+        khoi
+),
+v_tr_tg as (
+    select
+        khoi,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD')) then sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD'))
+            )
+        end value,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT' then sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                ) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                )
+            )
+        end value_lk
+    from
+        (
+            select
+                khoi,
+                nvl(sum (DUCUOI_VND) / 1e9, 0) ducuoi_vnd
+            from
+                apps.tr_tg
+            where
+                TRANSACTION_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+                and substr (GL, 1, 2) in ('42', '43')
+                and substr (PRODUCT_CODE, 1, 2) in ('11', '12', '13')
+                and to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+                and to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            group by
+                khoi
+        )
+    group by
+        khoi
+)
+select
+    TO_DATE('${PRD_ID}', 'YYYYMMDD') TRANSACTION_DATE,
+    sum(coalesce(a.value, b.value, c.value)) value,
+    coalesce(a.khoi, b.khoi, c.khoi) line,
+    'HDV_BQ' ma_ct,
+    'Huy động vốn bình quân lũy kế tháng' ten_ct
+FROM
+    v_MB_TR_HDV_BQ_DAILY_201804 a full
+    join v_tr_tk b on 1 = 2 full
+    join v_tr_tg c on 1 = 2
+WHERE
+    coalesce(a.khoi, b.khoi, c.khoi) IN ('CIB', 'SME', 'INDIV', 'NHS', 'DVC', 'FI')
+group by
+    coalesce(a.khoi, b.khoi, c.khoi)
+UNION
+ALL
+SELECT
+    TO_DATE('${PRD_ID}', 'YYYYMMDD') TRANSACTION_DATE,
+    sum(coalesce(a.value, b.value, c.value)) value,
+    'ALL' LINE,
+    'HDV_BQ' ma_ct,
+    'Huy động vốn bình quân lũy kế tháng' ten_ct
+FROM
+    v_MB_TR_HDV_BQ_DAILY_201804 a full
+    join v_tr_tk b on 1 = 2 full
+    join v_tr_tg c on 1 = 2
+UNION
+ALL
+select
+    TO_DATE('${PRD_ID}', 'YYYYMMDD') TRANSACTION_DATE,
+    sum(
+        coalesce(a.value_lk, b.value_lk, c.value_lk, d.value_lk)
+    ) value,
+    coalesce(a.khoi, b.khoi, c.khoi, d.khoi) line,
+    'HDV_BQ_LK' ma_ct,
+    'Huy động vốn bình quân lũy kế' ten_ct
+FROM
+    v_MB_TR_HDV_BQ_DAILY_201804 a full
+    join v_tr_tk b on 1 = 2 full
+    join v_tr_tg c on 1 = 2 full
+    join v_hdv_bq d on 1 = 2
+WHERE
+    coalesce(a.khoi, b.khoi, c.khoi, d.khoi) IN ('CIB', 'SME', 'INDIV', 'NHS', 'DVC', 'FI')
+group by
+    coalesce(a.khoi, b.khoi, c.khoi, d.khoi)
+UNION
+ALL
+select
+    TO_DATE('${PRD_ID}', 'YYYYMMDD') TRANSACTION_DATE,
+    sum(
+        coalesce(a.value_lk, b.value_lk, c.value_lk, d.value_lk)
+    ) value,
+    'ALL' line,
+    'HDV_BQ_LK' ma_ct,
+    'Huy động vốn bình quân lũy kế' ten_ct
+FROM
+    v_MB_TR_HDV_BQ_DAILY_201804 a full
+    join v_tr_tk b on 1 = 2 full
+    join v_tr_tg c on 1 = 2 full
+    join v_hdv_bq d on 1 = 2</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>HDV_BQ</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>HDV_BQ</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>50</length>
+        <precision>-1</precision>
+        <origin>HDV_BQ</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>9</length>
+        <precision>-1</precision>
+        <origin>HDV_BQ</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>35</length>
+        <precision>-1</precision>
+        <origin>HDV_BQ</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>592</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>ODS_RPT_CEO_DAILY</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>ETL</schema>
+    <table>ODS_RPT_CEO_DAILY</table>
+    <commit>10000</commit>
+    <truncate>Y</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>368</xloc>
+      <yloc>608</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>RPT_CEO_DAILY</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ods_dc</connection>
+    <sql>SELECT
+TXN_DATE TRANSACTION_DATE,
+IND MA_CT,
+IND_NAME TEN_CT,
+KHOI LINE,
+VAL VALUE
+FROM 
+RPT.RPT_CEO_DAILY
+WHERE TXN_DATE = TO_DATE('${PRD_ID}', 'YYYYMMDD')</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta/>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>80</xloc>
+      <yloc>608</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TPDN_BQ 2</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ors_dc</connection>
+    <sql>WITH v_sk_tpdn_bq_daily_bt as (
+    select
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and (
+                to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            ) then sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD'))
+            )
+        end value,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT' then sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                ) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                )
+            )
+        end value_lk,
+        khoi line
+    from
+        (
+            select
+                sum (FACE_AMOUNT + CKPT_CONLAI) * to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) / 1e9 ducuoi_vnd,
+                ISSUER_KHOI khoi
+            from
+                apps.MB_TR_SK_TPDN_BQ_DAILY
+            where
+                TRANS_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+            group by
+                ISSUER_KHOI
+        )
+    group by
+        khoi
+),
+v_sk_tpdn as (
+    select
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and (
+                to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            ) then sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD')) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DD'))
+            )
+        end value,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT' then sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                ) + 1
+            )
+            else sum(ducuoi_vnd) /(
+                to_number(
+                    to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                )
+            )
+        end value_lk,
+        khoi line
+    from
+        (
+            select
+                nvl(sum (FACE_AMOUNT + CKPT_CONLAI) / 1e9, 0) ducuoi_vnd,
+                ISSUER_KHOI khoi
+            from
+                apps.MB_TR_SK_TPDN
+            where
+                TRANS_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+                and to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+                and to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+                and ISSUER_KHOI IN ('CIB', 'SME')
+            group by
+                ISSUER_KHOI
+        )
+    GROUP BY
+        khoi
+),
+v_sk_tpdn_bq_daily_lk as (
+    select
+        ISSUER_KHOI line,
+        case
+            when to_char(to_date ('${PRD_ID}', 'YYYYMMDD'), 'DY') = 'SAT'
+            and (
+                to_date ('${PRD_ID}', 'YYYYMMDD') &lt;&gt; last_day(to_date ('${PRD_ID}', 'YYYYMMDD'))
+            ) then SUM (
+                (FACE_AMOUNT + CKPT_CONLAI) * (to_number (to_char (TRANS_DATE, 'DD'))) /(
+                    to_number (
+                        to_char (to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                    ) + 1
+                )
+            ) / 1e9
+            else SUM (
+                (FACE_AMOUNT + CKPT_CONLAI) * (to_number (to_char (TRANS_DATE, 'DD'))) /(
+                    to_number (
+                        to_char (to_date ('${PRD_ID}', 'YYYYMMDD'), 'DDD')
+                    )
+                )
+            ) / 1e9
+        end value_lk
+    from
+        apps.MB_TR_SK_TPDN_BQ_DAILY
+    where
+        TRANS_DATE between trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'YEAR')
+        and trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'MONTH') -1
+        and TRANS_DATE = last_day (TRANS_DATE)
+    group by
+        issuer_khoi
+)
+select
+    to_date('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'TP_BQ' ma_ct,
+    'Quy mô TPDN bình quân tháng' ten_ct,
+    line,
+    sum(value) value
+from
+    (
+        select
+            line,
+            value
+        from
+            v_sk_tpdn_bq_daily_bt
+        union
+        all
+        select
+            line,
+            value
+        from
+            v_sk_tpdn
+    )
+group by
+    line
+UNION
+ALL
+select
+    to_date('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'TP_BQ' ma_ct,
+    'Quy mô TPDN bình quân tháng' ten_ct,
+    'ALL' line,
+    sum(value) value
+from
+    (
+        select
+            line,
+            value
+        from
+            v_sk_tpdn_bq_daily_bt
+        union
+        all
+        select
+            line,
+            value
+        from
+            v_sk_tpdn
+    )
+UNION
+ALL
+select
+    to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'TP_BQ_LK' ma_ct,
+    'Quy mô TPDN bình quân lũy kế' ten_ct,
+    line,
+    sum(value_lk) value
+from
+    (
+        select
+            line,
+            value_lk
+        from
+            v_sk_tpdn
+        union
+        all
+        select
+            line,
+            value_lk
+        from
+            v_sk_tpdn_bq_daily_lk
+        union
+        all
+        select
+            line,
+            value_lk
+        from
+            v_sk_tpdn_bq_daily_bt
+    )
+group by
+    line
+UNION
+ALL
+select
+    to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'TP_BQ_LK' ma_ct,
+    'Quy mô TPDN bình quân lũy kế' ten_ct,
+    'ALL' line,
+    sum(value_lk) value
+from
+    (
+        select
+            line,
+            value_lk
+        from
+            v_sk_tpdn
+        union
+        all
+        select
+            line,
+            value_lk
+        from
+            v_sk_tpdn_bq_daily_lk
+        union
+        all
+        select
+            line,
+            value_lk
+        from
+            v_sk_tpdn_bq_daily_bt
+    )</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>TPDN_BQ 2</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>8</length>
+        <precision>-1</precision>
+        <origin>TPDN_BQ 2</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>28</length>
+        <precision>-1</precision>
+        <origin>TPDN_BQ 2</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>250</length>
+        <precision>-1</precision>
+        <origin>TPDN_BQ 2</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>TPDN_BQ 2</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>81</xloc>
+      <yloc>378</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TR_TK</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ods_dc</connection>
+    <sql>with tmp_tk
+as
+(select
+a.*,
+case
+when maturity_date - value_date between 0 and 27 then 'BL_1M'
+when maturity_date - value_date between 28 and 59 then '1M'
+when maturity_date - value_date between 60 and 119 then '2M_3M'
+when maturity_date - value_date between 120 and 179 then '4M_5M'
+when maturity_date - value_date between 180 and 209 then '6M'
+when maturity_date - value_date between 210 and 364 then '7M_11M'
+when maturity_date - value_date between 365 and 389 then '12M'
+when maturity_date - value_date between 390 and 729 then '13M_18M'
+when maturity_date - value_date >= 730 then 'ABV_18M'
+end nhom_kyhan
+from smy.TD_BAL a
+where a.TXN_DATE = to_date (${PRD_ID}, 'YYYYMMDD')
+and substr (a.COA_CODE,1,2) in ('42', '43')
+and substr (a.PRODUCT_CODE,1,2) in ('11', '12', '13')
+AND cate_code &lt;&gt; '18510'
+)
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ODS' data_source,
+division_code LINE,
+'HDV_TD_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'HĐV thời điểm &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'HĐV thời điểm > 18M'
+ELSE 'HĐV thời điểm từ '||nhom_kyhan END TEN_CT,
+sum (lcy_amt)/1e9 value
+from tmp_tk
+GROUP BY division_code, nhom_kyhan
+UNION ALL
+SELECT 
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ODS' data_source,
+'ALL' LINE,
+'HDV_TD_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'HĐV thời điểm &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'HĐV thời điểm > 18M'
+ELSE 'HĐV thời điểm từ '||nhom_kyhan END TEN_CT,
+sum (lcy_amt)/1e9 value
+from tmp_tk
+GROUP BY nhom_kyhan
+UNION all
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ODS' data_source,
+division_code LINE,
+'HDV_MOMOI_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'Huy động vốn mở mới &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'Huy động vốn mở mới > 18M'
+ELSE 'Huy động vốn mở mới từ '||nhom_kyhan END TEN_CT,
+sum (lcy_amt)/1e9 value
+from tmp_tk
+WHERE  txn_date = ARRANGEMENT_OPENING_DATE
+GROUP BY division_code, nhom_kyhan
+UNION ALL
+SELECT 
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ODS' data_source,
+'ALL' LINE,
+'HDV_MOMOI_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'Huy động vốn mở mới &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'Huy động vốn mở mới > 18M'
+ELSE 'Huy động vốn mở mới từ '||nhom_kyhan END TEN_CT,
+sum (lcy_amt)/1e9 value
+from tmp_tk
+WHERE  txn_date = ARRANGEMENT_OPENING_DATE
+GROUP BY nhom_kyhan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ODS' data_source,
+division_code LINE,
+'HDV_QUAYVONG_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'Huy động vốn quay vòng &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'Huy động vốn quay vòng > 18M'
+ELSE 'Huy động vốn quay vòng từ '||nhom_kyhan END TEN_CT,
+sum (lcy_amt)/1e9 value
+from tmp_tk
+WHERE txn_date = VALUE_DATE 
+AND txn_date > ARRANGEMENT_OPENING_DATE
+GROUP BY division_code, nhom_kyhan
+UNION ALL
+SELECT 
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'ODS' data_source,
+'ALL' LINE,
+'HDV_QUAYVONG_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'Huy động vốn quay vòng &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'Huy động vốn quay vòng > 18M'
+ELSE 'Huy động vốn quay vòng từ '||nhom_kyhan END TEN_CT,
+sum (lcy_amt)/1e9 value
+from tmp_tk
+WHERE txn_date = VALUE_DATE 
+AND txn_date > ARRANGEMENT_OPENING_DATE
+GROUP BY nhom_kyhan
+
+
+
+/*
+with v_temp as(
+    select
+        sum (ducuoi_vnd) / 1e9 value,
+        khoi,
+        case
+            when KYHAN_TXT like '%M' then case
+                --when to_number (replace (KYHAN_TXT, 'M')) &lt; 1 then 'DUOI_1M'
+                when to_number (replace (KYHAN_TXT, 'M')) between 0
+                and 5 then '1M_5M'
+                when to_number (replace (KYHAN_TXT, 'M')) between 7
+                and 11 then '7M_11M'
+                when to_number (replace (KYHAN_TXT, 'M')) IN (6, 12, 13) then KYHAN_TXT
+                when to_number (replace (KYHAN_TXT, 'M')) > 13 then 'ABV_13M'
+            end
+            when KYHAN_TXT like '%D' then case
+                when to_number (replace (KYHAN_TXT, 'D')) between 0
+                and 179 then '1M_5M'
+                when to_number (replace (KYHAN_TXT, 'D')) between 180
+                and 209 then '6M'
+                when to_number (replace (KYHAN_TXT, 'D')) between 210
+                and 364 then '7M_11M'
+                when to_number (replace (KYHAN_TXT, 'D')) between 365
+                and 389 then '12M'
+                when to_number (replace (KYHAN_TXT, 'D')) between 390
+                and 449 then '13M'
+                when to_number (replace (KYHAN_TXT, 'D')) >= 450 then 'ABV_13M'
+            end
+            when KYHAN_TXT like '%W' then case
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 0
+                and 179 then '1M_5M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 180
+                and 209 then '6M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 210
+                and 364 then '7M_11M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 365
+                and 389 then '12M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 390
+                and 449 then '13M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 >= 450 then 'ABV_13M'
+            end
+            else '1M_5M'
+        end nhom_kyhan,
+        start_date,
+        ngayms
+    from
+        apps.tr_tk a
+    where
+        a.TRANSACTION_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+        and substr (a.GL, 1, 2) in ('42', '43')
+        and substr (a.PRODUCT_CODE, 1, 2) in ('11', '12', '13')
+        and khoi is not null
+    group by
+        khoi,
+        start_date,
+        ngayms,
+        case
+            when KYHAN_TXT like '%M' then case
+                --when to_number (replace (KYHAN_TXT, 'M')) &lt; 1 then 'DUOI_1M'
+                when to_number (replace (KYHAN_TXT, 'M')) between 0
+                and 5 then '1M_5M'
+                when to_number (replace (KYHAN_TXT, 'M')) between 7
+                and 11 then '7M_11M'
+                when to_number (replace (KYHAN_TXT, 'M')) IN (6, 12, 13) then KYHAN_TXT
+                when to_number (replace (KYHAN_TXT, 'M')) > 13 then 'ABV_13M'
+            end
+            when KYHAN_TXT like '%D' then case
+                when to_number (replace (KYHAN_TXT, 'D')) between 0
+                and 179 then '1M_5M'
+                when to_number (replace (KYHAN_TXT, 'D')) between 180
+                and 209 then '6M'
+                when to_number (replace (KYHAN_TXT, 'D')) between 210
+                and 364 then '7M_11M'
+                when to_number (replace (KYHAN_TXT, 'D')) between 365
+                and 389 then '12M'
+                when to_number (replace (KYHAN_TXT, 'D')) between 390
+                and 449 then '13M'
+                when to_number (replace (KYHAN_TXT, 'D')) >= 450 then 'ABV_13M'
+            end
+            when KYHAN_TXT like '%W' then case
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 0
+                and 179 then '1M_5M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 180
+                and 209 then '6M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 210
+                and 364 then '7M_11M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 365
+                and 389 then '12M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 between 390
+                and 449 then '13M'
+                when to_number (replace (KYHAN_TXT, 'W')) * 7 >= 450 then 'ABV_13M'
+            end
+            else '1M_5M'
+        end
+)
+select
+    to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    case
+        when nhom_kyhan = '1M_5M' then 'HDV_TD_1M_5M'
+        when nhom_kyhan = '6M' then 'HDV_TD_6M'
+        when nhom_kyhan = '7M_11M' then 'HDV_TD_7M_11M'
+        when nhom_kyhan = '12M' then 'HDV_TD_12M'
+        when nhom_kyhan = '13M' then 'HDV_TD_13M'
+        when nhom_kyhan = 'ABV_13M' then 'HDV_TD_ABV_13M'
+    end ma_ct,
+    case
+        -- when nhom_kyhan = '1M_5M' then 'HĐV thời điểm từ 1-5M'
+        -- when nhom_kyhan = '7M_11M' then 'HĐV thời điểm từ 6-12M'
+        -- when nhom_kyhan = '13M_15M' then 'HĐV thời điểm từ 13-15M'
+        -- when nhom_kyhan = 'ABV_15M' then 'HĐV thời điểm > 15 tháng'
+        when nhom_kyhan = '1M_5M' then 'HĐV thời điểm từ 1-5M'
+        when nhom_kyhan = '6M' then 'HĐV thời điểm 6M'
+        when nhom_kyhan = '7M_11M' then 'HĐV thời điểm từ 7-11M'
+        when nhom_kyhan = '12M' then 'HĐV thời điểm 12M'
+        when nhom_kyhan = '13M' then 'HĐV thời điểm 13M'
+        when nhom_kyhan = 'ABV_13M' then 'HĐV thời điểm > 13 tháng'
+    end ten_ct,
+    khoi line,
+    sum(value) value
+from
+    v_temp a
+group by
+    nhom_kyhan,
+    khoi ---------------
+union
+all
+select
+    to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    case
+        when nhom_kyhan = '1M_5M' then 'HDV_TD_1M_5M'
+        when nhom_kyhan = '6M' then 'HDV_TD_6M'
+        when nhom_kyhan = '7M_11M' then 'HDV_TD_7M_11M'
+        when nhom_kyhan = '12M' then 'HDV_TD_12M'
+        when nhom_kyhan = '13M' then 'HDV_TD_13M'
+        when nhom_kyhan = 'ABV_13M' then 'HDV_TD_ABV_13M'
+    end ma_ct,
+    case
+        when nhom_kyhan = '1M_5M' then 'HĐV thời điểm từ 1-5M'
+        when nhom_kyhan = '6M' then 'HĐV thời điểm 6M'
+        when nhom_kyhan = '7M_11M' then 'HĐV thời điểm từ 7-11M'
+        when nhom_kyhan = '12M' then 'HĐV thời điểm 12M'
+        when nhom_kyhan = '13M' then 'HĐV thời điểm 13M'
+        when nhom_kyhan = 'ABV_13M' then 'HĐV thời điểm > 13 tháng'
+    end ten_ct,
+    'ALL' line,
+    sum(value) value
+from
+    v_temp a
+group by
+    nhom_kyhan ---------------
+union
+all
+select
+    to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    case
+        when nhom_kyhan = '1M_5M' then 'HDV_MOMOI_1M_5M'
+        when nhom_kyhan = '6M' then 'HDV_MOMOI_6M'
+        when nhom_kyhan = '7M_11M' then 'HDV_MOMOI_7M_11M'
+        when nhom_kyhan = '12M' then 'HDV_MOMOI_12M'
+        when nhom_kyhan = '13M' then 'HDV_MOMOI_13M'
+        when nhom_kyhan = 'ABV_13M' then 'HDV_MOMOI_ABV_13M'
+    end ma_ct,
+    case
+         when nhom_kyhan = '1M_5M' then 'Huy động vốn mở mới từ 1-5M'
+        when nhom_kyhan = '6M' then 'Huy động vốn mở mới 6M'
+        when nhom_kyhan = '7M_11M' then 'Huy động vốn mở mới từ 7-11M'
+        when nhom_kyhan = '12M' then 'Huy động vốn mở mới 12M'
+        when nhom_kyhan = '13M' then 'Huy động vốn mở mới 13M'
+        when nhom_kyhan = 'ABV_13M' then 'Huy động vốn mở mới > 13 tháng'
+    end ten_ct,
+    'ALL' line,
+    sum(value) value
+from
+    v_temp a
+where
+    to_date ('${PRD_ID}', 'YYYYMMDD') = start_date
+    -- and nhom_kyhan &lt;&gt; 'DUOI_1M'
+group by
+    nhom_kyhan
+union
+all
+select
+    to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'HDV_MOMOI' ma_ct,
+    'Huy động vốn mở mới' ten_ct,
+    'ALL' line,
+    sum(value) value
+from
+    v_temp a
+where
+    to_date ('${PRD_ID}', 'YYYYMMDD') = start_date --and nhom_kyhan&lt;&gt; 'DUOI_1M' 
+union
+all
+select
+    to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    case
+       when nhom_kyhan = '1M_5M' then 'HDV_QUAYVONG_1M_5M'
+        when nhom_kyhan = '6M' then 'HDV_QUAYVONG_6M'
+        when nhom_kyhan = '7M_11M' then 'HDV_QUAYVONG_7M_11M'
+        when nhom_kyhan = '12M' then 'HDV_QUAYVONG_12M'
+        when nhom_kyhan = '13M' then 'HDV_QUAYVONG_13M'
+        when nhom_kyhan = 'ABV_13M' then 'HDV_QUAYVONG_ABV_13M'
+    end ma_ct,
+    case
+        when nhom_kyhan = '1M_5M' then 'Huy động vốn quay vòng từ 1-5M'
+        when nhom_kyhan = '6M' then 'Huy động vốn quay vòng 6M'
+        when nhom_kyhan = '7M_11M' then 'Huy động vốn quay vòng từ 7-11M'
+        when nhom_kyhan = '12M' then 'Huy động vốn quay vòng 12M'
+        when nhom_kyhan = '13M' then 'Huy động vốn quay vòng 13M'
+        when nhom_kyhan = 'ABV_13M' then 'Huy động vốn quay vòng > 13 tháng'
+    end ten_ct,
+    'ALL' line,
+    sum(value) value
+from
+    v_temp a
+where
+    --nhom_kyhan &lt;&gt; 'DUOI_1M'
+    1=1
+    and to_date ('${PRD_ID}', 'YYYYMMDD') > start_date
+    and ngayms = to_date ('${PRD_ID}', 'YYYYMMDD')
+group by
+    nhom_kyhan
+union
+all
+select
+    to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date,
+    'HDV_QUAYVONG' ma_ct,
+    'Huy động vốn quay vòng' ten_ct,
+    'ALL' line,
+    sum(value) value
+from
+    v_temp a
+where
+    to_date ('${PRD_ID}', 'YYYYMMDD') > start_date
+    and ngayms = to_date ('${PRD_ID}', 'YYYYMMDD')
+*/</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>TR_TK</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>DATA_SOURCE</name>
+        <length>3</length>
+        <precision>-1</precision>
+        <origin>TR_TK</origin>
+        <comments>DATA_SOURCE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>50</length>
+        <precision>-1</precision>
+        <origin>TR_TK</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>20</length>
+        <precision>-1</precision>
+        <origin>TR_TK</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>33</length>
+        <precision>-1</precision>
+        <origin>TR_TK</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>TR_TK</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>596</xloc>
+      <yloc>256</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>etl</schema>
+    <table>ORS_CAL_ALM_RPT_DAILY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>368</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output 2</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>etl</schema>
+    <table>ORS_CAL_ALM_RPT_DAILY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>376</xloc>
+      <yloc>256</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output 2 2</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>etl</schema>
+    <table>ORS_CAL_ALM_RPT_DAILY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>376</xloc>
+      <yloc>378</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output 3</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>etl</schema>
+    <table>ORS_CAL_ALM_RPT_DAILY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>896</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output 3 2</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>etl</schema>
+    <table>ORS_CAL_ALM_RPT_DAILY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>896</xloc>
+      <yloc>256</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output 3 2 2</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>etl</schema>
+    <table>ORS_CAL_ALM_RPT_DAILY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>896</xloc>
+      <yloc>378</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output 3 2 2 2</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>etl</schema>
+    <table>ORS_CAL_ALM_RPT_DAILY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>896</xloc>
+      <yloc>512</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Table output 4</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <schema>etl</schema>
+    <table>ORS_CAL_ALM_RPT_DAILY</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>TRANSACTION_DATE</column_name>
+        <stream_name>TRANSACTION_DATE</stream_name>
+      </field>
+      <field>
+        <column_name>MA_CT</column_name>
+        <stream_name>MA_CT</stream_name>
+      </field>
+      <field>
+        <column_name>TEN_CT</column_name>
+        <stream_name>TEN_CT</stream_name>
+      </field>
+      <field>
+        <column_name>LINE</column_name>
+        <stream_name>LINE</stream_name>
+      </field>
+      <field>
+        <column_name>VALUE</column_name>
+        <stream_name>VALUE</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>368</xloc>
+      <yloc>512</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>rep_doanhso_td</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>ors_dc</connection>
+    <sql>with v_temp as(
+select
+to_date ('${PRD_ID}', 'YYYYMMDD') transaction_date ,
+case when  KHOI = 'NHS' then 'INDIV' else khoi end  line,
+SUM( case when CCY = 'VND' then  (-PSNO_VND)/1E9 else 0 end) DOANHSO_GIANNGAN_LK_TUAN_VND,
+SUM( case when CCY = 'USD' then  (-PSNO_VND)/1E9 else 0 end) DOANHSO_GIANNGAN_LK_TUAN_USD
+,
+SUM (case when CCY = 'VND' then (-PSNO_VND * LS) else 0 end) LS_GIANNGAN_LK_TUAN_VND_TS,
+SUM (case when CCY = 'VND' then -PSNO_VND else 0 end ) LS_GIANNGAN_LK_TUAN_VND_MS,
+SUM (case when CCY = 'USD' then (-PSNO_VND * LS) else 0 end) LS_GIANNGAN_LK_TUAN_USD_TS,
+SUM (case when CCY = 'USD' then -PSNO_VND else 0 end )  LS_GIANNGAN_LK_TUAN_USD_MS
+
+from apps.rep_doanhso_td
+where TRANSACTION_DATE between trunc (to_date ('${PRD_ID}', 'YYYYMMDD'), 'IW') and to_date ('${PRD_ID}', 'YYYYMMDD')
+and substr (SBV_CODE,1,1) = '2'
+and substr (SBV_CODE,1,2) &lt;&gt; '20'
+and substr (nvl (CATEG, '00000'),1,4) &lt;&gt; '1700'
+and CCY in ( 'VND','USD')
+--and khoi in ('CIB','SME','INDIV')
+group by case when  KHOI = 'NHS' then 'INDIV' else khoi end
+)
+select transaction_date, 'ALL' line, ma_ct, 
+       case when ma_ct = 'DOANHSO_GIANNGAN_LK_TUAN_VND' then 'Doanh số giải ngân VND lũy kế tuần'
+            when ma_ct = 'DOANHSO_GIANNGAN_LK_TUAN_USD' then 'Doanh số giải ngân USD lũy kế tuần'
+            when ma_ct = 'LS_GIANNGAN_LK_TUAN_VND' then 'Lãi suất bình quân các khoản giải ngân VND lũy kế tuần'
+            when ma_ct = 'LS_GIANNGAN_LK_TUAN_USD' then 'Lãi suất bình quân các khoản giải ngân USD lũy kế tuần'
+       end ten_ct,
+       value
+from (
+select transaction_date, 'ALL'line, 
+       sum(DOANHSO_GIANNGAN_LK_TUAN_VND) DOANHSO_GIANNGAN_LK_TUAN_VND,
+       sum(DOANHSO_GIANNGAN_LK_TUAN_USD) DOANHSO_GIANNGAN_LK_TUAN_USD,
+       case when sum(LS_GIANNGAN_LK_TUAN_VND_MS) =0 then 0 
+            else sum(LS_GIANNGAN_LK_TUAN_VND_TS)/sum(LS_GIANNGAN_LK_TUAN_VND_MS) end LS_GIANNGAN_LK_TUAN_VND,
+       case when sum(LS_GIANNGAN_LK_TUAN_USD_MS) =0 then 0
+            else sum(LS_GIANNGAN_LK_TUAN_USD_TS)/sum(LS_GIANNGAN_LK_TUAN_USD_MS) end LS_GIANNGAN_LK_TUAN_USD
+       from v_temp
+       group by transaction_date) UNPIVOT(VALUE FOR ma_ct IN(DOANHSO_GIANNGAN_LK_TUAN_VND AS
+                                                     'DOANHSO_GIANNGAN_LK_TUAN_VND',
+                                                     DOANHSO_GIANNGAN_LK_TUAN_USD AS
+                                                      'DOANHSO_GIANNGAN_LK_TUAN_USD',
+                                                     LS_GIANNGAN_LK_TUAN_VND as
+                                                     'LS_GIANNGAN_LK_TUAN_VND',
+                                                     LS_GIANNGAN_LK_TUAN_USD as
+                                                     'LS_GIANNGAN_LK_TUAN_USD' )) a
+union all
+select transaction_date, line, ma_ct, 
+       case when ma_ct = 'DOANHSO_GIANNGAN_LK_TUAN_VND' then 'Doanh số giải ngân VND lũy kế tuần'
+            when ma_ct = 'DOANHSO_GIANNGAN_LK_TUAN_USD' then 'Doanh số giải ngân USD lũy kế tuần'
+            when ma_ct = 'LS_GIANNGAN_LK_TUAN_VND' then 'Lãi suất bình quân các khoản giải ngân VND lũy kế tuần'
+            when ma_ct = 'LS_GIANNGAN_LK_TUAN_USD' then 'Lãi suất bình quân các khoản giải ngân USD lũy kế tuần'
+       end ten_ct,
+       value
+
+from (select transaction_date, line, 
+       sum(DOANHSO_GIANNGAN_LK_TUAN_VND) DOANHSO_GIANNGAN_LK_TUAN_VND,
+       sum(DOANHSO_GIANNGAN_LK_TUAN_USD) DOANHSO_GIANNGAN_LK_TUAN_USD,
+       case when sum(LS_GIANNGAN_LK_TUAN_VND_MS) =0 then 0 
+            else sum(LS_GIANNGAN_LK_TUAN_VND_TS)/sum(LS_GIANNGAN_LK_TUAN_VND_MS) end LS_GIANNGAN_LK_TUAN_VND,
+       case when sum(LS_GIANNGAN_LK_TUAN_USD_MS) =0 then 0
+            else sum(LS_GIANNGAN_LK_TUAN_USD_TS)/sum(LS_GIANNGAN_LK_TUAN_USD_MS) end LS_GIANNGAN_LK_TUAN_USD
+       from v_temp where line in ('CIB','SME','INDIV')
+       group by transaction_date,line) UNPIVOT(VALUE FOR ma_ct IN(DOANHSO_GIANNGAN_LK_TUAN_VND AS
+                                                     'DOANHSO_GIANNGAN_LK_TUAN_VND',
+                                                     DOANHSO_GIANNGAN_LK_TUAN_USD AS
+                                                      'DOANHSO_GIANNGAN_LK_TUAN_USD',
+                                                     LS_GIANNGAN_LK_TUAN_VND as
+                                                     'LS_GIANNGAN_LK_TUAN_VND',
+                                                     LS_GIANNGAN_LK_TUAN_USD as
+                                                     'LS_GIANNGAN_LK_TUAN_USD' )) a</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>rep_doanhso_td</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>5</length>
+        <precision>-1</precision>
+        <origin>rep_doanhso_td</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>28</length>
+        <precision>-1</precision>
+        <origin>rep_doanhso_td</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>54</length>
+        <precision>-1</precision>
+        <origin>rep_doanhso_td</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>rep_doanhso_td</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>80</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>tk_tattoan 2</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>tckt_dc</connection>
+    <sql>with tmp_tattoan
+as
+(select
+a.*, case
+when kyhan_thang &lt; 1 then 'BL_1M'
+WHEN kyhan_thang = 1 then '1M'
+WHEN kyhan_thang between 2 and 3 then '2M_3M'
+WHEN kyhan_thang between 4 and 5 then '4M_5M'
+when kyhan_thang = 6 then '6M'
+when kyhan_thang between 7 and 11 then '7M_11M'
+when kyhan_thang = 12 then '12M'
+when kyhan_thang between 13 and 18 then '13M_18M'
+when kyhan_thang > 18 then 'ABV_18M'
+end nhom_kyhan
+from apps.FIN_HDV_TRANS_DAILY a
+where a.transaction_date = to_date (${PRD_ID}, 'YYYYMMDD')
+)
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'Engine_TCKT' data_source,
+khoi LINE,
+'HDV_TATTOAN_DH_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'Huy động vốn tất toán đúng hạn &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'Huy động vốn tất toán đúng hạn > 18M'
+ELSE 'Huy động vốn tất toán đúng hạn '||nhom_kyhan END TEN_CT,
+sum (doanhso_tat_toan_dh_vnd)/1e9 value
+from tmp_tattoan
+GROUP BY khoi, nhom_kyhan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'Engine_TCKT' data_source,
+'ALL' LINE,
+'HDV_TATTOAN_DH_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'Huy động vốn tất toán đúng hạn &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'Huy động vốn tất toán đúng hạn > 18M'
+ELSE 'Huy động vốn tất toán đúng hạn '||nhom_kyhan END TEN_CT,
+sum (doanhso_tat_toan_dh_vnd)/1e9 value
+FROM tmp_tattoan
+GROUP BY nhom_kyhan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'Engine_TCKT' data_source,
+khoi LINE,
+'HDV_TATTOAN_TH_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'Huy động vốn tất toán trước hạn &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'Huy động vốn tất toán trước hạn > 18M'
+ELSE 'Huy động vốn tất toán trước hạn '||nhom_kyhan END TEN_CT,
+sum (doanhso_tat_toan_th_vnd)/1e9 value
+from tmp_tattoan
+GROUP BY khoi, nhom_kyhan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'Engine_TCKT' data_source,
+'ALL' LINE,
+'HDV_TATTOAN_TH_'||nhom_kyhan MA_CT,
+CASE WHEN nhom_kyhan = 'BL_1M' THEN 'Huy động vốn tất toán trước hạn &lt; 1M'
+WHEN nhom_kyhan = 'ABV_18M' THEN 'Huy động vốn tất toán trước hạn > 18M'
+ELSE 'Huy động vốn tất toán trước hạn '||nhom_kyhan END TEN_CT,
+sum (doanhso_tat_toan_th_vnd)/1e9 value
+FROM tmp_tattoan
+GROUP BY nhom_kyhan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'Engine_TCKT' data_source,
+'ALL' LINE,
+'HDV_TATTOAN_TH' MA_CT,
+'Huy động vốn tất toán trước hạn' TEN_CT,
+sum (doanhso_tat_toan_th_vnd)/1e9 value
+FROM tmp_tattoan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'Engine_TCKT' data_source,
+'ALL' LINE,
+'HDV_TATTOAN_DH' MA_CT,
+'Huy động vốn tất toán đúng hạn' TEN_CT,
+sum (doanhso_tat_toan_dh_vnd)/1e9 value
+FROM tmp_tattoan
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'Engine_TCKT' data_source,
+khoi LINE,
+'HDV_TATTOAN_TH' MA_CT,
+'Huy động vốn tất toán trước hạn' TEN_CT,
+sum (doanhso_tat_toan_th_vnd)/1e9 value
+FROM tmp_tattoan
+GROUP BY khoi
+UNION ALL
+SELECT
+to_date (${PRD_ID}, 'YYYYMMDD') transaction_date,
+'Engine_TCKT' data_source,
+khoi LINE,
+'HDV_TATTOAN_DH' MA_CT,
+'Huy động vốn tất toán đúng hạn' TEN_CT,
+sum (doanhso_tat_toan_dh_vnd)/1e9 value
+FROM tmp_tattoan
+GROUP by khoi
+
+
+/*
+with tmp_tk_tattoan as (
+  select
+    a.ngaydh,
+    TRANSACTION_DATE,
+    sum (ducuoi_vnd) / 1e9 value,
+    case
+      when KYHAN_TXT like '%M' then case
+        when to_number (replace (KYHAN_TXT, 'M')) between 0
+        and 5 then '1M_5M'
+        when to_number (replace (KYHAN_TXT, 'M')) IN (6, 12, 13) then KYHAN_TXT
+        when to_number (replace (KYHAN_TXT, 'M')) between 7
+        and 11 then '7M_11M'
+        when to_number (replace (KYHAN_TXT, 'M')) > 13 then 'ABV_13M'
+      end
+      when KYHAN_TXT like '%D' then case
+        when to_number (replace (KYHAN_TXT, 'D')) between 0
+        and 179 then '1M_5M'
+        when to_number (replace (KYHAN_TXT, 'D')) between 180
+        and 209 then '6M'
+        when to_number (replace (KYHAN_TXT, 'D')) between 210
+        and 364 then '7M_11M'
+        when to_number (replace (KYHAN_TXT, 'D')) between 365
+        and 389 then '12M'
+        when to_number (replace (KYHAN_TXT, 'D')) between 390
+        and 449 then '13M'
+        when to_number (replace (KYHAN_TXT, 'D')) >= 450 then 'ABV_13M'
+      end
+      when KYHAN_TXT like '%W' then case
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 0
+        and 179 then '1M_5M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 180
+        and 209 then '6M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 210
+        and 364 then '7M_11M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 365
+        and 389 then '12M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 390
+        and 449 then '13M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 >= 450 then 'ABV_13M'
+      end
+      else '1M_5M'
+    end nhom_kyhan
+  from
+    apps.mb_tr_tk_tattoan a
+  where
+    a.TRANSACTION_DATE = to_date ('${PRD_ID}', 'YYYYMMDD')
+    and substr (a.GL, 1, 2) in ('42', '43')
+    and substr (a.PRODUCT_CODE, 1, 2) in ('11', '12', '13')
+  group by
+    case
+      when KYHAN_TXT like '%M' then case
+        when to_number (replace (KYHAN_TXT, 'M')) between 0
+        and 5 then '1M_5M'
+        when to_number (replace (KYHAN_TXT, 'M')) IN (6, 12, 13) then KYHAN_TXT
+        when to_number (replace (KYHAN_TXT, 'M')) between 7
+        and 11 then '7M_11M'
+        when to_number (replace (KYHAN_TXT, 'M')) > 13 then 'ABV_13M'
+      end
+      when KYHAN_TXT like '%D' then case
+        when to_number (replace (KYHAN_TXT, 'D')) between 0
+        and 179 then '1M_5M'
+        when to_number (replace (KYHAN_TXT, 'D')) between 180
+        and 209 then '6M'
+        when to_number (replace (KYHAN_TXT, 'D')) between 210
+        and 364 then '7M_11M'
+        when to_number (replace (KYHAN_TXT, 'D')) between 365
+        and 389 then '12M'
+        when to_number (replace (KYHAN_TXT, 'D')) between 390
+        and 449 then '13M'
+        when to_number (replace (KYHAN_TXT, 'D')) >= 450 then 'ABV_13M'
+      end
+      when KYHAN_TXT like '%W' then case
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 0
+        and 179 then '1M_5M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 180
+        and 209 then '6M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 210
+        and 364 then '7M_11M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 365
+        and 389 then '12M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 between 390
+        and 449 then '13M'
+        when to_number (replace (KYHAN_TXT, 'W')) * 7 >= 450 then 'ABV_13M'
+      end
+      else '1M_5M'
+    end,
+    ngaydh,
+    TRANSACTION_DATE
+)
+select
+  transaction_date,
+  case
+    when nhom_kyhan = '1M_5M' then 'HDV_TATTOAN_DH_1M_5M'
+    when nhom_kyhan = '6M' then 'HDV_TATTOAN_DH_6M'
+    when nhom_kyhan = '12M' then 'HDV_TATTOAN_DH_12M'
+    when nhom_kyhan = '13M' then 'HDV_TATTOAN_DH_13M'
+    when nhom_kyhan = '7M_11M' then 'HDV_TATTOAN_DH_7M_11M'
+    when nhom_kyhan = 'ABV_13M' then 'HDV_TATTOAN_DH_ABV_13M'
+  end ma_ct,
+  case
+    when nhom_kyhan = '1M_5M' then 'Huy động vốn tất toán đúng hạn 1-5M'
+    when nhom_kyhan = '7M_11M' then 'Huy động vốn tất toán đúng hạn 7-11M'
+    when nhom_kyhan = '6M' then 'Huy động vốn tất toán đúng hạn 6M'
+    when nhom_kyhan = '12M' then 'Huy động vốn tất toán đúng hạn 12M'
+    when nhom_kyhan = '13M' then 'Huy động vốn tất toán đúng hạn 13M'
+    when nhom_kyhan = 'ABV_13M' then 'Huy động vốn tất toán đúng hạn trên 13M'
+  end ten_ct,
+  'ALL' line,
+  sum(value) value
+from
+  tmp_tk_tattoan
+where
+  transaction_date >= ngaydh - 1
+group by
+  nhom_kyhan,
+  transaction_date
+union
+all
+select
+  transaction_date,
+  'HDV_TATTOAN_DH' ma_ct,
+  'Huy động vốn tất toán đúng hạn' ten_ct,
+  'ALL' line,
+  sum(value) value
+from
+  tmp_tk_tattoan
+where
+  transaction_date >= ngaydh - 1
+  group by transaction_date
+union
+all
+select
+  transaction_date,
+  case
+    when nhom_kyhan = '1M_5M' then 'HDV_TATTOAN_TH_1M_5M'
+    when nhom_kyhan = '6M' then 'HDV_TATTOAN_TH_6M'
+    when nhom_kyhan = '12M' then 'HDV_TATTOAN_TH_12M'
+    when nhom_kyhan = '13M' then 'HDV_TATTOAN_TH_13M'
+    when nhom_kyhan = '7M_11M' then 'HDV_TATTOAN_TH_7M_11M'
+    when nhom_kyhan = 'ABV_13M' then 'HDV_TATTOAN_TH_ABV_13M'
+  end ma_ct,
+  case
+    when nhom_kyhan = '1M_5M' then 'Huy động vốn tất toán trước hạn 1-5M'
+    when nhom_kyhan = '7M_11M' then 'Huy động vốn tất toán trước hạn 7-11M'
+    when nhom_kyhan = '6M' then 'Huy động vốn tất toán trước hạn 6M'
+    when nhom_kyhan = '12M' then 'Huy động vốn tất toán trước hạn 12M'
+    when nhom_kyhan = '13M' then 'Huy động vốn tất toán trước hạn 13M'
+    when nhom_kyhan = 'ABV_13M' then 'Huy động vốn tất toán trước hạn trên 13M'
+  end ten_ct,
+  'ALL' line,
+  sum(value) value
+from
+  tmp_tk_tattoan
+where
+  transaction_date &lt; ngaydh - 1
+group by
+  nhom_kyhan,
+  transaction_date
+union all
+select
+  transaction_date,
+  'HDV_TATTOAN_TH' ma_ct,
+  'Huy động vốn tất toán trước hạn' ten_ct,
+  'ALL' line,
+  sum(value) value
+from
+  tmp_tk_tattoan
+where
+  transaction_date &lt; ngaydh - 1
+group by
+  transaction_date
+*/</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+    <cached_row_meta_active>N</cached_row_meta_active>
+    <row-meta>
+      <value-meta>
+        <type>Date</type>
+        <storagetype>normal</storagetype>
+        <name>TRANSACTION_DATE</name>
+        <length>0</length>
+        <precision>-1</precision>
+        <origin>tk_tattoan 2</origin>
+        <comments>TRANSACTION_DATE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>DATA_SOURCE</name>
+        <length>11</length>
+        <precision>-1</precision>
+        <origin>tk_tattoan 2</origin>
+        <comments>DATA_SOURCE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>LINE</name>
+        <length>50</length>
+        <precision>-1</precision>
+        <origin>tk_tattoan 2</origin>
+        <comments>LINE</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>MA_CT</name>
+        <length>22</length>
+        <precision>-1</precision>
+        <origin>tk_tattoan 2</origin>
+        <comments>MA_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>String</type>
+        <storagetype>normal</storagetype>
+        <name>TEN_CT</name>
+        <length>39</length>
+        <precision>-1</precision>
+        <origin>tk_tattoan 2</origin>
+        <comments>TEN_CT</comments>
+        <conversion_Mask/>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol>,</grouping_symbol>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+      <value-meta>
+        <type>BigNumber</type>
+        <storagetype>normal</storagetype>
+        <name>VALUE</name>
+        <length>-1</length>
+        <precision>-1</precision>
+        <origin>tk_tattoan 2</origin>
+        <comments>VALUE</comments>
+        <conversion_Mask>######0.0###################;-######0.0###################</conversion_Mask>
+        <decimal_symbol>.</decimal_symbol>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <trim_type>none</trim_type>
+        <case_insensitive>N</case_insensitive>
+        <collator_disabled>Y</collator_disabled>
+        <collator_strength>0</collator_strength>
+        <sort_descending>N</sort_descending>
+        <output_padding>N</output_padding>
+        <date_format_lenient>N</date_format_lenient>
+        <date_format_locale>en_US</date_format_locale>
+        <date_format_timezone>Asia/Bangkok</date_format_timezone>
+        <lenient_string_to_number>N</lenient_string_to_number>
+      </value-meta>
+    </row-meta>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>80</xloc>
+      <yloc>512</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step_error_handling>
+  </step_error_handling>
+  <slave-step-copy-partition-distribution>
+  </slave-step-copy-partition-distribution>
+  <slave_transformation>N</slave_transformation>
+  <attributes/>
+</transformation>
