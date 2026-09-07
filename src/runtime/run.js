@@ -23,10 +23,10 @@ function execute(command, args, options, spawnImpl, timeoutMs) {
 }
 
 export async function runPdi(request, context) {
-  if (request.mode === 'execute' && executionPolicy(context.config.environment, request.confirmed) !== 'ALLOW') {
-    return { status: 'CONFIRM_REQUIRED', environment: context.config.environment };
+  if (request.mode === 'execute' && executionPolicy(request.confirmed) !== 'ALLOW') {
+    return { status: 'CONFIRM_REQUIRED' };
   }
-  const detection = context.detection ?? detectPdi(context.config);
+  const detection = context.detection ?? detectPdi(context.pentahoHome);
   if (!detection.available) return { status: 'UNAVAILABLE', detection };
   const artifact = path.resolve(request.artifact);
   if (request.mode === 'execute' || request.mode === 'loadcheck') {

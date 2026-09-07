@@ -32,20 +32,25 @@ function spawnResult({ stdout = '', stderr = '', code = 0, hang = false } = {}, 
   };
 }
 
-test('detects Kitchen/Pan only beneath configured PDI home', () => {
+test('detects Kitchen/Pan only beneath PENTAHO_HOME', () => {
   const home = fakePdi();
-  const result = detectPdi({ pentahoHome: home });
+  const result = detectPdi(home);
   assert.equal(result.available, true);
   assert.equal(result.kitchen, path.join(home, 'Kitchen.bat'));
   assert.equal(result.pan, path.join(home, 'Pan.bat'));
-  assert.throws(() => detectPdi({ pentahoHome: path.join(home, '..', 'missing') }), /not found|unavailable/i);
+  assert.deepEqual(detectPdi(null), {
+    available: false,
+    reason: 'PENTAHO_HOME is not configured',
+    kitchen: null,
+    pan: null,
+  });
+  assert.throws(() => detectPdi(path.join(home, '..', 'missing')), /not found/i);
 });
 
-test('execution policy auto-allows DEV/TEST and requires confirmation elsewhere', () => {
-  assert.equal(executionPolicy('DEV', false), 'ALLOW');
-  assert.equal(executionPolicy('test', false), 'ALLOW');
-  assert.equal(executionPolicy('PROD', false), 'CONFIRM_REQUIRED');
-  assert.equal(executionPolicy('UNKNOWN', true), 'ALLOW');
+test('execution policy always requires explicit confirmation', () => {
+  assert.equal(executionPolicy(), 'CONFIRM_REQUIRED');
+  assert.equal(executionPolicy(false), 'CONFIRM_REQUIRED');
+  assert.equal(executionPolicy(true), 'ALLOW');
 });
 
 test('runtime preserves spaced arguments, shells out for .bat on Windows only, redacts secrets, and writes sanitized logs', async () => {
@@ -56,9 +61,9 @@ test('runtime preserves spaced arguments, shells out for .bat on Windows only, r
   writeFileSync(artifact, '<?xml version="1.0"?><job><name>x</name><entries><entry><name>Start</name><type>SPECIAL</type><start>Y</start></entry></entries><hops/></job>');
   const capture = {};
   const report = await runPdi({
-    kind: 'job', artifact, parameters: { INPUT_DATE: '20260904', DB_PASSWORD: 'top-secret' }, mode: 'execute', timeoutMs: 1000,
+    kind: 'job', artifact, parameters: { INPUT_DATE: '20260904', DB_PASSWORD: 'top-secret' }, mode: 'execute', timeoutMs: 1000, confirmed: true,
   }, {
-    config: { pentahoHome: home, environment: 'DEV' }, logsDir,
+    pentahoHome: home, logsDir,
     spawnImpl: spawnResult({ stdout: 'password=top-secret\nDone', code: 0 }, capture),
   });
   assert.equal(report.status, 'PASS');
@@ -86,17 +91,17 @@ test('runtime reports confirmation requirement and timeout without executing uns
   const home = fakePdi();
   let called = false;
   const blocked = await runPdi({ kind: 'job', artifact: 'x.kjb', mode: 'execute' }, {
-    config: { pentahoHome: home, environment: 'PROD' },
+    pentahoHome: home,
     spawnImpl: () => { called = true; },
   });
-  assert.equal(blocked.status, 'CONFIRM_REQUIRED');
+  assert.deepEqual(blocked, { status: 'CONFIRM_REQUIRED' });
   assert.equal(called, false);
 
   const root = mkdtempSync(path.join(os.tmpdir(), 'runtime-timeout-'));
   const artifact = path.join(root, 'x.ktr');
   writeFileSync(artifact, '<?xml version="1.0"?><transformation><info><name>x</name></info><order/></transformation>');
-  const timed = await runPdi({ kind: 'trans', artifact, mode: 'execute', timeoutMs: 10 }, {
-    config: { pentahoHome: home, environment: 'TEST' }, logsDir: path.join(root, 'logs'),
+  const timed = await runPdi({ kind: 'trans', artifact, mode: 'execute', timeoutMs: 10, confirmed: true }, {
+    pentahoHome: home, logsDir: path.join(root, 'logs'),
     spawnImpl: spawnResult({ hang: true }),
   });
   assert.equal(timed.status, 'TIMEOUT');

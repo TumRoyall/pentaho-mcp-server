@@ -6,9 +6,9 @@ function inside(root, target) {
   return rel === '' || (!rel.startsWith('..') && !path.isAbsolute(rel));
 }
 
-export function detectPdi(config) {
-  if (!config.pentahoHome) return { available: false, reason: 'pentaho.home is not configured', kitchen: null, pan: null };
-  const requested = path.resolve(config.pentahoHome);
+export function detectPdi(pentahoHome) {
+  if (!pentahoHome) return { available: false, reason: 'PENTAHO_HOME is not configured', kitchen: null, pan: null };
+  const requested = path.resolve(pentahoHome);
   if (!existsSync(requested)) throw new Error(`Configured PDI home not found: ${requested}`);
   const home = realpathSync(requested);
   const kitchen = path.resolve(home, 'Kitchen.bat');
