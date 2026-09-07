@@ -74,12 +74,6 @@ test('createFile rejects a kind that conflicts with the extension', () => {
   assert.throws(() => createFile(path.join(tmp, 'gen.ktr'), { kind: 'job' }), /conflicts with extension/);
 });
 
-test('createFile enforces the KETTLE_ROOT write boundary', () => {
-  const outside = mkdtempSync(path.join(os.tmpdir(), 'kettle-outside-'));
-  try {
-    assert.throws(() => createFile(path.join(outside, 'y.ktr')), /Refusing to write outside KETTLE_ROOT/);
-    assert.equal(existsSync(path.join(outside, 'y.ktr')), false);
-  } finally {
-    rmSync(outside, { recursive: true, force: true });
-  }
-});
+// The KETTLE_ROOT write boundary is now enforced by the tool-adapter layer
+// (createWorkspaceBoundary), covered by test/workspace-boundary.test.js and
+// test/tool-boundary.test.js. Core edit functions are pure filesystem ops.

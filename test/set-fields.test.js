@@ -160,13 +160,6 @@ test('setFieldPath errors when an ancestor segment is missing', () => {
     /Path segment "file" not found/);
 });
 
-test('setFieldPath enforces the KETTLE_ROOT write boundary', () => {
-  const outside = mkdtempSync(path.join(os.tmpdir(), 'kettle-outside-'));
-  try {
-    const file = path.join(outside, 'y.ktr');
-    writeFileSync(file, `<?xml version="1.0"?>\n<transformation><info><name>y</name></info><step><name>S</name><type>X</type><limit>0</limit></step><order/></transformation>`);
-    assert.throws(() => setFieldPath(file, 'S', 'limit', '1'), /Refusing to write outside KETTLE_ROOT/);
-  } finally {
-    rmSync(outside, { recursive: true, force: true });
-  }
-});
+// The KETTLE_ROOT write boundary is now enforced by the tool-adapter layer
+// (createWorkspaceBoundary), covered by test/workspace-boundary.test.js and
+// test/tool-boundary.test.js. Core edit functions are pure filesystem ops.

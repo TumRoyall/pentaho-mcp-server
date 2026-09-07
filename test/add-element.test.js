@@ -258,18 +258,6 @@ test('addElement rejects a template for the wrong artifact kind', () => {
   assert.equal(readFileSync(file, 'utf8'), before);
 });
 
-test('addElement enforces the KETTLE_ROOT write boundary', () => {
-  const outside = mkdtempSync(path.join(os.tmpdir(), 'kettle-add-outside-'));
-  try {
-    const file = path.join(outside, 'outside.ktr');
-    const before = '<transformation><info><name>x</name></info><order/></transformation>';
-    writeFileSync(file, before);
-    assert.throws(
-      () => edit.addElement(file, 'Dummy', 'New', { templateXml: '<step><name>X</name><type>Dummy</type></step>' }),
-      /Refusing to write outside KETTLE_ROOT/,
-    );
-    assert.equal(readFileSync(file, 'utf8'), before);
-  } finally {
-    rmSync(outside, { recursive: true, force: true });
-  }
-});
+// The KETTLE_ROOT write boundary is now enforced by the tool-adapter layer
+// (createWorkspaceBoundary), covered by test/workspace-boundary.test.js and
+// test/tool-boundary.test.js. Core edit functions are pure filesystem ops.
