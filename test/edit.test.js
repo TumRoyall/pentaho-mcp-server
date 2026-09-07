@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import {
-  setField, assertWritable, unifiedDiff, commitEdit,
+  setField, unifiedDiff, commitEdit,
 } from '../src/core/edit.js';
 import { loadModel, text } from '../src/core/model.js';
 import { assertMinimalDiff } from './helpers.js';
@@ -61,46 +61,6 @@ test('setField creates a missing child', () => {
   // still well-formed, other step untouched
   assert.equal(text(m.elements[1].raw.connection), 'conn_a');
 });
-
-test('assertWritable enforces KETTLE_ROOT', () => {
-  const prev = process.env.KETTLE_ROOT;
-  process.env.KETTLE_ROOT = tmp;
-  try {
-    assertWritable(path.join(tmp, 'mini.ktr')); // ok
-    assert.throws(() => assertWritable(fx('mini.ktr')), /outside KETTLE_ROOT/);
-  } finally {
-    if (prev === undefined) delete process.env.KETTLE_ROOT;
-    else process.env.KETTLE_ROOT = prev;
-  }
-});
-
-test('assertWritable refuses a sibling directory whose name merely starts with the root name', () => {
-  const prev = process.env.KETTLE_ROOT;
-  process.env.KETTLE_ROOT = tmp;
-  try {
-    const sibling = tmp + '2'; // e.g. root ".../foo" vs sibling ".../foo2"
-    assert.throws(() => assertWritable(path.join(sibling, 'mini.ktr')), /outside KETTLE_ROOT/);
-  } finally {
-    if (prev === undefined) delete process.env.KETTLE_ROOT;
-    else process.env.KETTLE_ROOT = prev;
-  }
-});
-
-test(
-  'assertWritable accepts a differently-cased in-root path on win32',
-  { skip: process.platform !== 'win32' },
-  () => {
-    const prev = process.env.KETTLE_ROOT;
-    process.env.KETTLE_ROOT = tmp;
-    try {
-      const differentlyCased = path.join(tmp.toUpperCase(), 'mini.ktr');
-      assertWritable(differentlyCased); // must not throw
-    } finally {
-      if (prev === undefined) delete process.env.KETTLE_ROOT;
-      else process.env.KETTLE_ROOT = prev;
-    }
-  },
-);
 
 test('commitEdit names the file when the result would be malformed XML', () => {
   const file = path.join(tmp, 'mini.ktr');

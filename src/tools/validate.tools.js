@@ -39,7 +39,7 @@ function validateWithCatalog(filePath) {
   return report;
 }
 
-export function validateTools({ resolve, root }) {
+export function validateTools({ resolveRead, root }) {
   return [
     {
       name: 'kettle_validate',
@@ -47,14 +47,14 @@ export function validateTools({ resolve, root }) {
       inputSchema: {
         type: 'object',
         properties: {
-          path: str('Path to a .kjb/.ktr file (absolute, or relative to KETTLE_ROOT)'),
+          path: str('Path to a .kjb/.ktr file (workspace-relative, or an absolute path contained by KETTLE_ROOT)'),
           checkCatalog: { type: 'boolean', description: 'Include knowledge-catalog type check (default true)' },
         },
       },
       handler: a => {
         const withCatalog = a.checkCatalog !== false;
         if (a.path) {
-          const file = resolve(a.path);
+          const file = resolveRead(a.path);
           return withCatalog ? validateWithCatalog(file) : validateFile(file);
         }
         // Whole-tree: core validateAll, optionally enriched per reported file.

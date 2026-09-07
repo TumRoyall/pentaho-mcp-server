@@ -3,21 +3,21 @@ import { summarize, getElement } from '../core/summarize.js';
 import { listArtifacts, search } from '../core/search.js';
 
 const str = d => ({ type: 'string', description: d });
-const PATH = str('Path to a .kjb/.ktr file (absolute, or relative to KETTLE_ROOT)');
+const PATH = str('Path to a .kjb/.ktr file (workspace-relative, or an absolute path contained by KETTLE_ROOT)');
 
-export function readTools({ resolve, root }) {
+export function readTools({ resolveRead, root }) {
   return [
     {
       name: 'kettle_list',
       description: 'Inventory of Kettle jobs/transformations under a directory (default: KETTLE_ROOT)',
       inputSchema: { type: 'object', properties: { directory: str('Directory to scan') } },
-      handler: a => listArtifacts(resolve(a.directory) ?? root),
+      handler: a => listArtifacts(resolveRead(a.directory)),
     },
     {
       name: 'kettle_summary',
       description: 'Summarize one job/transformation: elements with types, hop graph, connections, params, SQL previews',
       inputSchema: { type: 'object', properties: { path: PATH }, required: ['path'] },
-      handler: a => summarize(resolve(a.path)),
+      handler: a => summarize(resolveRead(a.path)),
     },
     {
       name: 'kettle_get_element',
@@ -27,7 +27,7 @@ export function readTools({ resolve, root }) {
         properties: { path: PATH, name: str('Step/entry name'), raw: { type: 'boolean' } },
         required: ['path', 'name'],
       },
-      handler: a => getElement(resolve(a.path), a.name, a.raw === true),
+      handler: a => getElement(resolveRead(a.path), a.name, a.raw === true),
     },
     {
       name: 'kettle_search',
@@ -41,7 +41,7 @@ export function readTools({ resolve, root }) {
         },
         required: ['query'],
       },
-      handler: a => search(root, a.query, a.kind ?? 'text', resolve(a.directory)),
+      handler: a => search(root, a.query, a.kind ?? 'text', resolveRead(a.directory)),
     },
   ];
 }

@@ -15,7 +15,7 @@ const VERIFICATION = {
   description: 'How the supplied XML was verified; defaults to unverified',
 };
 
-export function knowledgeTools({ resolve, root } = {}) {
+export function knowledgeTools({ resolveRead, root } = {}) {
   return [
     {
       name: 'kettle_knowledge_list',
@@ -87,7 +87,7 @@ export function knowledgeTools({ resolve, root } = {}) {
           includeExamples: { type: 'boolean' },
         },
       },
-      handler: a => knowledgeCoverage(resolve?.(a.directory) ?? root, {
+      handler: a => knowledgeCoverage(resolveRead ? resolveRead(a.directory) : root, {
         includeExamples: a.includeExamples !== false,
       }),
     },

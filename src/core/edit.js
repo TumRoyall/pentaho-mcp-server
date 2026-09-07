@@ -39,23 +39,6 @@ function indentBefore(xml, pos) {
   return xml.slice(i, pos);
 }
 
-export function assertWritable(filePath) {
-  const root = process.env.KETTLE_ROOT;
-  if (!root) return;
-  const rootPrefix = path.resolve(root) + path.sep;
-  const target = path.resolve(filePath);
-  // Windows paths are case-insensitive; comparing case-sensitively would
-  // falsely refuse legitimate writes whenever KETTLE_ROOT and the caller's
-  // path differ only in case. POSIX paths are case-sensitive, so keep that
-  // comparison exact there.
-  const isWritable = process.platform === 'win32'
-    ? target.toLowerCase().startsWith(rootPrefix.toLowerCase())
-    : target.startsWith(rootPrefix);
-  if (!isWritable) {
-    throw new Error(`Refusing to write outside KETTLE_ROOT (${root}): ${filePath}`);
-  }
-}
-
 export function replaceRange(xml, start, end, replacement) {
   return xml.slice(0, start) + replacement + xml.slice(end);
 }
@@ -171,7 +154,6 @@ function insertBeforeClosingTag(xml, closingTag, block, childIndent, eol, filePa
  * Job entries are children of <entries> and are inserted before its close.
  */
 export function addElement(filePath, xmlType, name, opts = {}) {
-  assertWritable(filePath);
   const kind = kindOf(filePath);
   const catalogEntry = findByXmlType(kind, xmlType);
   if (!catalogEntry) {
@@ -233,7 +215,6 @@ export function addElement(filePath, xmlType, name, opts = {}) {
 }
 
 export function setField(filePath, name, field, value) {
-  assertWritable(filePath);
   const xml = readFileSync(filePath, 'utf8');
   const { span, tag } = requireElementSpan(xml, filePath, name);
   const child = findChildSpan(xml, span, field);
@@ -271,7 +252,6 @@ function findHopSpan(xml, from, to) {
 }
 
 export function editHops(filePath, action, from, to, opts = {}) {
-  assertWritable(filePath);
   const kind = kindOf(filePath);
   const xml = readFileSync(filePath, 'utf8');
   const tag = ELEMENT_TAG[kind];
@@ -382,7 +362,6 @@ function findErrorSpanForSource(xml, source) {
  * error target per step).
  */
 export function addErrorHop(filePath, source, target, opts = {}) {
-  assertWritable(filePath);
   const kind = kindOf(filePath);
   if (kind !== 'trans') {
     throw new Error(`Error hops only exist in transformations, not ${kind} files: ${filePath}`);
@@ -459,7 +438,6 @@ export function addErrorHop(filePath, source, target, opts = {}) {
 }
 
 export function renameElement(filePath, oldName, newName) {
-  assertWritable(filePath);
   const xml = readFileSync(filePath, 'utf8');
   const tag = ELEMENT_TAG[kindOf(filePath)];
   if (findElementSpan(xml, tag, newName)) {
@@ -552,7 +530,6 @@ function renderItem(itemTag, order, values, indent, eol) {
  * byte-identical.
  */
 export function setFields(filePath, name, listTag, itemTag, items) {
-  assertWritable(filePath);
   if (!Array.isArray(items) || items.length === 0) {
     throw new Error(`setFields requires a non-empty items array for <${itemTag}> in "${name}"`);
   }
@@ -637,7 +614,6 @@ export function setFields(filePath, name, listTag, itemTag, items) {
  * behaves like setField (direct child).
  */
 export function setFieldPath(filePath, name, fieldPath, value) {
-  assertWritable(filePath);
   const xml = readFileSync(filePath, 'utf8');
   const { span, tag } = requireElementSpan(xml, filePath, name);
   const segments = Array.isArray(fieldPath)
@@ -746,7 +722,6 @@ function emptyJobXml(name) {
  * addElement / editHops / set* — no clone-then-strip needed.
  */
 export function createFile(filePath, { kind, name } = {}) {
-  assertWritable(filePath);
   const detected = kindOf(filePath); // throws on a non-.kjb/.ktr path
   if (kind && kind !== detected) {
     throw new Error(`kind "${kind}" conflicts with extension of ${filePath} (${detected})`);
@@ -765,7 +740,6 @@ export function createFile(filePath, { kind, name } = {}) {
 }
 
 export function cloneFile(sourcePath, destPath, name, replacements = []) {
-  assertWritable(destPath);
   if (kindOf(sourcePath) !== kindOf(destPath)) {
     throw new Error('Source and destination must be the same kind (.kjb/.ktr)');
   }

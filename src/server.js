@@ -18,15 +18,13 @@ import {
   ListToolsRequestSchema,
   ReadResourceRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import path from 'node:path';
 import { buildTools } from './tools/registry.js';
 import { getLifecyclePrompt, listLifecyclePrompts } from './lifecycle/prompts.js';
 import { listLifecycleResources, readLifecycleResource } from './lifecycle/resources.js';
+import { createWorkspaceBoundary } from './workspace/boundary.js';
 
-export function makeContext() {
-  const root = process.env.KETTLE_ROOT ?? process.cwd();
-  const resolve = p => (p == null ? undefined : path.isAbsolute(p) ? p : path.join(root, p));
-  return { root, resolve };
+export function makeContext({ root = process.env.KETTLE_ROOT ?? process.cwd() } = {}) {
+  return createWorkspaceBoundary(root);
 }
 
 function textResult(payload) {

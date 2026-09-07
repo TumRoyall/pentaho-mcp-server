@@ -4,9 +4,9 @@ import {
 } from '../core/edit.js';
 
 const str = d => ({ type: 'string', description: d });
-const PATH = str('Path to a .kjb/.ktr file (absolute, or relative to KETTLE_ROOT)');
+const PATH = str('Path to a .kjb/.ktr file (workspace-relative, or an absolute path contained by KETTLE_ROOT)');
 
-export function editTools({ resolve }) {
+export function editTools({ resolveRead, resolveWrite }) {
   return [
     {
       name: 'kettle_create_file',
@@ -14,13 +14,13 @@ export function editTools({ resolve }) {
       inputSchema: {
         type: 'object',
         properties: {
-          path: str('Destination .kjb/.ktr path (absolute, or relative to KETTLE_ROOT). Must not exist.'),
+          path: str('Destination .kjb/.ktr path (workspace-relative, or an absolute path contained by KETTLE_ROOT). Must not exist.'),
           kind: { type: 'string', enum: ['job', 'trans'], description: 'Optional; must match the extension if given' },
           name: str('Optional internal artifact name; defaults to the filename without extension'),
         },
         required: ['path'],
       },
-      handler: a => createFile(resolve(a.path), { kind: a.kind, name: a.name }),
+      handler: a => createFile(resolveWrite(a.path), { kind: a.kind, name: a.name }),
     },
     {
       name: 'kettle_add_element',
@@ -40,7 +40,7 @@ export function editTools({ resolve }) {
         },
         required: ['path', 'type', 'name'],
       },
-      handler: a => addElement(resolve(a.path), a.type, a.name, {
+      handler: a => addElement(resolveWrite(a.path), a.type, a.name, {
         x: a.x,
         y: a.y,
         allowObserved: a.allowObserved === true,
@@ -54,7 +54,7 @@ export function editTools({ resolve }) {
         properties: { path: PATH, name: str('Step/entry name'), field: str('Child element tag'), value: str('New value') },
         required: ['path', 'name', 'field', 'value'],
       },
-      handler: a => ({ diff: setField(resolve(a.path), a.name, a.field, a.value) }),
+      handler: a => ({ diff: setField(resolveWrite(a.path), a.name, a.field, a.value) }),
     },
     {
       name: 'kettle_set_field_path',
@@ -69,7 +69,7 @@ export function editTools({ resolve }) {
         },
         required: ['path', 'name', 'fieldPath', 'value'],
       },
-      handler: a => ({ diff: setFieldPath(resolve(a.path), a.name, a.fieldPath, a.value) }),
+      handler: a => ({ diff: setFieldPath(resolveWrite(a.path), a.name, a.fieldPath, a.value) }),
     },
     {
       name: 'kettle_set_fields',
@@ -89,7 +89,7 @@ export function editTools({ resolve }) {
         },
         required: ['path', 'name', 'listTag', 'itemTag', 'items'],
       },
-      handler: a => ({ diff: setFields(resolve(a.path), a.name, a.listTag, a.itemTag, a.items) }),
+      handler: a => ({ diff: setFields(resolveWrite(a.path), a.name, a.listTag, a.itemTag, a.items) }),
     },
     {
       name: 'kettle_edit_hops',
@@ -107,7 +107,7 @@ export function editTools({ resolve }) {
         required: ['path', 'action', 'from', 'to'],
       },
       handler: a => ({
-        diff: editHops(resolve(a.path), a.action, a.from, a.to, {
+        diff: editHops(resolveWrite(a.path), a.action, a.from, a.to, {
           evaluation: a.evaluation, unconditional: a.unconditional,
         }),
       }),
@@ -133,7 +133,7 @@ export function editTools({ resolve }) {
         required: ['path', 'source', 'target'],
       },
       handler: a => ({
-        diff: addErrorHop(resolve(a.path), a.source, a.target, {
+        diff: addErrorHop(resolveWrite(a.path), a.source, a.target, {
           enabled: a.enabled,
           nrErrorsField: a.nrErrorsField,
           errorDescField: a.errorDescField,
@@ -153,7 +153,7 @@ export function editTools({ resolve }) {
         properties: { path: PATH, oldName: str('Current name'), newName: str('New name') },
         required: ['path', 'oldName', 'newName'],
       },
-      handler: a => ({ diff: renameElement(resolve(a.path), a.oldName, a.newName) }),
+      handler: a => ({ diff: renameElement(resolveWrite(a.path), a.oldName, a.newName) }),
     },
     {
       name: 'kettle_clone',
@@ -175,7 +175,7 @@ export function editTools({ resolve }) {
         },
         required: ['sourcePath', 'destPath', 'name'],
       },
-      handler: a => cloneFile(resolve(a.sourcePath), resolve(a.destPath), a.name, a.replacements ?? []),
+      handler: a => cloneFile(resolveRead(a.sourcePath), resolveWrite(a.destPath), a.name, a.replacements ?? []),
     },
   ];
 }
