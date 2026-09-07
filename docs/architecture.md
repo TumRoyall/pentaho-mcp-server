@@ -15,13 +15,13 @@ flowchart LR
     S --> R[src/tools/registry.js]
     R --> C[src/core]
     R --> K[src/knowledge]
-    R --> RT[src/runtime - tùy chọn, hoãn]
+    R --> RT[src/runtime - tùy chọn]
     R --> B[src/workspace/boundary.js]
     C --> W[(workspace .kjb/.ktr)]
     RT --> PDI[(Kitchen.bat/Pan.bat tùy chọn)]
 ```
 
-Module lifecycle cũ (`src/lifecycle/**`, `src/tools/lifecycle.tools.js`) **không** còn được đăng ký vào registry; chúng là legacy giữ trên đĩa để rollback/trích xuất sau, không thuộc bề mặt production.
+Phần cài đặt lifecycle BA cũ đã được **gỡ bỏ khỏi source**; không còn module nào như vậy trên đĩa. Hồ sơ thiết kế lịch sử chỉ còn dưới `docs/superpowers/`.
 
 ## Nguyên tắc thiết kế
 
@@ -46,8 +46,7 @@ Cơ chế `assertWritable` cũ (dựa biến môi trường trong `src/core/edit
 | `src/workspace/boundary.js` | `createWorkspaceBoundary` — chính sách biên workspace chia sẻ (canonical containment) | `src/workspace/boundary.js` |
 | `src/core/` | `model.js`, `span.js`, `edit.js`, `search.js`, `validate.js`, `summarize.js`, `knowledge-intake.js`, `knowledge-coverage.js` — engine thuần túy, filesystem op | `src/core/*.js` |
 | `src/knowledge/` | `loader.js` (parse `catalog.yaml`, resolve reference, `KETTLE_KNOWLEDGE_DIR` override), `catalog-check.js` | `src/knowledge/loader.js` |
-| `src/runtime/` | `detect.js`, `policy.js`, `run.js`, `redact.js` — dò PDI, chính sách thực thi, spawn có timeout, khử nhạy cảm; **nằm ngoài workflow mới, đã hoãn** | `src/runtime/*.js` |
-| `src/lifecycle/`, `src/tools/lifecycle.tools.js` | **Legacy, KHÔNG đăng ký**: prompt/resource catalog, validator/generator/sync cũ; giữ trên đĩa cho rollback/trích xuất, không thuộc production API | `src/lifecycle/*`, `src/tools/lifecycle.tools.js` |
+| `src/runtime/` | `detect.js`, `policy.js`, `run.js`, `redact.js` — dò PDI theo `PENTAHO_HOME`, chính sách thực thi confirm-only, spawn có timeout, khử nhạy cảm; **tùy chọn, ngoài workflow tĩnh**, dùng chung biên `KETTLE_ROOT` | `src/runtime/*.js` |
 | `scripts/`, `packaging/` | `build-release.mjs` (esbuild + SEA + postject + ZIP), `verify-production-profile.mjs`, `install.ps1`/`uninstall.ps1`/`doctor.ps1` | `scripts/*`, `packaging/*` |
 
 ```mermaid
@@ -57,7 +56,7 @@ flowchart TB
     EDIT[src/tools/edit.tools.js]
     VAL[src/tools/validate.tools.js]
     KNOW[src/tools/knowledge.tools.js]
-    RUN[src/tools/runtime.tools.js - hoãn]
+    RUN[src/tools/runtime.tools.js - tùy chọn]
     end
     REG[src/tools/registry.js] --> READ
     REG --> EDIT
@@ -72,8 +71,6 @@ flowchart TB
     VAL --> KLOAD[src/knowledge/loader.js]
     KNOW --> KLOAD
     RUN --> RDET[src/runtime/detect + policy + run]
-    LIFE[src/tools/lifecycle.tools.js - LEGACY, không đăng ký]:::legacy
-    classDef legacy stroke-dasharray: 5 5,color:#888;
 ```
 
 ## Luồng request/response MCP

@@ -1,6 +1,6 @@
 # Cấu hình
 
-Tài liệu schema cho operator và maintainer. Nguồn sự thật: `src/workspace/boundary.js`, `src/server.js`, `src/project/config.js` (chỉ còn liên quan runtime tùy chọn/hoãn), `src/runtime/detect.js`, `src/runtime/policy.js`.
+Tài liệu schema cho operator và maintainer. Nguồn sự thật: `src/workspace/boundary.js`, `src/server.js`, `src/runtime/detect.js`, `src/runtime/policy.js`, `src/tools/runtime.tools.js`.
 
 ## Biên workspace và fallback root
 
@@ -13,44 +13,33 @@ Tài liệu schema cho operator và maintainer. Nguồn sự thật: `src/worksp
 
 | Biến | Ý nghĩa | Mặc định |
 |------|---------|----------|
-| `KETTLE_ROOT` | Scope + biên workspace cho read/edit/validate/coverage. Đường tương đối resolve tại đây; tuyệt đối chỉ hợp lệ khi trong root. Luôn được enforce. | `process.cwd()` |
+| `KETTLE_ROOT` | Scope + biên workspace cho read/edit/validate/coverage/runtime. Đường tương đối resolve tại đây; tuyệt đối chỉ hợp lệ khi trong root. Luôn được enforce. | `process.cwd()` |
+| `PENTAHO_HOME` | Vị trí PDI cục bộ (chứa `Kitchen.bat`/`Pan.bat`) cho nhóm runtime tùy chọn. Tùy chọn cho tool tĩnh. | không đặt |
 | `KETTLE_KNOWLEDGE_DIR` | Ghi đè knowledge base nhúng để nhiều checkout chia sẻ một cây canonical. | `src/knowledge/pentaho` đóng gói |
 
-## Runtime tùy chọn/đã hoãn: `.pentaho-mcp.yaml`
+Không còn file cấu hình YAML theo project, biến môi trường tên môi trường, hay biến ghi đè tên thư mục docs/jobs. Server không tự phát hiện, tạo hay đổi tên thư mục con của project.
 
-> **Cảnh báo:** Đợt refactor runtime **đã hoãn**. File `.pentaho-mcp.yaml` **chỉ còn ý nghĩa với các tool runtime tùy chọn/đã hoãn** (`kettle_runtime_*`). Nó không tham gia workflow idea-to-static-job và không ảnh hưởng read/edit/validate/knowledge.
+## Runtime tùy chọn: một root, dùng chung biên
 
-Khi bạn thực sự dùng nhóm runtime đã hoãn, file cấu hình runtime-only tuân theo schema sau:
+Bốn tool `kettle_runtime_*` dùng đúng biên `KETTLE_ROOT` như các tool tĩnh. Không có tham số chọn project riêng cho từng lời gọi (không còn tham số workspace-root hay requirement-folder theo lời gọi).
 
-- File duy nhất: `<workspace>/.pentaho-mcp.yaml`. Thiếu file → `Missing .pentaho-mcp.yaml`.
-- `schema_version` phải là `1` (số, không phải chuỗi).
-- `environment`: **mapping** với key tùy chọn `name`. Vắng → `UNKNOWN`. Chuẩn hóa trim + uppercase. Điều khiển chính sách thực thi `DEV`/`TEST`.
-- `pentaho.home`: tùy chọn; tuyệt đối giữ nguyên, tương đối resolve theo workspace root. Nơi chứa `Kitchen.bat`/`Pan.bat`.
+- `artifact` resolve theo `KETTLE_ROOT` (tương đối, hoặc tuyệt đối nằm trong root); chỉ nhận `.kjb`/`.ktr`.
+- `PENTAHO_HOME` là thiết lập vị trí PDI duy nhất. Bỏ trống → runtime báo không khả dụng, tool tĩnh vẫn chạy.
+- Log đã khử được ghi lười (lazy) dưới `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs/`. Nên thêm `.pentaho-mcp/` vào `.gitignore` của project (MCP không tự sửa `.gitignore`).
 
-```yaml
-schema_version: 1
-environment:
-  # DEV và TEST cho Kitchen/Pan tự chạy; mọi giá trị khác (kể cả UNKNOWN) cần confirmed: true.
-  name: UNKNOWN
-pentaho:
-  # Tùy chọn: PDI cục bộ (Kitchen.bat/Pan.bat nằm dưới nó). Bỏ trống khi không cài runtime.
-  # home: pentaho-ce/data-integration
-```
+## Chính sách thực thi: luôn cần xác nhận
 
-> Nội dung requirement-folder (`REQ_<ID>_<UPPER_SNAKE>`), biên ghi `input/`, `paths.requirements`/`paths.pentaho` thuộc về **bề mặt lifecycle legacy đã gỡ đăng ký** và **không** còn là chính sách production. Nếu gặp nó trong workspace cũ, coi là legacy runtime-only, không phải hành vi hiện tại của biên workspace chung.
+| Lời gọi | Kết quả |
+|---------|---------|
+| `kettle_runtime_execute` không `confirmed` | `CONFIRM_REQUIRED` (không spawn) |
+| `kettle_runtime_execute` với `confirmed: true` | `ALLOW` |
+| `kettle_runtime_loadcheck` | Không cần xác nhận thực thi; vẫn validation tĩnh trước |
 
-## Chính sách thực thi theo environment (runtime đã hoãn)
+Nguồn: `src/runtime/policy.js`. Không có tên môi trường nào bỏ qua bước xác nhận. `loadcheck`/`execute` luôn validation tĩnh trước; `STATIC_VALIDATION_FAILED` khi có structural error.
 
-| `environment.name` | `kettle_runtime_execute` không `confirmed` | Với `confirmed: true` |
-|--------------------|--------------------------------------------|------------------------|
-| `DEV`, `TEST` | `ALLOW` (tự chạy) | `ALLOW` |
-| Mọi giá trị khác, gồm `UNKNOWN`, `PROD` | `CONFIRM_REQUIRED` | `ALLOW` |
+## Discovery PDI tùy chọn
 
-Nguồn: `src/runtime/policy.js`. `loadcheck`/`execute` luôn validation tĩnh trước; `STATIC_VALIDATION_FAILED` khi có structural error.
-
-## Discovery PDI tùy chọn (runtime đã hoãn)
-
-- `pentaho.home` unset → `detectPdi` trả `{available: false, reason: pentaho.home is not configured}`.
+- `PENTAHO_HOME` unset → `detectPdi` trả `{available: false, reason: PENTAHO_HOME is not configured}`.
 - Home không tồn tại → throw `Configured PDI home not found`.
 - Resolve `Kitchen.bat`/`Pan.bat` dưới home; ngoài home → throw; thiếu một trong hai → `available: false`.
 - Không có PDI vẫn dùng được đầy đủ read/edit/validate/knowledge; `runPdi` trả `UNAVAILABLE` thay vì fail toàn cục.
@@ -65,20 +54,23 @@ Nguồn: `src/runtime/policy.js`. `loadcheck`/`execute` luôn validation tĩnh t
     "dte-pentaho": {
       "command": "node",
       "args": ["C:/path/to/pentaho-mcp-server/src/index.js"],
-      "env": { "KETTLE_ROOT": "C:/path/to/your/workspace" }
+      "env": {
+        "KETTLE_ROOT": "C:/path/to/your/workspace",
+        "PENTAHO_HOME": "C:/Pentaho/data-integration"
+      }
     }
   }
 }
 ```
 
-Lưu rồi reconnect MCP trong Kiro; không cần restart Kiro.
+`KETTLE_ROOT` là tùy chọn nhưng nên đặt khi không chắc thư mục làm việc của tiến trình MCP; nếu client khởi chạy server ngay trong project thì có thể chỉ cần `PENTAHO_HOME`. `PENTAHO_HOME` chỉ cần khi dùng nhóm runtime tùy chọn. Lưu rồi reconnect MCP trong Kiro; không cần restart Kiro.
 
 ## Đăng ký packaged executable
 
 Sau `npm run build:release -- --version <semver>`, giải nén ZIP và chạy trong folder giải nén:
 
 ```powershell
-.\install.ps1 -WorkspaceRoot C:\path\to\your\workspace
+.\install.ps1 -WorkspaceRoot C:\path\to\your\workspace -PentahoHome C:\Pentaho\data-integration
 ```
 
 Lệnh ghi entry `dte-pentaho` (`command` là `.exe`, `args` rỗng, `env.KETTLE_ROOT` là workspace) sau khi backup JSON, giữ server khác, không bật auto-approve toàn bộ. `uninstall.ps1` chỉ xóa entry này.
@@ -89,4 +81,4 @@ Lệnh ghi entry `dte-pentaho` (`command` là `.exe`, `args` rỗng, `env.KETTLE
 |-----|-------------|-----|
 | Đường ngoài `KETTLE_ROOT` bị từ chối | Absolute ngoài root, `..`, sibling-prefix, hoặc symlink/junction escape | Đưa target vào trong `KETTLE_ROOT` |
 | Tuyệt đối bị từ chối | Đường tuyệt đối nhưng không nằm trong root | Dùng đường tương đối, hoặc tuyệt đối bên trong root |
-| `Missing .pentaho-mcp.yaml` (chỉ runtime đã hoãn) | Thiếu file khi gọi tool runtime | Chỉ cần khi dùng runtime; tạo file runtime-only tối thiểu |
+| Runtime báo không khả dụng | `PENTAHO_HOME` chưa đặt hoặc trỏ sai | Đặt `PENTAHO_HOME` tới thư mục PDI chứa `Kitchen.bat`/`Pan.bat` |

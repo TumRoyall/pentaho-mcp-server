@@ -48,7 +48,7 @@ Kết quả: mảng JSON gồm 22 tool, bao gồm `kettle_add_error_hop`. Danh s
 | Nhóm runtime (4): `kettle_runtime_detect`, `kettle_runtime_loadcheck`, `kettle_runtime_execute`, `kettle_runtime_logs` — nằm ngoài workflow mới, đã hoãn | `src/tools/runtime.tools.js` | `docs/tools-reference.md` |
 | **Không** quảng bá prompt nào; `initialize` khai báo `capabilities = { tools: {} }` | `src/server.js`, `scripts/verify-production-profile.mjs` | `README.md`, `docs/tools-reference.md`, `docs/operations.md` |
 | **Không** quảng bá resource nào (không còn `dte-pentaho://skills/...`) | `src/server.js`, `scripts/verify-production-profile.mjs` | `README.md`, `docs/tools-reference.md`, `docs/operations.md` |
-| Code lifecycle BA cũ (`src/lifecycle/**`, `src/tools/lifecycle.tools.js`) còn trên đĩa nhưng **KHÔNG đăng ký** vào `FACTORIES`; là legacy giữ để rollback/trích xuất, không thuộc production API | `src/tools/registry.js`, `src/lifecycle/*`, `src/tools/lifecycle.tools.js` | `docs/architecture.md`, `docs/development.md` |
+| Source production hiện tại **không còn** phần cài đặt lifecycle BA (không module, không tool factory tương ứng); guard absence assert điều này, còn `registry.js` chỉ đăng ký 5 factory production | `test/legacy-removal.test.js`, `src/tools/registry.js` | `docs/architecture.md`, `docs/development.md` |
 | Không có bề mặt learning/promotion tri thức (production knowledge bất biến, chỉ đọc) | `scripts/verify-production-profile.mjs`, `src/tools/registry.js` | `README.md`, `docs/architecture.md`, `docs/development.md` |
 | Envelope trả về: `text` chứa `{ "ok": true, "data": ... }` hoặc `{ "ok": false, "error": "..." }`; edit tool trả unified diff | `src/server.js:32-66`, `src/tools/edit.tools.js` | `docs/tools-reference.md`, `docs/architecture.md` |
 
@@ -60,7 +60,7 @@ Kết quả: mảng JSON gồm 22 tool, bao gồm `kettle_add_error_hop`. Danh s
 | Đường tuyệt đối chỉ hợp lệ khi trong root; `..`, sibling-prefix, symlink/junction escape đều bị từ chối; so containment không phân biệt hoa/thường trên Windows | `src/workspace/boundary.js` | `docs/configuration.md` |
 | `assertWritable` cũ (env-based) trong `src/core/edit.js` đã gỡ; hàm XML lõi là filesystem op thuần túy, lớp tool adapter sở hữu biên | `src/core/edit.js`, `src/workspace/boundary.js` | `docs/architecture.md` |
 | `KETTLE_KNOWLEDGE_DIR` ghi đè knowledge nhúng | `src/knowledge/loader.js` | `docs/configuration.md`, `docs/tools-reference.md` |
-| `.pentaho-mcp.yaml` chỉ còn liên quan các tool runtime tùy chọn/đã hoãn (`schema_version: 1`, `environment.name`, `pentaho.home`) | `src/project/config.js`, `src/runtime/*` | `docs/configuration.md` |
+| `PENTAHO_HOME` là thiết lập vị trí PDI duy nhất cho nhóm runtime tùy chọn; runtime dùng chung biên `KETTLE_ROOT`, log dưới `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs`; execute luôn cần `confirmed: true` | `src/server.js`, `src/runtime/*`, `src/tools/runtime.tools.js` | `docs/configuration.md` |
 
 ## 6. Workflow idea-to-static-job
 
@@ -101,7 +101,7 @@ Kết quả: mảng JSON gồm 22 tool, bao gồm `kettle_add_error_hop`. Danh s
 | Fact | Nguồn authoritative | Đích tài liệu |
 |------|---------------------|----------------|
 | Lệnh: `npm run build:release -- --version <semver>`; bundle esbuild + SEA blob + postject inject; thất bại to nếu thiếu toolchain, không fallback cần system Node | `scripts/build-release.mjs`, `packaging/sea-config.json`, `package.json:11` | `docs/development.md`, `docs/operations.md` |
-| ZIP gồm các entry: `README.md`, `VERSION`, `config.example.yaml`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `install.ps1`, `uninstall.ps1`, `skills/`, `skills/developing-pentaho-jobs/`, `skills/developing-pentaho-jobs/references/`, `skills/developing-pentaho-jobs/SKILL.md`, `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`; `checksums.sha256` nằm cạnh ZIP, không phải entry bên trong | `scripts/build-release.mjs`, `test/packaging.test.js` | `docs/development.md`, `docs/operations.md`, `docs/install.md` |
+| ZIP gồm các entry: `README.md`, `VERSION`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `install.ps1`, `uninstall.ps1`, `skills/`, `skills/developing-pentaho-jobs/`, `skills/developing-pentaho-jobs/references/`, `skills/developing-pentaho-jobs/SKILL.md`, `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`; `checksums.sha256` nằm cạnh ZIP, không phải entry bên trong | `scripts/build-release.mjs`, `test/packaging.test.js` | `docs/development.md`, `docs/operations.md`, `docs/install.md` |
 | `install.ps1` ghi entry Kiro user-level, backup JSON, giữ server khác, không `autoApprove: ["*"]`; `uninstall.ps1` chỉ xóa entry này; `doctor.ps1` handshake initialize + tools/list (22 tool, từ chối `pentaho_*`, không kiểm prompt/resource) + dò PDI (thiếu PDI không fail) | `packaging/install.ps1`, `packaging/uninstall.ps1`, `packaging/doctor.ps1` | `docs/operations.md`, `docs/install.md` |
 | Companion skill được đưa vào `files` của npm (mục `"skills"`) và copy vào ZIP release; agent tương thích Superpowers phát hiện qua thư mục `skills/` | `package.json`, `scripts/build-release.mjs`, `skills/developing-pentaho-jobs/SKILL.md` | `docs/install.md`, `docs/operations.md`, `README.md` |
 

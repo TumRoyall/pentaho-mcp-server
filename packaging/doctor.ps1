@@ -1,20 +1,20 @@
 <#
 .SYNOPSIS
-  Diagnose a DTE Pentaho lifecycle MCP install.
+  Diagnose a DTE Pentaho Kettle MCP install.
 
 .DESCRIPTION
   Verifies the packaged executable exists, performs an MCP stdio handshake
-  (initialize, tools/list), validates an optional .pentaho-mcp.yaml, and probes
-  for an optional local PDI. Exits nonzero when the install, handshake, or
-  supplied config is invalid. A missing PDI is reported separately and never
-  fails the check.
+  (initialize, tools/list), and probes an optional local PDI given by
+  -PentahoHome. Exits nonzero when the install or handshake is invalid. A
+  missing PDI is reported separately and never fails the check.
 
-.PARAMETER WorkspaceRoot
-  Optional workspace folder to validate .pentaho-mcp.yaml and probe pentaho.home.
+.PARAMETER PentahoHome
+  Optional PDI home (folder containing Kitchen.bat/Pan.bat) to probe. Runtime
+  execution is unavailable without it; static tools still work.
 #>
 [CmdletBinding()]
 param(
-  [string] $WorkspaceRoot
+  [string] $PentahoHome
 )
 
 $ErrorActionPreference = 'Stop'
@@ -77,40 +77,16 @@ if ($tools | Where-Object { $_.name -like 'pentaho_*' }) {
   Write-Host "[OK]   no lifecycle pentaho_* tools advertised"
 }
 
-# --- Optional workspace config ------------------------------------------------
-if ($WorkspaceRoot) {
-  $cfg = Join-Path $WorkspaceRoot '.pentaho-mcp.yaml'
-  if (-not (Test-Path -LiteralPath $cfg)) {
-    Write-Host "[FAIL] .pentaho-mcp.yaml not found in $WorkspaceRoot"
-    $failures += 'config'
+# --- Optional PDI probe (never a failure) -------------------------------------
+if ($PentahoHome) {
+  $kitchen = Join-Path $PentahoHome 'Kitchen.bat'
+  if (Test-Path -LiteralPath $kitchen) {
+    Write-Host "[INFO] optional PDI detected: $kitchen"
   } else {
-    $text = Get-Content -LiteralPath $cfg -Raw
-    $needed = @('schema_version', 'project', 'paths')
-    $missing = $needed | Where-Object { $text -notmatch ("(?m)^\s*" + [regex]::Escape($_) + "\s*:") }
-    if ($missing.Count -eq 0) {
-      Write-Host "[OK]   .pentaho-mcp.yaml has schema_version, project, paths"
-    } else {
-      Write-Host "[FAIL] .pentaho-mcp.yaml missing keys: $($missing -join ', ')"
-      $failures += 'config'
-    }
-
-    # Optional PDI probe (never a failure).
-    $homeMatch = [regex]::Match($text, "(?m)^\s*home\s*:\s*(.+?)\s*$")
-    if ($homeMatch.Success) {
-      $pdiHome = $homeMatch.Groups[1].Value.Trim("'`" ")
-      $abs = if ([System.IO.Path]::IsPathRooted($pdiHome)) { $pdiHome } else { Join-Path $WorkspaceRoot $pdiHome }
-      $kitchen = Join-Path $abs 'Kitchen.bat'
-      if (Test-Path -LiteralPath $kitchen) {
-        Write-Host "[INFO] optional PDI detected: $kitchen"
-      } else {
-        Write-Host "[INFO] optional PDI not found under $abs (runtime execution unavailable; validation/generation still work)"
-      }
-    } else {
-      Write-Host "[INFO] no pentaho.home configured; runtime execution disabled"
-    }
+    Write-Host "[INFO] optional PDI not found under $PentahoHome (runtime execution unavailable; static tools still work)"
   }
 } else {
-  Write-Host "[INFO] no -WorkspaceRoot supplied; skipped config and PDI checks"
+  Write-Host "[INFO] no -PentahoHome supplied; runtime execution disabled, static tools still work"
 }
 
 if ($failures.Count -gt 0) {

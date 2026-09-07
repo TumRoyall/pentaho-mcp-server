@@ -19,6 +19,21 @@ test('production profile excludes learning and installer scripts are portable an
   }
 });
 
+test('current user-facing docs and installers drop legacy configuration references', () => {
+  for (const relative of [
+    'README.md', 'docs/architecture.md', 'docs/configuration.md',
+    'docs/tools-reference.md', 'docs/operations.md', 'docs/install.md',
+    'packaging/install.ps1', 'packaging/doctor.ps1',
+  ]) {
+    const text = readFileSync(path.join(root, relative), 'utf8');
+    assert.doesNotMatch(
+      text,
+      /\.pentaho-mcp\.yaml|workspaceRoot|requirementFolder|PENTAHO_ENV|KETTLE_DOCS_DIR|KETTLE_JOBS_DIR/,
+      `${relative} must not reference removed configuration`,
+    );
+  }
+});
+
 test('package metadata ships the companion skill in the npm files list', () => {
   const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
   assert.ok(pkg.files.includes('skills'), 'package.json files must include skills');

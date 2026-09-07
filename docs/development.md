@@ -26,15 +26,15 @@ Chuẩn mực baseline: toàn suite pass, profile `production profile OK: 22 too
 | `npm run verify:profile` | Chặn learning/promotion surface, assert đúng 22 tool và không có bề mặt lifecycle prompt/resource |
 | `npm run build:release -- --version <semver>` | Bundle + SEA + ZIP versioned + checksum (chỉ Windows), gồm companion skill |
 
-## Bề mặt production và code lifecycle legacy
+## Bề mặt production
 
 Registry (`src/tools/registry.js`) đăng ký đúng **5 factory**: read/edit/validate/knowledge/runtime → tổng **22 tool**. Nhóm runtime giữ lại nhưng nằm ngoài workflow mới (đã hoãn).
 
-Code lifecycle BA cũ **cố ý không đăng ký**: `src/lifecycle/**` và `src/tools/lifecycle.tools.js` còn trên đĩa và test của chúng vẫn được giữ, nhưng **không** nằm trong `FACTORIES`, nên không xuất hiện trong `tools/list`. Đây là legacy giữ để rollback/trích xuất sau, không phải production API. MCP cũng không quảng bá prompt/resource nào; `initialize` chỉ khai báo `capabilities = { tools: {} }`.
+Phần cài đặt lifecycle BA cũ đã **gỡ bỏ khỏi source** cùng toàn bộ test riêng của nó; không còn module nào như vậy trên đĩa. `test/legacy-removal.test.js` giữ vai trò guard, fail nếu bất kỳ đường dẫn legacy nào quay lại. MCP cũng không quảng bá prompt/resource nào; `initialize` chỉ khai báo `capabilities = { tools: {} }`.
 
 ## Tổ chức test
 
-`test/` dùng `node:test` + `assert/strict`. Nhóm chính đăng ký: `add-element`, `create-file`, `edit*`, `set-fields`, `search`, `summarize`, `validate`, `knowledge*`, `runtime`, `smoke`, `packaging`, cùng test biên workspace. Các test lifecycle legacy (`lifecycle-*`, `workflow-*`, `generation`, `sync-changes`) được giữ nhưng nhắm code đã gỡ đăng ký.
+`test/` dùng `node:test` + `assert/strict`. Nhóm chính đăng ký: `add-element`, `create-file`, `edit*`, `set-fields`, `search`, `summarize`, `validate`, `knowledge*`, `runtime`, `smoke`, `packaging`, cùng test biên workspace và `legacy-removal`.
 
 Lệnh focused:
 
@@ -70,7 +70,7 @@ Trạng thái catalog:
 
 ## Giới hạn production-profile
 
-`scripts/verify-production-profile.mjs` fail nếu tool chứa `learn|promot|intake|catalog_add/write/promote`, nếu có bất kỳ prompt/resource nào được quảng bá, hoặc khác 22 tool. Không thêm bề mặt ghi/promote tri thức, không đăng ký lại lifecycle, không quảng bá prompt/resource vào production.
+`scripts/verify-production-profile.mjs` fail nếu tool chứa `learn|promot|intake|catalog_add/write/promote`, nếu có bất kỳ prompt/resource nào được quảng bá, hoặc khác 22 tool. Không thêm bề mặt ghi/promote tri thức, không đưa bề mặt lifecycle BA trở lại, không quảng bá prompt/resource vào production.
 
 ## Release build internals
 
@@ -84,7 +84,7 @@ Trạng thái catalog:
 
 ## Danh mục phát hành
 
-ZIP gồm các entry: `README.md`, `VERSION`, `config.example.yaml`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `install.ps1`, `uninstall.ps1`, `skills/`, `skills/developing-pentaho-jobs/`, `skills/developing-pentaho-jobs/references/`, `skills/developing-pentaho-jobs/SKILL.md`, `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`. `checksums.sha256` nằm cạnh ZIP, không phải entry bên trong.
+ZIP gồm các entry: `README.md`, `VERSION`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `install.ps1`, `uninstall.ps1`, `skills/`, `skills/developing-pentaho-jobs/`, `skills/developing-pentaho-jobs/references/`, `skills/developing-pentaho-jobs/SKILL.md`, `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`. `checksums.sha256` nằm cạnh ZIP, không phải entry bên trong.
 
 ## Checklist đóng góp
 

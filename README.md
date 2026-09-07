@@ -67,11 +67,16 @@ node src/index.js
     "dte-pentaho": {
       "command": "node",
       "args": ["C:/path/to/pentaho-mcp-server/src/index.js"],
-      "env": { "KETTLE_ROOT": "C:/path/to/your/workspace" }
+      "env": {
+        "KETTLE_ROOT": "C:/path/to/your/workspace",
+        "PENTAHO_HOME": "C:/Pentaho/data-integration"
+      }
     }
   }
 }
 ```
+
+`KETTLE_ROOT` là tùy chọn nhưng nên đặt khi không chắc thư mục làm việc của tiến trình MCP. `PENTAHO_HOME` chỉ cần khi dùng nhóm runtime tùy chọn.
 
 Kiểm tra:
 
@@ -88,13 +93,13 @@ Không cần system Node hay `npm install`; knowledge và companion skill nằm 
 
 ```powershell
 npm run build:release -- --version 1.0.0
-.\install.ps1 -WorkspaceRoot C:\path\to\your\workspace
-.\doctor.ps1 -WorkspaceRoot C:\path\to\your\workspace
+.\install.ps1 -WorkspaceRoot C:\path\to\your\workspace -PentahoHome C:\Pentaho\data-integration
+.\doctor.ps1 -PentahoHome C:\Pentaho\data-integration
 ```
 
 Gỡ bỏ: `.\uninstall.ps1` (chỉ xóa entry `dte-pentaho`).
 
-Hướng dẫn chi tiết: `docs/install.md` (cài đặt), `docs/configuration.md` (`KETTLE_ROOT`, biên workspace, PDI tùy chọn/hoãn), `docs/operations.md` (vận hành).
+Hướng dẫn chi tiết: `docs/install.md` (cài đặt), `docs/configuration.md` (`KETTLE_ROOT`, biên workspace, `PENTAHO_HOME` runtime tùy chọn), `docs/operations.md` (vận hành).
 
 ## Kiến trúc tóm tắt
 
@@ -109,18 +114,16 @@ flowchart LR
     Registry --> Boundary[src/workspace/boundary.js - chính sách biên]
     Core --> Workspace[(workspace .kjb/.ktr)]
     Runtime --> PDI[(PDI cục bộ)]
-    Legacy[src/lifecycle + src/tools/lifecycle.tools.js - legacy, KHÔNG đăng ký]:::legacy
-    classDef legacy stroke-dasharray: 5 5,color:#888;
 ```
 
-Superpowers nằm **ngoài** MCP. Module lifecycle cũ (`src/lifecycle/**`, `src/tools/lifecycle.tools.js`) còn trên đĩa nhưng **không đăng ký** vào `FACTORIES` (legacy, giữ để rollback/trích xuất sau). `KETTLE_ROOT` mặc định là `process.cwd()` khi unset và **luôn được enforce** (canonical containment) qua `src/workspace/boundary.js`.
+Superpowers nằm **ngoài** MCP. Bề mặt và phần cài đặt lifecycle BA đã được **gỡ bỏ** khỏi source; hồ sơ thiết kế lịch sử vẫn lưu tại `docs/superpowers/`. `KETTLE_ROOT` mặc định là `process.cwd()` khi unset và **luôn được enforce** (canonical containment) qua `src/workspace/boundary.js`.
 
 Luồng chi tiết, module map, và quy ước lỗi/kết quả xem `docs/architecture.md`. Playbook idea-to-static-job xem `docs/workflow-guide.md`.
 
 ## Cấu hình tối thiểu
 
 - `KETTLE_ROOT` mặc định `process.cwd()` khi unset và luôn được enforce: đường dẫn tuyệt đối chỉ hợp lệ khi nằm trong root; `..`, sibling-prefix và symlink/junction thoát root đều bị từ chối.
-- `.pentaho-mcp.yaml` chỉ còn liên quan tới các tool runtime tùy chọn/đã hoãn.
+- `PENTAHO_HOME` là thiết lập vị trí PDI duy nhất, chỉ cần cho nhóm runtime tùy chọn; không còn file cấu hình YAML theo project.
 
 Chi tiết xem `docs/configuration.md`.
 
@@ -129,7 +132,7 @@ Chi tiết xem `docs/configuration.md`.
 | Tài liệu | Đối tượng |
 |----------|-----------|
 | `docs/architecture.md` | Kiến trúc hệ thống, module, luồng MCP, biên an toàn |
-| `docs/configuration.md` | `KETTLE_ROOT` và biên workspace, biến môi trường, runtime tùy chọn/hoãn |
+| `docs/configuration.md` | `KETTLE_ROOT` và biên workspace, biến môi trường, `PENTAHO_HOME` runtime tùy chọn |
 | `docs/tools-reference.md` | Catalog 22 tool: tham số, output, ví dụ, bảng chọn tool |
 | `docs/workflow-guide.md` | Workflow idea-to-static-job và hợp đồng đặc tả |
 | `docs/development.md` | Setup repo, test, thêm tool/type, build release, checklist đóng góp |

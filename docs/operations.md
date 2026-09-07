@@ -14,7 +14,7 @@ Cả hai đều tôn trọng `KETTLE_ROOT` (mặc định `process.cwd()`, luôn
 ## Xác minh cài đặt
 
 ```powershell
-.\doctor.ps1 -WorkspaceRoot C:\path\to\your\workspace
+.\doctor.ps1 -PentahoHome C:\Pentaho\data-integration
 node scripts/verify-production-profile.mjs
 ```
 
@@ -65,17 +65,17 @@ Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime đã hoã
 |-------------|-------|
 | Đường ngoài `KETTLE_ROOT` bị từ chối | Đưa target vào trong root; tránh `..`, sibling-prefix, symlink/junction escape |
 | Tuyệt đối bị từ chối | Dùng tương đối, hoặc tuyệt đối bên trong root |
-| Thiếu `.pentaho-mcp.yaml` khi gọi runtime | Chỉ cần cho nhóm runtime đã hoãn; tạo file runtime-only tối thiểu |
+| Runtime báo không khả dụng | Đặt `PENTAHO_HOME` trỏ thư mục PDI chứa `Kitchen.bat`/`Pan.bat` |
 
 Chi tiết biên xem `docs/configuration.md`.
 
-## Thiếu PDI (runtime đã hoãn)
+## Thiếu PDI (runtime tùy chọn)
 
-`kettle_runtime_detect` trả `available: false` + reason. Tính năng lõi (read/edit/validate/knowledge) vẫn chạy; `loadcheck`/`execute` trả `UNAVAILABLE`. Cài PDI rồi đặt `pentaho.home` trỏ thư mục chứa `Kitchen.bat`/`Pan.bat`.
+`kettle_runtime_detect` trả `available: false` + reason. Tính năng lõi (read/edit/validate/knowledge) vẫn chạy; `loadcheck`/`execute` trả `UNAVAILABLE`. Cài PDI rồi đặt `PENTAHO_HOME` trỏ thư mục chứa `Kitchen.bat`/`Pan.bat`.
 
 ## Triage sự cố
 
 1. `doctor.ps1` fail handshake → kiểm tra `.exe` bị chặn, `mcp.json` trỏ đúng path, reconnect MCP.
 2. Tool trả `{ok:false}` → đọc `error`: đường ngoài `KETTLE_ROOT` / validation fail → sửa path hoặc artifact.
-3. Runtime `FAIL`/`TIMEOUT` (đã hoãn) → `kettle_runtime_logs` xem log khử; kiểm tra `environment`/`confirmed`, `timeoutMs`, PDI home, structural validation.
+3. Runtime `FAIL`/`TIMEOUT` (tùy chọn) → `kettle_runtime_logs` xem log khử dưới `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs/`; kiểm tra `confirmed`, `timeoutMs`, `PENTAHO_HOME`, structural validation.
 4. Giữ `git status --short` sạch khỏi artifact tạm; server không bao giờ commit/push.

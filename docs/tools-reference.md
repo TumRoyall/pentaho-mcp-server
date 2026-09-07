@@ -143,36 +143,36 @@ MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai bá
 - Output: `{summary: {files, parsedFiles, scanIssues, typeUsages, distinctTypes, canonical, observed, missing}, types, issues}`. Chỉ đọc, resilient trước file hỏng.
 - Ví dụ: `{ "directory": "etl-pentaho" }`
 
-## Nhóm runtime (4, ngoài workflow / đã hoãn)
+## Nhóm runtime (4, ngoài workflow, tùy chọn)
 
-> Nhóm runtime tạm giữ lại nhưng **nằm ngoài workflow idea-to-static-job** và được **hoãn** cho một đợt refactor sau. Không dùng trong luồng knowledge-first.
+> Nhóm runtime tạm giữ lại nhưng **nằm ngoài workflow idea-to-static-job**. Không dùng trong luồng knowledge-first. Các tool này dùng đúng biên `KETTLE_ROOT` và không nhận tham số chọn project riêng cho từng lời gọi.
 
 ### `kettle_runtime_detect`
 
-- Mục đích: dò `Kitchen.bat`/`Pan.bat` tùy chọn dưới `pentaho.home`.
-- Tham số: `workspaceRoot` (bắt buộc).
+- Mục đích: dò `Kitchen.bat`/`Pan.bat` tùy chọn dưới `PENTAHO_HOME`.
+- Tham số: không có.
 - Output: `{available, home, kitchen, pan, reason?}`. Không cần PDI để dùng tool khác.
-- Ví dụ: `{ "workspaceRoot": "C:/ws" }`
+- Ví dụ: `{}`
 
 ### `kettle_runtime_loadcheck`
 
 - Mục đích: validation tĩnh rồi nhờ Kitchen/Pan load artifact, không deploy.
-- Tham số: `workspaceRoot`, `requirementFolder`, `artifact` (path tương đối Pentaho root) (bắt buộc); `parameters?`, `timeoutMs?`.
+- Tham số: `artifact` (path tương đối `KETTLE_ROOT`, chỉ `.kjb`/`.ktr`) (bắt buộc); `parameters?`, `timeoutMs?`.
 - Output: `UNAVAILABLE` (thiếu PDI), `STATIC_VALIDATION_FAILED`, `PASS`/`FAIL`/`TIMEOUT` kèm stdout/stderr đã khử + `logFile`.
-- Ví dụ: `{ "workspaceRoot": "C:/ws", "requirementFolder": "REQ_001_CUSTOMER_EXPORT", "artifact": "jobs/main.kjb" }`
+- Ví dụ: `{ "artifact": "jobs/main.kjb" }`
 
 ### `kettle_runtime_execute`
 
-- Mục đích: execute bằng Kitchen/Pan; `DEV`/`TEST` tự cho phép, mọi môi trường khác cần `confirmed: true`. Giới hạn cwd, param, env, output 256KB, timeout (mặc định 120s). Log khử trong `runtime-logs/`.
-- Tham số thêm: `confirmed?` (boolean).
-- Ví dụ: `{ "workspaceRoot": "C:/ws", "requirementFolder": "REQ_001_CUSTOMER_EXPORT", "artifact": "jobs/main.kjb", "confirmed": true }`
+- Mục đích: execute bằng Kitchen/Pan; **luôn cần `confirmed: true`** (không tên môi trường nào bỏ qua bước này). Giới hạn cwd, param, env, output 256KB, timeout (mặc định 120s). Log khử trong `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs/`.
+- Tham số: `artifact` (bắt buộc); `parameters?`, `timeoutMs?`, `confirmed?` (boolean).
+- Ví dụ: `{ "artifact": "jobs/main.kjb", "confirmed": true }`
 
 ### `kettle_runtime_logs`
 
-- Mục đích: đọc log đã khử của một workflow.
-- Tham số: `workspaceRoot`, `requirementFolder` (bắt buộc).
-- Output: `{files: [{name, content}]}`.
-- Ví dụ: `{ "workspaceRoot": "C:/ws", "requirementFolder": "REQ_001_CUSTOMER_EXPORT" }`
+- Mục đích: đọc log đã khử dưới `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs/`.
+- Tham số: không có.
+- Output: `{files: [{name, content}]}`; `{files: []}` khi thư mục log chưa tồn tại.
+- Ví dụ: `{}`
 
 ## Bảng chọn tool
 

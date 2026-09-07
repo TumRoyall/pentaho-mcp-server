@@ -16,7 +16,7 @@ node scripts/build-release.mjs --version 1.0.0
 
 Kết quả trong `dist/`:
 
-- `dte-pentaho-mcp-<version>-win-x64.zip` — gồm các mục: `README.md`, `VERSION`, `config.example.yaml`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `install.ps1`, `uninstall.ps1`, và companion skill `skills/developing-pentaho-jobs/SKILL.md` cùng `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`.
+- `dte-pentaho-mcp-<version>-win-x64.zip` — gồm các mục: `README.md`, `VERSION`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `install.ps1`, `uninstall.ps1`, và companion skill `skills/developing-pentaho-jobs/SKILL.md` cùng `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`.
 - `checksums.sha256` — SHA-256 của ZIP, nằm cạnh ZIP.
 
 ### Cài trên máy đích (offline)
@@ -25,13 +25,13 @@ Kết quả trong `dist/`:
 2. Trong thư mục vừa giải nén:
 
 ```powershell
-.\install.ps1 -WorkspaceRoot C:\path\to\your\workspace
+.\install.ps1 -WorkspaceRoot C:\path\to\your\workspace -PentahoHome C:\Pentaho\data-integration
 ```
 
 Lệnh ghi server `dte-pentaho` vào `%USERPROFILE%\.kiro\settings\mcp.json` (backup file cũ, giữ server khác, không auto-approve toàn bộ tool).
 3. Reconnect MCP server trong Kiro.
 
-Kiểm tra: `.\doctor.ps1 -WorkspaceRoot C:\path\to\your\workspace` (handshake MCP bằng initialize + tools/list, assert 22 tool, từ chối `pentaho_*`).
+Kiểm tra: `.\doctor.ps1 -PentahoHome C:\Pentaho\data-integration` (handshake MCP bằng initialize + tools/list, assert 22 tool, từ chối `pentaho_*`).
 
 Gỡ bỏ: `.\uninstall.ps1` (chỉ xóa entry `dte-pentaho`).
 
@@ -84,11 +84,11 @@ Vì chỉ có 3 dependency, có 2 lựa chọn đã kiểm chứng:
 ## Biên workspace
 
 - `KETTLE_ROOT` mặc định `process.cwd()` khi unset và luôn được enforce; đường tuyệt đối chỉ hợp lệ khi nằm trong root, `..`/sibling-prefix/symlink escape bị từ chối. Chi tiết xem `docs/configuration.md`.
-- `.pentaho-mcp.yaml` chỉ cần cho các tool runtime tùy chọn/đã hoãn.
+- `PENTAHO_HOME` chỉ cần cho các tool runtime tùy chọn; không còn file cấu hình YAML theo project.
 
 ## An toàn thực thi và không tự commit Git
 
-- Kitchen/Pan (runtime đã hoãn) chỉ tự chạy ở `DEV`/`TEST`; môi trường khác (kể cả `UNKNOWN`) cần `confirmed: true`.
+- Kitchen/Pan (runtime tùy chọn) luôn cần `confirmed: true` để execute; không tên môi trường nào bỏ qua bước xác nhận.
 - Server không bao giờ thay đổi Git (không commit/push/amend).
 
 ## Đóng gói npm (tùy chọn)
