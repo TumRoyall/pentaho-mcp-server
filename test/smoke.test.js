@@ -12,7 +12,7 @@ function rpc(id, method, params) {
   return JSON.stringify({ jsonrpc: '2.0', id, method, params });
 }
 
-test('stdio smoke: initialize, tools, prompts, resources, and tool calls', async () => {
+test('stdio smoke: initialize, 22 tools, and tool calls', async () => {
   const root = mkdtempSync(path.join(os.tmpdir(), 'kettle-smoke-'));
   copyFileSync(path.join(here, 'fixtures', 'mini.ktr'), path.join(root, 'mini.ktr'));
   writeFileSync(
@@ -32,10 +32,6 @@ test('stdio smoke: initialize, tools, prompts, resources, and tool calls', async
       name: 'kettle_add_element',
       arguments: { path: 'add.ktr', type: 'SetSessionVariableStep', name: 'SetSess', allowObserved: true },
     }),
-    rpc(6, 'prompts/list', {}),
-    rpc(7, 'prompts/get', { name: 'develop-pentaho-job', arguments: { requirementFolder: 'REQ_001_SMOKE' } }),
-    rpc(8, 'resources/list', {}),
-    rpc(9, 'resources/read', { uri: 'dte-pentaho://skills/developing-pentaho-jobs' }),
   ].join('\n') + '\n');
   proc.stdin.end();
 
@@ -45,9 +41,9 @@ test('stdio smoke: initialize, tools, prompts, resources, and tool calls', async
     const responses = out.split('\n').filter(l => l.trim().startsWith('{')).map(l => JSON.parse(l));
 
     const list = responses.find(r => r.id === 2);
-    assert.equal(list.result.tools.length, 31); // 18 low-level + 9 lifecycle + 4 runtime
-    assert.equal(list.result.tools.filter(t => t.name.startsWith('kettle_')).length, 22);
-    assert.equal(list.result.tools.filter(t => t.name.startsWith('pentaho_')).length, 9);
+    assert.equal(list.result.tools.length, 22);
+    assert.ok(list.result.tools.every(tool => tool.name.startsWith('kettle_')));
+    assert.equal(list.result.tools.some(tool => tool.name.startsWith('pentaho_')), false);
     assert.equal(list.result.tools.some(tool => tool.name === 'kettle_set_sql'), false);
     assert.ok(list.result.tools.some(tool => tool.name === 'kettle_set_field'));
     const addTool = list.result.tools.find(t => t.name === 'kettle_add_element');
@@ -58,20 +54,9 @@ test('stdio smoke: initialize, tools, prompts, resources, and tool calls', async
     assert.ok(list.result.tools.some(t => t.name === 'kettle_knowledge_coverage'));
 
     const initialized = responses.find(r => r.id === 1);
-    assert.ok(initialized.result.capabilities.tools);
-    assert.ok(initialized.result.capabilities.prompts);
-    assert.ok(initialized.result.capabilities.resources);
-
-    const prompts = responses.find(r => r.id === 6);
-    assert.ok(prompts.result.prompts.some(p => p.name === 'develop-pentaho-job'));
-    const prompt = responses.find(r => r.id === 7);
-    assert.match(prompt.result.messages[0].content.text, /REQ_001_SMOKE/);
-
-    const resources = responses.find(r => r.id === 8);
-    assert.ok(resources.result.resources.some(r => r.uri === 'dte-pentaho://skills/developing-pentaho-jobs'));
-    assert.ok(resources.result.resources.every(r => !/learning|promotion/i.test(r.uri)));
-    const resource = responses.find(r => r.id === 9);
-    assert.match(resource.result.contents[0].text, /inspect.*workspace/i);
+    assert.ok(Object.hasOwn(initialized.result.capabilities, 'tools'));
+    assert.equal(Object.hasOwn(initialized.result.capabilities, 'prompts'), false);
+    assert.equal(Object.hasOwn(initialized.result.capabilities, 'resources'), false);
 
     const ok = responses.find(r => r.id === 3);
     assert.equal(ok.result.content[0].type, 'text');

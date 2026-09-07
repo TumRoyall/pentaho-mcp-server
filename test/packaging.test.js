@@ -41,12 +41,16 @@ test('versioned Windows release has exact inventory, checksum, and working MCP e
   const rpc = (id, method, params) => JSON.stringify({ jsonrpc: '2.0', id, method, params });
   proc.stdin.end([
     rpc(1, 'initialize', { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'package-test', version: '1' } }),
-    rpc(2, 'tools/list', {}), rpc(3, 'prompts/list', {}), rpc(4, 'resources/list', {}),
+    rpc(2, 'tools/list', {}),
   ].join('\n') + '\n');
   let output = '';
   for await (const chunk of proc.stdout) output += chunk;
   const responses = output.split(/\r?\n/).filter(line => line.startsWith('{')).map(JSON.parse);
-  assert.equal(responses.find(row => row.id === 2).result.tools.length, 31);
-  assert.ok(responses.find(row => row.id === 3).result.prompts.some(item => item.name === 'develop-pentaho-job'));
-  assert.ok(responses.find(row => row.id === 4).result.resources.every(item => !/learning|promotion/i.test(item.uri)));
+  const tools = responses.find(row => row.id === 2).result.tools;
+  assert.equal(tools.length, 22);
+  assert.equal(tools.some(item => item.name.startsWith('pentaho_')), false);
+  const capabilities = responses.find(row => row.id === 1).result.capabilities;
+  assert.ok(Object.hasOwn(capabilities, 'tools'));
+  assert.equal(Object.hasOwn(capabilities, 'prompts'), false);
+  assert.equal(Object.hasOwn(capabilities, 'resources'), false);
 });

@@ -12,15 +12,9 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
   CallToolRequestSchema,
-  GetPromptRequestSchema,
-  ListPromptsRequestSchema,
-  ListResourcesRequestSchema,
   ListToolsRequestSchema,
-  ReadResourceRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { buildTools } from './tools/registry.js';
-import { getLifecyclePrompt, listLifecyclePrompts } from './lifecycle/prompts.js';
-import { listLifecycleResources, readLifecycleResource } from './lifecycle/resources.js';
 import { createWorkspaceBoundary } from './workspace/boundary.js';
 
 export function makeContext({ root = process.env.KETTLE_ROOT ?? process.cwd() } = {}) {
@@ -39,18 +33,10 @@ export function createServer() {
 
   const server = new Server(
     { name: 'kettle-mcp-dte', version: '0.1.0' },
-    { capabilities: { tools: {}, prompts: {}, resources: {} } },
+    { capabilities: { tools: {} } },
   );
 
   server.setRequestHandler(ListToolsRequestSchema, () => ({ tools: listing }));
-  server.setRequestHandler(ListPromptsRequestSchema, () => ({ prompts: listLifecyclePrompts() }));
-  server.setRequestHandler(GetPromptRequestSchema, request => (
-    getLifecyclePrompt(request.params.name, request.params.arguments ?? {})
-  ));
-  server.setRequestHandler(ListResourcesRequestSchema, () => ({ resources: listLifecycleResources() }));
-  server.setRequestHandler(ReadResourceRequestSchema, request => ({
-    contents: [readLifecycleResource(request.params.uri)],
-  }));
 
   server.setRequestHandler(CallToolRequestSchema, async request => {
     const { name, arguments: args } = request.params;

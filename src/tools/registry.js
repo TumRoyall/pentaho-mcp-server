@@ -10,10 +10,9 @@ import { readTools } from './read.tools.js';
 import { editTools } from './edit.tools.js';
 import { validateTools } from './validate.tools.js';
 import { knowledgeTools } from './knowledge.tools.js';
-import { lifecycleTools } from './lifecycle.tools.js';
 import { runtimeTools } from './runtime.tools.js';
 
-const FACTORIES = [readTools, editTools, validateTools, knowledgeTools, lifecycleTools, runtimeTools];
+const FACTORIES = [readTools, editTools, validateTools, knowledgeTools, runtimeTools];
 
 export function buildTools(ctx) {
   const tools = FACTORIES.flatMap(factory => factory(ctx));

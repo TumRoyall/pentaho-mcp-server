@@ -4,15 +4,16 @@
  *
  * Pipeline:
  *   1. Bundle src/index.js (all src/**) into one CommonJS file with esbuild.
- *   2. Embed every immutable text asset (knowledge base + lifecycle skill
- *      Markdown) into a generated module. The runtime code reads these through
- *      fs.readFileSync using import.meta.url-relative paths; inside the single
- *      executable those files do not exist on disk, so a thin fs interception
- *      resolves any read whose path suffix matches an embedded asset and falls
- *      back to the real fs otherwise. Task 1-9 source is untouched.
+ *   2. Embed the immutable Pentaho knowledge base into a generated module. The
+ *      runtime code reads these through fs.readFileSync using
+ *      import.meta.url-relative paths; inside the single executable those files
+ *      do not exist on disk, so a thin fs interception resolves any read whose
+ *      path suffix matches an embedded asset and falls back to the real fs
+ *      otherwise.
  *   3. Generate the SEA blob with `node --experimental-sea-config`.
  *   4. Copy the running Node executable and inject the blob with postject.
- *   5. Verify the executable answers initialize/tools/prompts/resources.
+ *   5. Verify the executable answers initialize/tools/list with the 22-tool
+ *      surface and no prompt/resource capability.
  *   6. Assemble the versioned ZIP (exact inventory) and SHA-256 checksum.
  *
  * The build fails loudly if esbuild, postject, or the SEA toolchain is missing;
@@ -78,17 +79,14 @@ function collectFiles(dir) {
 }
 
 /**
- * Build the embedded asset map. Keys are POSIX path suffixes anchored at the
- * `src/` boundary (e.g. "knowledge/pentaho/job/START.md",
- * "lifecycle/writing-etl-requirements.md"). Values are UTF-8 text.
- */
-/**
+ * Build the embedded asset map for the Pentaho knowledge base. Keys are POSIX
+ * path suffixes anchored at the `src/knowledge/` boundary (e.g.
+ * "pentaho/job/START.md"). Values are UTF-8 text.
+ *
  * The bundle collapses every module's `import.meta.url` to one base (see
- * IMPORT_META_URL). That means runtime reads resolve to:
- *   - knowledge: <base>/pentaho/<entry.file>  (loader.js joins knowledgeDir())
- *   - lifecycle: <base>/<slug>.md             (catalog.js reads new URL('./..'))
- * so asset keys are anchored at src/knowledge/ (yielding "pentaho/...") and
- * src/lifecycle/ (yielding "<slug>.md"). The fs shim matches by path suffix.
+ * IMPORT_META_URL), so a knowledge read resolves to <base>/pentaho/<entry.file>
+ * (loader.js joins knowledgeDir()). Anchoring keys at src/knowledge/ yields
+ * "pentaho/...", which the fs shim matches by path suffix.
  */
 function collectEmbeddedAssets() {
   const assets = {};
@@ -101,14 +99,13 @@ function collectEmbeddedAssets() {
     }
   };
   add(path.join(root, 'src', 'knowledge', 'pentaho'), path.join(root, 'src', 'knowledge'));
-  add(path.join(root, 'src', 'lifecycle'), path.join(root, 'src', 'lifecycle'), ['.md']);
   return assets;
 }
 
 /**
  * The fs-interception prologue. Installs asset-serving overrides on `fs`
  * BEFORE the bundled server executes, so runtime import.meta.url-relative reads
- * of embedded knowledge/lifecycle files resolve from memory. Any read whose
+ * of the embedded knowledge base resolve from memory. Any read whose
  * normalized path suffix matches an embedded key is served; everything else
  * delegates to the real fs. A single self-contained file is required because a
  * SEA embeds exactly one main script and cannot require sibling files.
@@ -196,25 +193,22 @@ function injectExecutable(blob) {
   return exePath;
 }
 
-/** Smoke the built executable over stdio; assert the production surface. */
+/** Smoke the built executable over stdio; assert the 22-tool production surface. */
 function verifyExecutable(exePath) {
   const rpc = (id, method, params) => JSON.stringify({ jsonrpc: '2.0', id, method, params });
   const input = [
     rpc(1, 'initialize', { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'build-verify', version: '1' } }),
     rpc(2, 'tools/list', {}),
-    rpc(3, 'prompts/list', {}),
-    rpc(4, 'resources/list', {}),
   ].join('\n') + '\n';
   const res = spawnSync(exePath, [], { input, encoding: 'utf8', timeout: 60_000 });
   if (res.status !== 0 && res.status !== null) fail(`executable exited ${res.status}: ${res.stderr}`);
   const responses = (res.stdout || '').split(/\r?\n/).filter(l => l.startsWith('{')).map(JSON.parse);
   const tools = responses.find(r => r.id === 2)?.result?.tools;
-  if (!tools || tools.length !== 31) fail(`executable advertised ${tools ? tools.length : 'no'} tools, expected 31`);
-  const prompts = responses.find(r => r.id === 3)?.result?.prompts ?? [];
-  if (!prompts.some(p => p.name === 'develop-pentaho-job')) fail('develop-pentaho-job prompt missing from executable');
-  const resources = responses.find(r => r.id === 4)?.result?.resources ?? [];
-  if (resources.some(r => /learning|promotion/i.test(r.uri))) fail('executable exposes learning/promotion resources');
-  if (!resources.length) fail('executable exposes no lifecycle resources');
+  if (!tools || tools.length !== 22) fail(`executable advertised ${tools ? tools.length : 'no'} tools, expected 22`);
+  if (tools.some(t => t.name.startsWith('pentaho_'))) fail('executable exposes lifecycle pentaho_* tools');
+  const capabilities = responses.find(r => r.id === 1)?.result?.capabilities ?? {};
+  if (Object.hasOwn(capabilities, 'prompts')) fail('executable advertises a prompts capability');
+  if (Object.hasOwn(capabilities, 'resources')) fail('executable advertises a resources capability');
 }
 
 function assembleRelease(exePath, version) {

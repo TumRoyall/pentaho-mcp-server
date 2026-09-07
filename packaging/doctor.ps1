@@ -3,11 +3,11 @@
   Diagnose a DTE Pentaho lifecycle MCP install.
 
 .DESCRIPTION
-  Verifies the packaged executable exists, performs an MCP stdio handshake and
-  list calls (initialize, tools/list, prompts/list, resources/list), validates
-  an optional .pentaho-mcp.yaml, and probes for an optional local PDI. Exits
-  nonzero when the install, handshake, or supplied config is invalid. A missing
-  PDI is reported separately and never fails the check.
+  Verifies the packaged executable exists, performs an MCP stdio handshake
+  (initialize, tools/list), validates an optional .pentaho-mcp.yaml, and probes
+  for an optional local PDI. Exits nonzero when the install, handshake, or
+  supplied config is invalid. A missing PDI is reported separately and never
+  fails the check.
 
 .PARAMETER WorkspaceRoot
   Optional workspace folder to validate .pentaho-mcp.yaml and probe pentaho.home.
@@ -39,9 +39,7 @@ $init = @{ jsonrpc = '2.0'; id = 1; method = 'initialize'; params = @{
 
 $requests = @(
   $init,
-  (New-Rpc 2 'tools/list'),
-  (New-Rpc 3 'prompts/list'),
-  (New-Rpc 4 'resources/list')
+  (New-Rpc 2 'tools/list')
 ) -join "`n"
 
 $psi = New-Object System.Diagnostics.ProcessStartInfo
@@ -64,28 +62,19 @@ foreach ($line in ($stdout -split "`r?`n")) {
 }
 
 $tools = ($responses | Where-Object { $_.id -eq 2 }).result.tools
-if ($tools -and $tools.Count -eq 31) {
+if ($tools -and $tools.Count -eq 22) {
   Write-Host "[OK]   MCP handshake: $($tools.Count) tools"
 } else {
   $count = if ($tools) { $tools.Count } else { 0 }
-  Write-Host "[FAIL] MCP handshake: expected 31 tools, got $count"
+  Write-Host "[FAIL] MCP handshake: expected 22 tools, got $count"
   $failures += 'handshake'
 }
 
-$prompts = ($responses | Where-Object { $_.id -eq 3 }).result.prompts
-if ($prompts | Where-Object { $_.name -eq 'develop-pentaho-job' }) {
-  Write-Host "[OK]   prompt develop-pentaho-job advertised"
+if ($tools | Where-Object { $_.name -like 'pentaho_*' }) {
+  Write-Host "[FAIL] lifecycle pentaho_* tools advertised"
+  $failures += 'lifecycle-surface'
 } else {
-  Write-Host "[FAIL] prompt develop-pentaho-job missing"
-  $failures += 'prompts'
-}
-
-$resources = ($responses | Where-Object { $_.id -eq 4 }).result.resources
-if ($resources -and -not ($resources | Where-Object { $_.uri -match 'learning|promotion' })) {
-  Write-Host "[OK]   resources present and free of learning/promotion"
-} else {
-  Write-Host "[FAIL] resources missing or expose learning/promotion"
-  $failures += 'resources'
+  Write-Host "[OK]   no lifecycle pentaho_* tools advertised"
 }
 
 # --- Optional workspace config ------------------------------------------------
