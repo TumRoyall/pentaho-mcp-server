@@ -45,9 +45,11 @@ test('stdio smoke: initialize, tools, prompts, resources, and tool calls', async
     const responses = out.split('\n').filter(l => l.trim().startsWith('{')).map(l => JSON.parse(l));
 
     const list = responses.find(r => r.id === 2);
-    assert.equal(list.result.tools.length, 32); // 19 low-level + 9 lifecycle + 4 runtime
-    assert.equal(list.result.tools.filter(t => t.name.startsWith('kettle_')).length, 23);
+    assert.equal(list.result.tools.length, 31); // 18 low-level + 9 lifecycle + 4 runtime
+    assert.equal(list.result.tools.filter(t => t.name.startsWith('kettle_')).length, 22);
     assert.equal(list.result.tools.filter(t => t.name.startsWith('pentaho_')).length, 9);
+    assert.equal(list.result.tools.some(tool => tool.name === 'kettle_set_sql'), false);
+    assert.ok(list.result.tools.some(tool => tool.name === 'kettle_set_field'));
     const addTool = list.result.tools.find(t => t.name === 'kettle_add_element');
     assert.ok(addTool);
     assert.equal(addTool.inputSchema.properties.allowObserved.type, 'boolean');

@@ -209,7 +209,7 @@ function verifyExecutable(exePath) {
   if (res.status !== 0 && res.status !== null) fail(`executable exited ${res.status}: ${res.stderr}`);
   const responses = (res.stdout || '').split(/\r?\n/).filter(l => l.startsWith('{')).map(JSON.parse);
   const tools = responses.find(r => r.id === 2)?.result?.tools;
-  if (!tools || tools.length !== 32) fail(`executable advertised ${tools ? tools.length : 'no'} tools, expected 32`);
+  if (!tools || tools.length !== 31) fail(`executable advertised ${tools ? tools.length : 'no'} tools, expected 31`);
   const prompts = responses.find(r => r.id === 3)?.result?.prompts ?? [];
   if (!prompts.some(p => p.name === 'develop-pentaho-job')) fail('develop-pentaho-job prompt missing from executable');
   const resources = responses.find(r => r.id === 4)?.result?.resources ?? [];

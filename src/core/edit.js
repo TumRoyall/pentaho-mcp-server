@@ -232,18 +232,6 @@ export function addElement(filePath, xmlType, name, opts = {}) {
   };
 }
 
-export function setSql(filePath, name, sql) {
-  assertWritable(filePath);
-  const xml = readFileSync(filePath, 'utf8');
-  const { span } = requireElementSpan(xml, filePath, name);
-  const child = findChildSpan(xml, span, 'sql');
-  if (!child) throw new Error(`Element "${name}" has no <sql> block in ${filePath}`);
-  const newXml = child.selfClosing
-    ? replaceRange(xml, child.start, child.end, `<sql>${escapeXml(sql)}</sql>`)
-    : replaceRange(xml, child.inner.start, child.inner.end, escapeXml(sql));
-  return commitEdit(filePath, xml, newXml);
-}
-
 export function setField(filePath, name, field, value) {
   assertWritable(filePath);
   const xml = readFileSync(filePath, 'utf8');

@@ -17,7 +17,7 @@ import { listLifecyclePrompts } from '../src/lifecycle/prompts.js';
 import { listLifecycleResources } from '../src/lifecycle/resources.js';
 
 const FORBIDDEN = /learn|promot|intake|catalog[_-]?(add|write|promote)/i;
-const EXPECTED_TOOL_COUNT = 32;
+const EXPECTED_TOOL_COUNT = 31;
 
 const problems = [];
 

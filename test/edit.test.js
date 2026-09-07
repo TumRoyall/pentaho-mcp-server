@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import {
-  setSql, setField, assertWritable, unifiedDiff, commitEdit,
+  setField, assertWritable, unifiedDiff, commitEdit,
 } from '../src/core/edit.js';
 import { loadModel, text } from '../src/core/model.js';
 import { assertMinimalDiff } from './helpers.js';
@@ -21,30 +21,16 @@ beforeEach(() => {
   copyFileSync(fx('mini.kjb'), path.join(tmp, 'mini.kjb'));
 });
 
-test('setSql replaces only the SQL of the named step', () => {
+test('setField updates an existing SQL block', () => {
   const file = path.join(tmp, 'mini.ktr');
   const before = readFileSync(file, 'utf8');
-  const diff = setSql(file, 'in', "SELECT id FROM t WHERE a < 'x' AND b > 1");
+  const diff = setField(file, 'in', 'sql', "SELECT id FROM t WHERE a < 'x' AND b > 1");
   const after = readFileSync(file, 'utf8');
-  assert.match(diff, /^--- /);
   assertMinimalDiff(before, after, ['&lt;']);
+  assert.match(after, /SELECT id FROM t WHERE a &lt; 'x' AND b &gt; 1/);
+  assert.match(diff, /SELECT id FROM t/);
   const m = loadModel(file);
   assert.equal(text(m.elements[0].raw.sql), "SELECT id FROM t WHERE a < 'x' AND b > 1");
-});
-
-test('setSql works on SQL job entries', () => {
-  const file = path.join(tmp, 'mini.kjb');
-  setSql(file, 'run sql', 'TRUNCATE TABLE t2');
-  const m = loadModel(file);
-  assert.equal(text(m.elements[1].raw.sql), 'TRUNCATE TABLE t2');
-});
-
-test('setSql errors are precise and non-destructive', () => {
-  const file = path.join(tmp, 'mini.ktr');
-  const before = readFileSync(file, 'utf8');
-  assert.throws(() => setSql(file, 'ghost', 'X'), /No step named "ghost"/);
-  assert.throws(() => setSql(file, 'out', 'X'), /has no <sql> block/);
-  assert.equal(readFileSync(file, 'utf8'), before);
 });
 
 test('setField updates an existing child', () => {

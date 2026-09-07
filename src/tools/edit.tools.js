@@ -1,6 +1,6 @@
 /** Surgical edit tools. Each returns a unified diff of exactly what changed. */
 import {
-  createFile, addElement, setSql, setField, setFields, setFieldPath, editHops, addErrorHop, renameElement, cloneFile,
+  createFile, addElement, setField, setFields, setFieldPath, editHops, addErrorHop, renameElement, cloneFile,
 } from '../core/edit.js';
 
 const str = d => ({ type: 'string', description: d });
@@ -45,16 +45,6 @@ export function editTools({ resolve }) {
         y: a.y,
         allowObserved: a.allowObserved === true,
       }),
-    },
-    {
-      name: 'kettle_set_sql',
-      description: 'Replace the SQL of a TableInput/ExecSQL step or SQL job entry (surgical edit, returns diff)',
-      inputSchema: {
-        type: 'object',
-        properties: { path: PATH, name: str('Step/entry name'), sql: str('New SQL text') },
-        required: ['path', 'name', 'sql'],
-      },
-      handler: a => ({ diff: setSql(resolve(a.path), a.name, a.sql) }),
     },
     {
       name: 'kettle_set_field',
