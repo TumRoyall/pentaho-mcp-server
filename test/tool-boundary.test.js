@@ -4,8 +4,11 @@ import { mkdtempSync, mkdirSync, copyFileSync, readFileSync, existsSync, rmSync 
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { symlinkSync } from 'node:fs';
 import { createWorkspaceBoundary } from '../src/workspace/boundary.js';
 import { buildTools } from '../src/tools/registry.js';
+import { makeContext } from '../src/server.js';
+import { runtimeTools } from '../src/tools/runtime.tools.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fx = (...p) => path.join(here, 'fixtures', ...p);
@@ -88,6 +91,49 @@ test('kettle_create_file rejects an outside destination and creates no file', as
   const dest = path.join(outside, 'new.ktr');
   await assert.rejects(() => invoke(tools.get('kettle_create_file'), { path: dest }), /outside KETTLE_ROOT/i);
   assert.equal(existsSync(dest), false);
+});
+
+function runtimeMap(root) {
+  const tools = runtimeTools(makeContext({ root, pentahoHome: null }));
+  return new Map(tools.map(tool => [tool.name, tool]));
+}
+
+test('runtime loadcheck/execute reject outside and non-Kettle artifacts before spawning', async () => {
+  const { root, outside } = scratch();
+  const tools = runtimeMap(root);
+  const loadcheck = tools.get('kettle_runtime_loadcheck');
+  const execute = tools.get('kettle_runtime_execute');
+  await assert.rejects(
+    () => invoke(loadcheck, { artifact: '../outside.kjb' }),
+    /outside KETTLE_ROOT/i,
+  );
+  await assert.rejects(
+    () => invoke(execute, { artifact: path.join(outside, 'mini.kjb'), confirmed: true }),
+    /outside KETTLE_ROOT/i,
+  );
+  await assert.rejects(
+    () => invoke(loadcheck, { artifact: 'notes.txt' }),
+    /must end in \.kjb or \.ktr/i,
+  );
+});
+
+test('runtime tools reject an in-root link that resolves to an outside artifact', t => {
+  const { root, outside } = scratch();
+  const link = path.join(root, 'external');
+  try {
+    symlinkSync(outside, link, process.platform === 'win32' ? 'junction' : 'dir');
+  } catch (err) {
+    if (['EPERM', 'EACCES', 'UNKNOWN'].includes(err.code)) {
+      t.skip(`cannot create link on this platform: ${err.code}`);
+      return;
+    }
+    throw err;
+  }
+  const tools = runtimeMap(root);
+  return assert.rejects(
+    () => invoke(tools.get('kettle_runtime_loadcheck'), { artifact: path.join('external', 'mini.kjb') }),
+    /outside KETTLE_ROOT/i,
+  );
 });
 
 test('kettle_clone rejects an outside source and independently an outside destination', async () => {

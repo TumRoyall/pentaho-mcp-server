@@ -112,3 +112,25 @@ test('runtime factory exposes detect, loadcheck, execute, and logs tools', () =>
     'kettle_runtime_detect', 'kettle_runtime_loadcheck', 'kettle_runtime_execute', 'kettle_runtime_logs',
   ]);
 });
+
+test('runtime tools use the server root without project-selection arguments', () => {
+  const root = path.resolve('C:/project');
+  const tools = runtimeTools({
+    root,
+    pentahoHome: 'C:/Pentaho/data-integration',
+    resolveRead: value => path.resolve(root, value),
+  });
+  const byName = new Map(tools.map(tool => [tool.name, tool]));
+  assert.deepEqual(byName.get('kettle_runtime_detect').inputSchema, {
+    type: 'object', properties: {},
+  });
+  assert.deepEqual(byName.get('kettle_runtime_logs').inputSchema, {
+    type: 'object', properties: {},
+  });
+  for (const name of ['kettle_runtime_loadcheck', 'kettle_runtime_execute']) {
+    const schema = byName.get(name).inputSchema;
+    assert.deepEqual(schema.required, ['artifact']);
+    assert.equal(Object.hasOwn(schema.properties, 'workspaceRoot'), false);
+    assert.equal(Object.hasOwn(schema.properties, 'requirementFolder'), false);
+  }
+});
