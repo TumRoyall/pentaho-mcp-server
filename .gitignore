@@ -4,4 +4,4 @@ node_modules/
 # Release build artifacts (produced by scripts/build-release.mjs)
 build/
 dist/
-.kiro
+.kiro/
