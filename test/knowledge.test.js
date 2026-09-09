@@ -6,7 +6,8 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import {
   parseCatalog, loadCatalog, listTypes, findByXmlType,
-  knownXmlTypes, isGeneratorEligible, getReference, knowledgeDir, _resetCache,
+  knownXmlTypes, isGeneratorEligible, getReference, knowledgeDir,
+  verifiedVersions, _resetCache,
 } from '../src/knowledge/loader.js';
 import { checkCatalogTypes } from '../src/knowledge/catalog-check.js';
 import { loadModel } from '../src/core/model.js';
@@ -57,6 +58,48 @@ test('isGeneratorEligible follows catalog policy', () => {
   assert.equal(isGeneratorEligible('trans', 'TableInput'), true);                // canonical + eligible
   assert.equal(isGeneratorEligible('trans', 'SetSessionVariableStep'), false);   // observed, not eligible
   assert.equal(isGeneratorEligible('trans', 'NoSuchType'), false);               // unknown
+});
+
+test('verifiedVersions splits pipe-separated evidence and filters blanks', () => {
+  assert.deepEqual(verifiedVersions({ verified_versions: '9.3|9.4' }), ['9.3', '9.4']);
+  assert.deepEqual(verifiedVersions({ verified_versions: ' 9.4 ' }), ['9.4']);
+  assert.deepEqual(verifiedVersions({ verified_versions: '' }), []);
+  assert.deepEqual(verifiedVersions({}), []);
+  assert.deepEqual(verifiedVersions(null), []);
+});
+
+test('embedded catalog targets PDI 9.4', () => {
+  assert.equal(String(loadCatalog().pdi_version), '9.4');
+});
+
+test('generator eligibility requires the catalog target in verified_versions', () => {
+  const tmp = mkdtempSync(path.join(os.tmpdir(), 'kettle-evidence-'));
+  const prev = process.env.KETTLE_KNOWLEDGE_DIR;
+  try {
+    mkdirSync(path.join(tmp, 'trans'), { recursive: true });
+    writeFileSync(path.join(tmp, 'catalog.yaml'), [
+      'version: 1',
+      'pdi_version: "9.4"',
+      'policy:',
+      '  generator_requires_status: canonical',
+      '  generator_requires_eligible: true',
+      'components:',
+      '  transformation:',
+      '    - {type: LEGACY_ONLY, xml_type: LegacyOnly, file: trans/LegacyOnly.md, status: canonical, generator_eligible: true, verified_versions: "9.3"}',
+      '    - {type: VERIFIED_TARGET, xml_type: VerifiedTarget, file: trans/VerifiedTarget.md, status: canonical, generator_eligible: true, verified_versions: "9.3|9.4"}',
+    ].join('\n'));
+    writeFileSync(path.join(tmp, 'trans', 'LegacyOnly.md'), '# LegacyOnly\n');
+    writeFileSync(path.join(tmp, 'trans', 'VerifiedTarget.md'), '# VerifiedTarget\n');
+    process.env.KETTLE_KNOWLEDGE_DIR = tmp;
+    _resetCache();
+    assert.equal(isGeneratorEligible('trans', 'LegacyOnly'), false);
+    assert.equal(isGeneratorEligible('trans', 'VerifiedTarget'), true);
+  } finally {
+    if (prev === undefined) delete process.env.KETTLE_KNOWLEDGE_DIR;
+    else process.env.KETTLE_KNOWLEDGE_DIR = prev;
+    _resetCache();
+    rmSync(tmp, { recursive: true, force: true });
+  }
 });
 
 test('knownXmlTypes and getReference resolve embedded files', () => {

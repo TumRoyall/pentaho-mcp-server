@@ -79,6 +79,30 @@ test('knowledgeCoverage sorts missing first, then observed, then canonical', () 
   }
 });
 
+test('knowledgeCoverage exposes target-version evidence on catalogued rows', () => {
+  const root = tmpTree();
+  try {
+    const report = knowledgeCoverage(root);
+    const dummy = report.types.find(x => x.xmlType === 'Dummy');
+    assert.ok(dummy, 'Dummy row present');
+    assert.equal(dummy.sourceVersion, '9.4');
+    assert.deepEqual(dummy.verifiedVersions, ['9.4']);
+    assert.equal(dummy.verification, 'source_reviewed');
+
+    // Observed row with no established target evidence carries none.
+    const observed = report.types.find(x => x.xmlType === 'SetSessionVariableStep');
+    assert.ok(observed, 'observed row present');
+    assert.deepEqual(observed.verifiedVersions, []);
+
+    // Uncatalogued (missing) rows have no evidence fields to report.
+    const missing = report.types.find(x => x.xmlType === 'CustomStep');
+    assert.deepEqual(missing.verifiedVersions, []);
+    assert.equal(missing.sourceVersion, null);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test('knowledgeCoverage does not count nested field <type> values', () => {
   const root = tmpTree();
   try {
