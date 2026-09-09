@@ -55,8 +55,11 @@ Skill đi kèm nằm ở `skills/developing-pentaho-jobs/SKILL.md`, cùng hai m�
 
 **Phát hiện skill (discovery) không tự động chỉ vì `skills/` nằm trong ZIP.** Cách nạp tùy client:
 
-- **Kiro:** copy thư mục `skills/developing-pentaho-jobs/` vào `.kiro/skills/` của workspace (hoặc `~/.kiro/skills/` cho phạm vi user), rồi Kiro sẽ khám phá được skill.
-- **Codex / agent tương thích Superpowers dùng alias chung:** đặt skill dưới thư mục skills của runtime đó (ví dụ `~/.agents/skills/`) hoặc thư mục skills mà runtime quét; xem tài liệu client để biết đường dẫn chính xác.
+| Client | Project scope | User scope |
+|---|---|---|
+| Kiro | `.kiro/skills/developing-pentaho-jobs/` | `%USERPROFILE%/.kiro/skills/developing-pentaho-jobs/` |
+| Claude Code | `.claude/skills/developing-pentaho-jobs/` | `%USERPROFILE%/.claude/skills/developing-pentaho-jobs/` |
+| Codex | `.agents/skills/developing-pentaho-jobs/` | `%USERPROFILE%/.agents/skills/developing-pentaho-jobs/` |
 
 Ở bản packaged, skill nằm trong ZIP giải nén dưới `skills/developing-pentaho-jobs/`; bạn vẫn cần copy vào vị trí skills của client như trên.
 
@@ -72,22 +75,13 @@ $env:KETTLE_ROOT = "C:\path\to\your\workspace"
 node src/index.js
 ```
 
-Đăng ký vào Kiro (`%USERPROFILE%\.kiro\settings\mcp.json`):
+Đăng ký client thủ công theo `docs/install.md`:
 
-```json
-{
-  "mcpServers": {
-    "dte-pentaho": {
-      "command": "node",
-      "args": ["C:/path/to/pentaho-mcp-server/src/index.js"],
-      "env": {
-        "KETTLE_ROOT": "C:/path/to/your/workspace",
-        "PENTAHO_HOME": "C:/Pentaho/data-integration"
-      }
-    }
-  }
-}
-```
+| Client | Cấu hình | Chi tiết |
+|---|---|---|
+| Kiro | `.kiro/settings/mcp.json` hoặc `%USERPROFILE%/.kiro/settings/mcp.json` | `docs/install.md#kiro` |
+| Claude Code | `.mcp.json` tại project root | `docs/install.md#claude-code` |
+| Codex | `.codex/config.toml` project hoặc `%USERPROFILE%/.codex/config.toml` | `docs/install.md#codex` |
 
 `KETTLE_ROOT` là tùy chọn nhưng nên đặt khi không chắc thư mục làm việc của tiến trình MCP. `PENTAHO_HOME` chỉ cần khi dùng nhóm runtime tùy chọn.
 
@@ -106,11 +100,10 @@ Không cần system Node hay `npm install`; knowledge và companion skill nằm 
 
 ```powershell
 npm run build:release -- --version 1.0.0
-.\install.ps1 -WorkspaceRoot C:\path\to\your\workspace -PentahoHome C:\Pentaho\data-integration
 .\doctor.ps1 -PentahoHome C:\Pentaho\data-integration
 ```
 
-Gỡ bỏ: `.\uninstall.ps1` (chỉ xóa entry `dte-pentaho`).
+Đăng ký client là thao tác thủ công theo `docs/install.md` (Kiro, Claude Code, Codex). Giải nén ZIP ra thư mục ổn định vì cấu hình client trỏ trực tiếp tới `dte-pentaho-mcp.exe`.
 
 Hướng dẫn chi tiết: `docs/install.md` (cài đặt), `docs/configuration.md` (`KETTLE_ROOT`, biên workspace, `PENTAHO_HOME` runtime tùy chọn), `docs/operations.md` (vận hành).
 

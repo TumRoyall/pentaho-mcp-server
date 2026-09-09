@@ -47,7 +47,7 @@ Cơ chế `assertWritable` cũ (dựa biến môi trường trong `src/core/edit
 | `src/core/` | `model.js`, `span.js`, `edit.js`, `artifact-edit.js`, `remove.js`, `search.js`, `validate.js`, `summarize.js`, `knowledge-intake.js`, `knowledge-coverage.js` — engine thuần túy, filesystem op | `src/core/*.js` |
 | `src/knowledge/` | `loader.js` (parse `catalog.yaml`, resolve reference, `KETTLE_KNOWLEDGE_DIR` override), `catalog-check.js` | `src/knowledge/loader.js` |
 | `src/runtime/` | `detect.js`, `policy.js`, `run.js`, `redact.js` — dò PDI theo `PENTAHO_HOME`, chính sách thực thi confirm-only, spawn có timeout, khử nhạy cảm; **tùy chọn, phase-gated** (chỉ sau validation tĩnh), dùng chung biên `KETTLE_ROOT` | `src/runtime/*.js` |
-| `scripts/`, `packaging/` | `build-release.mjs` (esbuild + SEA + postject + ZIP), `verify-production-profile.mjs`, `install.ps1`/`uninstall.ps1`/`doctor.ps1` | `scripts/*`, `packaging/*` |
+| `scripts/`, `packaging/` | `build-release.mjs` (esbuild + SEA + postject + ZIP), `verify-production-profile.mjs`, `doctor.ps1` plus client-neutral manual configuration in docs/install.md | `scripts/*`, `packaging/*` |
 
 ```mermaid
 flowchart TB

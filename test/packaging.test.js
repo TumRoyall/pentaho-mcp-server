@@ -87,6 +87,21 @@ test('installation guide covers all supported clients and their skill locations'
   assert.doesNotMatch(install, /install\.ps1|uninstall\.ps1/);
 });
 
+test('current documentation has no removed installer workflow', () => {
+  for (const relative of [
+    'README.md',
+    'docs/architecture.md',
+    'docs/configuration.md',
+    'docs/development.md',
+    'docs/documentation-facts.md',
+    'docs/install.md',
+    'docs/operations.md',
+  ]) {
+    const text = readFileSync(path.join(root, relative), 'utf8');
+    assert.doesNotMatch(text, /install\.ps1|uninstall\.ps1/, relative);
+  }
+});
+
 test('versioned Windows release has exact inventory, checksum, and working MCP executable', async () => {
   rmSync(path.join(root, 'dist'), { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   const build = spawnSync(process.execPath, ['scripts/build-release.mjs', '--version', version], { cwd: root, encoding: 'utf8', timeout: 120_000 });

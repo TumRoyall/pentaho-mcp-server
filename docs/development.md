@@ -95,7 +95,7 @@ Trạng thái catalog:
 
 ## Danh mục phát hành
 
-ZIP gồm các entry: `README.md`, `VERSION`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `install.ps1`, `uninstall.ps1`, `skills/`, `skills/developing-pentaho-jobs/`, `skills/developing-pentaho-jobs/references/`, `skills/developing-pentaho-jobs/SKILL.md`, `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`. `checksums.sha256` nằm cạnh ZIP, không phải entry bên trong.
+ZIP gồm đúng các entry: `README.md`, `VERSION`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `skills/`, `skills/developing-pentaho-jobs/`, `skills/developing-pentaho-jobs/references/`, `skills/developing-pentaho-jobs/SKILL.md`, `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`, `skills/developing-pentaho-jobs/references/pentaho-plan-template.md`. `checksums.sha256` nằm cạnh ZIP, không phải entry bên trong. Cấu hình client được tài liệu hóa trong `docs/install.md` thay vì bị script release tự sửa.
 
 ## Checklist đóng góp
 

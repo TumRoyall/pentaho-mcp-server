@@ -57,37 +57,17 @@ Nguồn: `src/runtime/policy.js` (`executionPolicy({confirmed, executeEnabled})`
 - Resolve `Kitchen.bat`/`Pan.bat` dưới home; ngoài home → throw; thiếu một trong hai → `available: false`. Sau kiểm tồn tại, launcher được canonical hóa bằng `realpathSync` và kiểm lại vẫn nằm trong home canonical (chống symlink/junction thoát ra ngoài).
 - Không có PDI vẫn dùng được đầy đủ read/edit/validate/knowledge; `runPdi` trả `UNAVAILABLE` thay vì fail toàn cục.
 
-## Đăng ký source-mode
+## Mô hình đăng ký client dùng chung
 
-`%USERPROFILE%\.kiro\settings\mcp.json`:
+Mọi client đều dùng chung mô hình command/args/env cho server `dte-pentaho`:
 
-```json
-{
-  "mcpServers": {
-    "dte-pentaho": {
-      "command": "node",
-      "args": ["C:/path/to/pentaho-mcp-server/src/index.js"],
-      "env": {
-        "KETTLE_ROOT": "C:/path/to/your/workspace",
-        "PENTAHO_HOME": "C:/Pentaho/data-integration",
-        "PENTAHO_ENABLE_EXECUTE": "1"
-      }
-    }
-  }
-}
-```
+- `command` là đường dẫn tuyệt đối `dte-pentaho-mcp.exe` (bản packaged) hoặc `node` (source-mode).
+- `args` rỗng cho bản packaged, hoặc một phần tử là đường dẫn tuyệt đối `src/index.js` cho source-mode.
+- `env` luôn nên đặt `KETTLE_ROOT`; `PENTAHO_HOME` và `PENTAHO_ENABLE_EXECUTE` là tùy chọn.
 
-`KETTLE_ROOT` là tùy chọn nhưng nên đặt khi không chắc thư mục làm việc của tiến trình MCP; nếu client khởi chạy server ngay trong project thì có thể chỉ cần `PENTAHO_HOME`. `PENTAHO_HOME` chỉ cần khi dùng nhóm runtime tùy chọn. `PENTAHO_ENABLE_EXECUTE` cũng tùy chọn: **chỉ đặt `"1"` khi muốn cho phép thực thi thật**; bỏ hẳn để chặn (`EXECUTE_DISABLED`). Lưu rồi reconnect MCP trong Kiro; không cần restart Kiro.
+Ví dụ chính xác cho từng client xem `docs/install.md`: Kiro (`.kiro/settings/mcp.json`), Claude Code (`.mcp.json` tại project root), Codex (`.codex/config.toml`).
 
-## Đăng ký packaged executable
-
-Sau `npm run build:release -- --version <semver>`, giải nén ZIP và chạy trong folder giải nén:
-
-```powershell
-.\install.ps1 -WorkspaceRoot C:\path\to\your\workspace -PentahoHome C:\Pentaho\data-integration
-```
-
-Lệnh ghi entry `dte-pentaho` (`command` là `.exe`, `args` rỗng, `env.KETTLE_ROOT` là workspace) sau khi backup JSON, giữ server khác, không bật auto-approve toàn bộ. `uninstall.ps1` chỉ xóa entry này.
+`KETTLE_ROOT` là tùy chọn nhưng nên đặt khi không chắc thư mục làm việc của tiến trình MCP; nếu client khởi chạy server ngay trong project thì có thể chỉ cần `PENTAHO_HOME`. `PENTAHO_HOME` chỉ cần khi dùng nhóm runtime tùy chọn. `PENTAHO_ENABLE_EXECUTE` cũng tùy chọn: **chỉ đặt `"1"` khi muốn cho phép thực thi thật**; bỏ hẳn để chặn (`EXECUTE_DISABLED`).
 
 ## Lỗi biên thường gặp
 

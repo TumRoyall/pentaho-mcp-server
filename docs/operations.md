@@ -1,6 +1,6 @@
 # Vận hành
 
-Runbook cho operator. Nguồn sự thật: `packaging/*.ps1`, `scripts/*.mjs`, `src/runtime/*`, `src/workspace/boundary.js`.
+Runbook cho operator. Nguồn sự thật: `packaging/doctor.ps1`, `scripts/*.mjs`, `src/runtime/*`, `src/workspace/boundary.js`.
 
 ## Mô hình triển khai
 
@@ -24,17 +24,20 @@ Kiểm tra handshake thủ công: `tools/list` phải có `kettle_add_error_hop`
 
 ## Companion skill
 
-Bản packaged kèm companion skill dưới `skills/developing-pentaho-jobs/` (gồm `SKILL.md` và hai mẫu `references/pentaho-spec-template.md`, `references/pentaho-plan-template.md`). **Việc phát hiện skill không tự động chỉ vì thư mục `skills/` có trong bản giải nén.** Cách nạp cho từng client:
+Bản packaged kèm companion skill dưới `skills/developing-pentaho-jobs/` (gồm `SKILL.md` và hai mẫu `references/pentaho-spec-template.md`, `references/pentaho-plan-template.md`). **Việc phát hiện skill không tự động chỉ vì thư mục `skills/` có trong bản giải nén.**
 
-- **Kiro:** copy `skills/developing-pentaho-jobs/` vào `.kiro/skills/` của workspace (hoặc `~/.kiro/skills/` cho phạm vi user).
-- **Codex / agent tương thích Superpowers:** đặt skill dưới thư mục skills của runtime (ví dụ `~/.agents/skills/`) theo tài liệu client.
+| Client | Project scope | User scope |
+|---|---|---|
+| Kiro | `.kiro/skills/developing-pentaho-jobs/` | `%USERPROFILE%/.kiro/skills/developing-pentaho-jobs/` |
+| Claude Code | `.claude/skills/developing-pentaho-jobs/` | `%USERPROFILE%/.claude/skills/developing-pentaho-jobs/` |
+| Codex | `.agents/skills/developing-pentaho-jobs/` | `%USERPROFILE%/.agents/skills/developing-pentaho-jobs/` |
 
 Ở source-mode, skill nằm ngay tại `skills/` trong repo; vẫn cần copy vào vị trí skills của client như trên để client khám phá được.
 
 ## Nâng cấp/rollback
 
-- Nâng cấp: giải nén ZIP mới ra folder mới, chạy `install.ps1` (chỉ ghi đè entry `dte-pentaho`), giữ folder cũ tới khi `doctor.ps1` OK trên bản mới.
-- Rollback: chạy `install.ps1` từ folder cũ (trỏ lại `.exe` cũ), reconnect MCP.
+- Nâng cấp: giải nén ZIP mới ra thư mục ổn định mới, sửa đường dẫn `command` của `dte-pentaho` trong cấu hình client đang dùng sang `.exe` mới, kiểm tra bằng `doctor.ps1`, sau đó giữ lại hoặc xóa thư mục cũ.
+- Rollback: khôi phục đường dẫn executable cũ trong cùng cấu hình client.
 
 ## `doctor.ps1`
 
@@ -65,14 +68,13 @@ Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime phase-gat
 - Runtime là bước verification phase-gated: chỉ dùng sau validation tĩnh; `execute` còn cần user duyệt riêng cho lần chạy đó.
 - `loadcheck`/`execute` luôn validation tĩnh trước; structural error → `STATIC_VALIDATION_FAILED`.
 
-## Biên filesystem và backup
+## Biên filesystem
 
 - Ghi/đọc giới hạn trong `KETTLE_ROOT` (mặc định `process.cwd()`, luôn enforce) qua `src/workspace/boundary.js`; chặn absolute ngoài root, `..`, sibling-prefix, symlink/junction escape.
-- `install.ps1` backup `%USERPROFILE%\.kiro\settings\mcp.json` thành `mcp.json.bak-<timestamp>` trước khi ghi, giữ server khác.
 
 ## Gỡ cài đặt
 
-`.\uninstall.ps1` chỉ xóa entry `dte-pentaho`; giữ các server khác và workspace.
+Xóa mục/bảng `dte-pentaho` khỏi cấu hình client đang dùng và tùy chọn xóa thư mục companion-skill đã copy; giữ các server khác và workspace.
 
 ## SmartScreen/AV
 
