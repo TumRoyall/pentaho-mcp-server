@@ -12,7 +12,7 @@
  *      otherwise.
  *   3. Generate the SEA blob with `node --experimental-sea-config`.
  *   4. Copy the running Node executable and inject the blob with postject.
- *   5. Verify the executable answers initialize/tools/list with the 22-tool
+ *   5. Verify the executable answers initialize/tools/list with the 26-tool
  *      surface and no prompt/resource capability.
  *   6. Assemble the versioned ZIP (exact inventory) and SHA-256 checksum.
  *
@@ -193,7 +193,7 @@ function injectExecutable(blob) {
   return exePath;
 }
 
-/** Smoke the built executable over stdio; assert the 22-tool production surface. */
+/** Smoke the built executable over stdio; assert the 26-tool production surface. */
 function verifyExecutable(exePath) {
   const rpc = (id, method, params) => JSON.stringify({ jsonrpc: '2.0', id, method, params });
   const input = [
@@ -204,7 +204,7 @@ function verifyExecutable(exePath) {
   if (res.status !== 0 && res.status !== null) fail(`executable exited ${res.status}: ${res.stderr}`);
   const responses = (res.stdout || '').split(/\r?\n/).filter(l => l.startsWith('{')).map(JSON.parse);
   const tools = responses.find(r => r.id === 2)?.result?.tools;
-  if (!tools || tools.length !== 22) fail(`executable advertised ${tools ? tools.length : 'no'} tools, expected 22`);
+  if (!tools || tools.length !== 26) fail(`executable advertised ${tools ? tools.length : 'no'} tools, expected 26`);
   if (tools.some(t => t.name.startsWith('pentaho_'))) fail('executable exposes lifecycle pentaho_* tools');
   const capabilities = responses.find(r => r.id === 1)?.result?.capabilities ?? {};
   if (Object.hasOwn(capabilities, 'prompts')) fail('executable advertises a prompts capability');

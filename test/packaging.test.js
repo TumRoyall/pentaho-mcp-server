@@ -73,7 +73,7 @@ test('versioned Windows release has exact inventory, checksum, and working MCP e
   for await (const chunk of proc.stdout) output += chunk;
   const responses = output.split(/\r?\n/).filter(line => line.startsWith('{')).map(JSON.parse);
   const tools = responses.find(row => row.id === 2).result.tools;
-  assert.equal(tools.length, 22);
+  assert.equal(tools.length, 26);
   assert.equal(tools.some(item => item.name.startsWith('pentaho_')), false);
   const capabilities = responses.find(row => row.id === 1).result.capabilities;
   assert.ok(Object.hasOwn(capabilities, 'tools'));

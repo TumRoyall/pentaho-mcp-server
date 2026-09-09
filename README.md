@@ -6,15 +6,19 @@ MCP stdio server cho file Pentaho Kettle `.kjb` và `.ktr`: kiểm tra/chỉnh s
 
 ## Khả năng
 
-Bề mặt production đúng **22 tool**, chia 5 nhóm:
+Bề mặt production đúng **26 tool**, chia 6 nhóm:
 
 | Nhóm | Số lượng | Tool |
 |------|----------|------|
 | Read | 4 | `kettle_list`, `kettle_summary`, `kettle_get_element`, `kettle_search` |
 | Edit | 9 | `kettle_create_file`, `kettle_add_element`, `kettle_set_field`, `kettle_set_field_path`, `kettle_set_fields`, `kettle_edit_hops`, `kettle_add_error_hop`, `kettle_rename_element`, `kettle_clone` |
+| Artifact | 2 | `kettle_set_parameters`, `kettle_copy_connection` |
+| Removal | 2 | `kettle_remove_element`, `kettle_edit_error_hop` |
 | Validate | 1 | `kettle_validate` |
 | Knowledge | 4 | `kettle_knowledge_list`, `kettle_knowledge_get`, `kettle_knowledge_analyze_xml`, `kettle_knowledge_coverage` |
 | Runtime (PDI tùy chọn, phase-gated) | 4 | `kettle_runtime_detect`, `kettle_runtime_loadcheck`, `kettle_runtime_execute`, `kettle_runtime_logs` |
+
+Nhóm **Artifact** sửa tham số cấp artifact (`kettle_set_parameters`) và sao chép một `<connection>` đã đặt tên giữa các artifact trong root (`kettle_copy_connection`), **không bao giờ** ghi mật khẩu dạng plaintext (chỉ cho phép rỗng, `${BIẾN}`, hoặc chuỗi `Encrypted...` khi bật `allowEncryptedPassword`). Nhóm **Removal** xóa step/entry an toàn theo tham chiếu (`kettle_remove_element`, mặc định từ chối khi còn tham chiếu; `removeReferences:true` để cascade) và bật/tắt/xóa error hop (`kettle_edit_error_hop`).
 
 Nhóm Runtime **thuộc workflow** nhưng bị **giới hạn theo pha** (phase-gated): chỉ dùng sau khi validation tĩnh pass; `kettle_runtime_execute` còn cần user duyệt riêng cho lần chạy đó và `confirmed: true`. Chi tiết xem `docs/workflow-guide.md`. MCP **không quảng bá bất kỳ prompt hay resource nào**; `initialize` chỉ khai báo `capabilities = { tools: {} }`.
 
@@ -94,7 +98,7 @@ node --test
 node scripts/verify-production-profile.mjs
 ```
 
-Chuẩn mực thành công: toàn bộ suite pass và `production profile OK: 22 tools, no lifecycle prompt/resource surface, no learning/promotion surface`.
+Chuẩn mực thành công: toàn bộ suite pass và `production profile OK: 26 tools (exact set), no lifecycle prompt/resource surface, no learning/promotion surface`.
 
 ### Bản Windows tự chứa (cho end user)
 
@@ -142,7 +146,7 @@ Chi tiết xem `docs/configuration.md`.
 |----------|-----------|
 | `docs/architecture.md` | Kiến trúc hệ thống, module, luồng MCP, biên an toàn |
 | `docs/configuration.md` | `KETTLE_ROOT` và biên workspace, biến môi trường, `PENTAHO_HOME` runtime tùy chọn |
-| `docs/tools-reference.md` | Catalog 22 tool: tham số, output, ví dụ, bảng chọn tool |
+| `docs/tools-reference.md` | Catalog 26 tool: tham số, output, ví dụ, bảng chọn tool |
 | `docs/workflow-guide.md` | Workflow phát triển Pentaho năm pha, hợp đồng đặc tả, cổng mutation, runtime phase-gated |
 | `docs/development.md` | Setup repo, test, thêm tool/type, build release, checklist đóng góp |
 | `docs/operations.md` | Triển khai, verify, upgrade/rollback, `doctor.ps1`, log, sự cố |
