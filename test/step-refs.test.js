@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { renameElement } from '../src/core/edit.js';
+import { renameElement, addErrorHop } from '../src/core/edit.js';
 import { validateXml } from '../src/core/validate.js';
+import { loadModel } from '../src/core/model.js';
 
 let tmp;
 
@@ -163,4 +164,110 @@ test('validate accepts intact step references', () => {
   const r = validateXml(REF_TRANS, 'refs.ktr', { dir: tmp });
   const msgs = r.issues.map(i => i.message).join(' | ');
   assert.ok(!msgs.includes('Step reference'), `unexpected step-reference issue: ${msgs}`);
+});
+
+// A FilterRows routing to "keep" via <send_true_to>, but the only matching
+// hop split->keep is DISABLED. A disabled hop draws no arrow in Spoon, so the
+// route is unsatisfied and must warn.
+const DISABLED_TARGET_TRANS = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<transformation>',
+  '  <info><name>t</name></info>',
+  '  <order>',
+  '    <hop><from>split</from><to>keep</to><enabled>N</enabled></hop>',
+  '  </order>',
+  '  <step>',
+  '    <name>split</name>',
+  '    <type>FilterRows</type>',
+  '    <send_true_to>keep</send_true_to>',
+  '  </step>',
+  '  <step><name>keep</name><type>TableOutput</type></step>',
+  '</transformation>',
+].join('\n');
+
+test('target reference satisfied only by a disabled hop is a warning', () => {
+  const r = validateXml(DISABLED_TARGET_TRANS, 'refs.ktr', { dir: tmp });
+  const msgs = r.issues.map(i => i.message).join(' | ');
+  assert.match(msgs, /Step "split" routes to "keep" via <send_true_to> but has no hop to it/);
+  assert.equal(r.summary.errors, 0, msgs);
+});
+
+test('enabled error handling satisfied only by a disabled ordinary hop is a warning', () => {
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<transformation>',
+    '  <info><name>t</name></info>',
+    '  <order>',
+    '    <hop><from>src</from><to>err</to><enabled>N</enabled></hop>',
+    '  </order>',
+    '  <step><name>src</name><type>TableInput</type></step>',
+    '  <step><name>err</name><type>TableOutput</type></step>',
+    '  <step_error_handling>',
+    '    <error>',
+    '      <source_step>src</source_step>',
+    '      <target_step>err</target_step>',
+    '      <is_enabled>Y</is_enabled>',
+    '    </error>',
+    '  </step_error_handling>',
+    '</transformation>',
+  ].join('\n');
+  const r = validateXml(xml, 'refs.ktr', { dir: tmp });
+  const msgs = r.issues.map(i => i.message).join(' | ');
+  assert.match(msgs, /Error handling on "src" routes to "err" but has no hop to it/);
+  assert.equal(r.summary.errors, 0, msgs);
+});
+
+test('error handling naming a missing source step is an error', () => {
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<transformation>',
+    '  <info><name>t</name></info>',
+    '  <order>',
+    '    <hop><from>ghost</from><to>err</to><enabled>Y</enabled></hop>',
+    '  </order>',
+    '  <step><name>err</name><type>TableOutput</type></step>',
+    '  <step_error_handling>',
+    '    <error>',
+    '      <source_step>ghost</source_step>',
+    '      <target_step>err</target_step>',
+    '      <is_enabled>Y</is_enabled>',
+    '    </error>',
+    '  </step_error_handling>',
+    '</transformation>',
+  ].join('\n');
+  const r = validateXml(xml, 'refs.ktr', { dir: tmp });
+  const msgs = r.issues.map(i => i.message).join(' | ');
+  assert.match(msgs, /Error handling.*missing.*source step "ghost"/i);
+  assert.ok(r.summary.errors >= 1);
+});
+
+test('addErrorHop enables an existing disabled ordinary hop instead of adding a duplicate', () => {
+  const file = path.join(tmp, 'err.ktr');
+  writeFileSync(file, [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<transformation>',
+    '  <info><name>t</name></info>',
+    '  <order>',
+    '    <hop>',
+    '      <from>src</from>',
+    '      <to>tgt</to>',
+    '      <enabled>N</enabled>',
+    '    </hop>',
+    '  </order>',
+    '  <step><name>src</name><type>TableInput</type></step>',
+    '  <step><name>tgt</name><type>TableOutput</type></step>',
+    '</transformation>',
+    '',
+  ].join('\n'), 'utf8');
+
+  addErrorHop(file, 'src', 'tgt');
+  const after = readFileSync(file, 'utf8');
+  // No duplicate hop was inserted; the existing one is now enabled.
+  assert.equal((after.match(/<from>src<\/from>/g) || []).length, 1);
+  const m = loadModel(file);
+  const hop = m.hops.find(h => h.from === 'src' && h.to === 'tgt');
+  assert.ok(hop);
+  assert.equal(hop.enabled, 'Y');
+  // The error block was written for the source.
+  assert.ok(m.errorHops.some(e => e.source === 'src' && e.target === 'tgt'));
 });

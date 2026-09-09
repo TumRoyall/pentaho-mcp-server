@@ -78,6 +78,28 @@ test('unreachable element is a warning, unknown variable is info', () => {
   assert.equal(r.summary.errors, 0, msgs(r));
 });
 
+test('a disabled hop is not an active graph edge: its target is unreachable', () => {
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<transformation>',
+    '  <info><name>t</name></info>',
+    '  <order>',
+    '    <hop>',
+    '      <from>A</from>',
+    '      <to>B</to>',
+    '      <enabled>N</enabled>',
+    '    </hop>',
+    '  </order>',
+    '  <step><name>A</name><type>TableInput</type></step>',
+    '  <step><name>B</name><type>TableOutput</type></step>',
+    '</transformation>',
+  ].join('\n');
+  const r = validateXml(xml, 't.ktr', { dir: '.' });
+  assert.match(msgs(r), /"B" is not reachable/);
+  // Endpoint validation still runs for disabled hops (no missing-element error).
+  assert.equal(r.summary.errors, 0, msgs(r));
+});
+
 test('real fixture job passes structural rules', () => {
   const r = validateFile(fx('bcqt_kpcs', 'etl_job_ias_bcqt_kpcs.kjb'));
   const structural = r.issues.filter(i =>

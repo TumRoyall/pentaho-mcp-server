@@ -12,12 +12,26 @@ import path from 'node:path';
 import { XMLValidator } from 'fast-xml-parser';
 import { kindOf, STEP_REFERENCE_TAGS } from './model.js';
 import {
-  findChildSpan, findElementSpan, escapeXml, findAllSpans, innerText, unescapeXml,
+  findChildSpan, findDirectChildSpan, findElementSpan, escapeXml, findAllSpans, innerText, unescapeXml,
 } from './span.js';
 import { validateFile } from './validate.js';
 import { findByXmlType, getReference, isGeneratorEligible } from '../knowledge/loader.js';
 
 const ELEMENT_TAG = { job: 'entry', trans: 'step' };
+
+/**
+ * XML tag names interpolated into an edit must be safe element names — a tag
+ * built from caller input is written verbatim into the document, so an
+ * unvalidated value could inject markup or produce malformed XML. Reject
+ * anything that is not a plain XML name before any file is read or written.
+ */
+const XML_TAG_NAME = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
+
+function assertTagName(tag, label = 'tag name') {
+  if (typeof tag !== 'string' || !XML_TAG_NAME.test(tag)) {
+    throw new Error(`Invalid ${label} "${tag}": must match ${XML_TAG_NAME}`);
+  }
+}
 
 /**
  * The document's dominant line ending, used for every fragment this module
@@ -215,9 +229,10 @@ export function addElement(filePath, xmlType, name, opts = {}) {
 }
 
 export function setField(filePath, name, field, value) {
+  assertTagName(field, 'field name');
   const xml = readFileSync(filePath, 'utf8');
   const { span, tag } = requireElementSpan(xml, filePath, name);
-  const child = findChildSpan(xml, span, field);
+  const child = findDirectChildSpan(xml, span, field);
   let newXml;
   if (child) {
     newXml = child.selfClosing
@@ -418,9 +433,14 @@ export function addErrorHop(filePath, source, target, opts = {}) {
     withError = replaceRange(xml, indentStart, anchor, `${container}${eol}${anchorIndent}`);
   }
 
-  // 2) Ensure an ordinary enabled hop source -> target connects the steps.
+  // 2) Ensure an ordinary ENABLED hop source -> target connects the steps.
+  // Three cases, all inside this one atomic edit:
+  //   - no hop exists      -> insert a new enabled hop
+  //   - a disabled hop     -> flip its <enabled> to Y (do not duplicate it)
+  //   - an enabled hop     -> leave it untouched
   let newXml = withError;
-  if (!findHopSpan(withError, source, target)) {
+  const existingHop = findHopSpan(withError, source, target);
+  if (!existingHop) {
     const at = withError.indexOf('</order>');
     if (at === -1) throw new Error(`No </order> container in ${filePath}`);
     const hopXml = [
@@ -432,6 +452,11 @@ export function addErrorHop(filePath, source, target, opts = {}) {
       '  ',
     ].join(eol);
     newXml = replaceRange(withError, at, at, hopXml);
+  } else {
+    const en = findChildSpan(withError, existingHop, 'enabled');
+    if (en && unescapeXml(withError.slice(en.inner.start, en.inner.end)) !== 'Y') {
+      newXml = replaceRange(withError, en.inner.start, en.inner.end, 'Y');
+    }
   }
 
   return commitEdit(filePath, xml, newXml);
@@ -530,6 +555,8 @@ function renderItem(itemTag, order, values, indent, eol) {
  * byte-identical.
  */
 export function setFields(filePath, name, listTag, itemTag, items) {
+  assertTagName(listTag, 'list tag');
+  assertTagName(itemTag, 'item tag');
   if (!Array.isArray(items) || items.length === 0) {
     throw new Error(`setFields requires a non-empty items array for <${itemTag}> in "${name}"`);
   }
@@ -614,12 +641,14 @@ export function setFields(filePath, name, listTag, itemTag, items) {
  * behaves like setField (direct child).
  */
 export function setFieldPath(filePath, name, fieldPath, value) {
-  const xml = readFileSync(filePath, 'utf8');
-  const { span, tag } = requireElementSpan(xml, filePath, name);
   const segments = Array.isArray(fieldPath)
     ? fieldPath.slice()
     : String(fieldPath).split('/').map(s => s.trim()).filter(Boolean);
   if (segments.length === 0) throw new Error('setFieldPath requires a non-empty path');
+  for (const seg of segments) assertTagName(seg, 'path segment');
+
+  const xml = readFileSync(filePath, 'utf8');
+  const { span, tag } = requireElementSpan(xml, filePath, name);
 
   // Walk ancestors, narrowing the search span at each level. Ancestors must
   // exist and must not be self-closing (there is nothing to descend into).
@@ -630,19 +659,23 @@ export function setFieldPath(filePath, name, fieldPath, value) {
   let insertBefore = span.end - `</${tag}>`.length;
   for (let i = 0; i < segments.length - 1; i++) {
     const seg = segments[i];
-    const child = findChildSpan(xml, scope, seg);
+    const child = findDirectChildSpan(xml, scope, seg);
     if (!child) {
       throw new Error(`Path segment "${seg}" not found under "${name}" in ${filePath}`);
     }
     if (child.selfClosing) {
       throw new Error(`Path segment "${seg}" under "${name}" is empty (<${seg}/>); cannot descend`);
     }
-    scope = { start: child.inner.start, end: child.inner.end };
+    // Keep the full child span (opening tag through closing tag) as the next
+    // scope so findDirectChildSpan consumes that opening tag as the parent and
+    // tracks depth from there. The leaf-insertion offset is still the inner end
+    // (just before the child's own closing tag).
+    scope = { start: child.start, end: child.end };
     insertBefore = child.inner.end;
   }
 
   const leaf = segments[segments.length - 1];
-  const child = findChildSpan(xml, scope, leaf);
+  const child = findDirectChildSpan(xml, scope, leaf);
   let newXml;
   if (child) {
     newXml = child.selfClosing
