@@ -62,7 +62,7 @@ Skill đi kèm nằm ở `skills/developing-pentaho-jobs/SKILL.md`, cùng hai m�
 
 ## Bắt đầu nhanh
 
-Yêu cầu: Node.js 20+. Ba runtime dependency: `@modelcontextprotocol/sdk`, `fast-xml-parser`, `yaml`.
+Yêu cầu: Node.js 20+. Hai runtime dependency: `@modelcontextprotocol/sdk`, `fast-xml-parser`.
 
 ### Chế độ source (cho developer)
 

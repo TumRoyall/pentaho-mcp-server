@@ -32,7 +32,7 @@ Kết quả: mảng JSON gồm 26 tool, bao gồm `kettle_add_error_hop`, `kettl
 | Fact | Nguồn authoritative | Đích tài liệu |
 |------|---------------------|----------------|
 | Node.js >= 20 (ESM, `node:test`) | `package.json:14-16` | `README.md`, `docs/development.md`, `docs/install.md` |
-| Ba runtime dependency: `@modelcontextprotocol/sdk`, `fast-xml-parser`, `yaml` | `package.json:22-26` | `docs/install.md`, `docs/development.md`, `README.md` |
+| Hai runtime dependency: `@modelcontextprotocol/sdk`, `fast-xml-parser` (đã gỡ `yaml` — không source nào import) | `package.json:22-25` | `docs/install.md`, `docs/development.md`, `README.md` |
 | Hai devDependency phục vụ release: `esbuild`, `postject` | `package.json:27-30` | `docs/development.md`, `docs/operations.md` |
 | Tính năng lõi (read/edit/validate/knowledge) không cần PDI; chỉ `kettle_runtime_loadcheck` và `kettle_runtime_execute` cần PDI cục bộ tùy chọn (nhóm runtime thuộc workflow nhưng phase-gated: chỉ sau validation tĩnh) | `src/runtime/detect.js`, `src/runtime/run.js`, `src/tools/runtime.tools.js` | `README.md`, `docs/tools-reference.md`, `docs/operations.md`, `docs/configuration.md` |
 
@@ -105,7 +105,7 @@ Kết quả: mảng JSON gồm 26 tool, bao gồm `kettle_add_error_hop`, `kettl
 |------|---------------------|----------------|
 | Lệnh: `npm run build:release -- --version <semver>`; bundle esbuild + SEA blob + postject inject; thất bại to nếu thiếu toolchain, không fallback cần system Node | `scripts/build-release.mjs`, `packaging/sea-config.json`, `package.json:11` | `docs/development.md`, `docs/operations.md` |
 | ZIP gồm các entry: `README.md`, `VERSION`, `doctor.ps1`, `dte-pentaho-mcp.exe`, `install.ps1`, `uninstall.ps1`, `skills/`, `skills/developing-pentaho-jobs/`, `skills/developing-pentaho-jobs/references/`, `skills/developing-pentaho-jobs/SKILL.md`, `skills/developing-pentaho-jobs/references/pentaho-spec-template.md`, `skills/developing-pentaho-jobs/references/pentaho-plan-template.md`; `checksums.sha256` nằm cạnh ZIP, không phải entry bên trong | `scripts/build-release.mjs`, `test/packaging.test.js` | `docs/development.md`, `docs/operations.md`, `docs/install.md` |
-| `install.ps1` ghi entry Kiro user-level, backup JSON, giữ server khác, không `autoApprove: ["*"]`; `uninstall.ps1` chỉ xóa entry này; `doctor.ps1` handshake initialize + tools/list (22 tool, từ chối `pentaho_*`, không kiểm prompt/resource) + dò PDI (thiếu PDI không fail) | `packaging/install.ps1`, `packaging/uninstall.ps1`, `packaging/doctor.ps1` | `docs/operations.md`, `docs/install.md` |
+| `install.ps1` ghi entry Kiro user-level, backup JSON, giữ server khác, không `autoApprove: ["*"]`; `uninstall.ps1` chỉ xóa entry này; `doctor.ps1` handshake initialize + tools/list (26 tool, từ chối `pentaho_*`, không kiểm prompt/resource) + dò PDI (thiếu PDI không fail) | `packaging/install.ps1`, `packaging/uninstall.ps1`, `packaging/doctor.ps1` | `docs/operations.md`, `docs/install.md` |
 | Companion skill được đưa vào `files` của npm (mục `"skills"`) và copy vào ZIP release (`cpSync` đệ quy). **Discovery không tự động chỉ vì `skills/` trong ZIP**: Kiro cần copy `skills/developing-pentaho-jobs/` vào `.kiro/skills/` (workspace) hoặc `~/.kiro/skills/` (user); Codex/agent tương thích Superpowers đặt dưới thư mục skills runtime (ví dụ `~/.agents/skills/`) | `package.json`, `scripts/build-release.mjs`, `skills/developing-pentaho-jobs/SKILL.md` | `docs/install.md`, `docs/operations.md`, `README.md` |
 
 ## 11. Non-goals (không làm)

@@ -31,7 +31,7 @@ Kết quả trong `dist/`:
 Lệnh ghi server `dte-pentaho` vào `%USERPROFILE%\.kiro\settings\mcp.json` (backup file cũ, giữ server khác, không auto-approve toàn bộ tool).
 3. Reconnect MCP server trong Kiro.
 
-Kiểm tra: `.\doctor.ps1 -PentahoHome C:\Pentaho\data-integration` (handshake MCP bằng initialize + tools/list, assert 22 tool, từ chối `pentaho_*`).
+Kiểm tra: `.\doctor.ps1 -PentahoHome C:\Pentaho\data-integration` (handshake MCP bằng initialize + tools/list, assert 26 tool, từ chối `pentaho_*`).
 
 Gỡ bỏ: `.\uninstall.ps1` (chỉ xóa entry `dte-pentaho`).
 
@@ -46,7 +46,7 @@ Bản giải nén chứa `skills/developing-pentaho-jobs/`. **Skill không tự 
 
 ## Cách 2 — source-mode (cho developer)
 
-Yêu cầu: Node.js 20+. **Ba** runtime dependency: `@modelcontextprotocol/sdk`, `fast-xml-parser`, `yaml`.
+Yêu cầu: Node.js 20+. **Hai** runtime dependency: `@modelcontextprotocol/sdk`, `fast-xml-parser`.
 
 ```powershell
 npm install
@@ -77,7 +77,7 @@ node --test
 node scripts/verify-production-profile.mjs
 ```
 
-Kỳ vọng: toàn suite pass và `production profile OK: 22 tools, no lifecycle prompt/resource surface, no learning/promotion surface`.
+Kỳ vọng: toàn suite pass và `production profile OK: 26 tools (exact set), no lifecycle prompt/resource surface, no learning/promotion surface`.
 
 ## Mạng nội bộ hạn chế (không ra npm)
 
