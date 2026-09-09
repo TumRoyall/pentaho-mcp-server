@@ -9,29 +9,38 @@ export function readTools({ resolveRead, root }) {
   return [
     {
       name: 'kettle_list',
+      title: 'List Kettle artifacts',
       description: 'Inventory of Kettle jobs/transformations under a directory (default: KETTLE_ROOT)',
-      inputSchema: { type: 'object', properties: { directory: str('Directory to scan') } },
+      annotations: { title: 'List Kettle artifacts', readOnlyHint: true },
+      inputSchema: { type: 'object', properties: { directory: str('Directory to scan') }, additionalProperties: false },
       handler: a => listArtifacts(resolveRead(a.directory)),
     },
     {
       name: 'kettle_summary',
+      title: 'Summarize artifact',
       description: 'Summarize one job/transformation: elements with types, hop graph, connections, params, SQL previews',
-      inputSchema: { type: 'object', properties: { path: PATH }, required: ['path'] },
+      annotations: { title: 'Summarize artifact', readOnlyHint: true },
+      inputSchema: { type: 'object', properties: { path: PATH }, required: ['path'], additionalProperties: false },
       handler: a => summarize(resolveRead(a.path)),
     },
     {
       name: 'kettle_get_element',
+      title: 'Get element detail',
       description: 'Full configuration of one named step/entry, including complete SQL (raw:true adds the raw XML)',
+      annotations: { title: 'Get element detail', readOnlyHint: true },
       inputSchema: {
         type: 'object',
         properties: { path: PATH, name: str('Step/entry name'), raw: { type: 'boolean' } },
         required: ['path', 'name'],
+        additionalProperties: false,
       },
       handler: a => getElement(resolveRead(a.path), a.name, a.raw === true),
     },
     {
       name: 'kettle_search',
+      title: 'Search artifacts',
       description: 'Search across all .kjb/.ktr files: free text, table (word-boundary), connection, variable, step_type, entry_type',
+      annotations: { title: 'Search artifacts', readOnlyHint: true },
       inputSchema: {
         type: 'object',
         properties: {

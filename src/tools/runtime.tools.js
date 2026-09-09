@@ -73,28 +73,45 @@ async function runArtifact(ctx, args, mode) {
 export function runtimeTools(ctx) {
   return [
     {
-      name: 'kettle_runtime_detect', description: 'Detect optional local Kitchen.bat and Pan.bat beneath PENTAHO_HOME.',
-      inputSchema: { type: 'object', properties: {} },
+      name: 'kettle_runtime_detect',
+      title: 'Detect PDI runtime',
+      description: 'Detect optional local Kitchen.bat and Pan.bat beneath PENTAHO_HOME.',
+      annotations: { title: 'Detect PDI runtime', readOnlyHint: true },
+      inputSchema: { type: 'object', properties: {}, additionalProperties: false },
       handler: () => detectPdi(ctx.pentahoHome),
     },
     {
-      name: 'kettle_runtime_loadcheck', description: 'Statically validate and ask local Kitchen/Pan to load an artifact without deployment.',
-      inputSchema: { type: 'object', properties: runProperties, required: ['artifact'] },
+      name: 'kettle_runtime_loadcheck',
+      title: 'Load-check artifact',
+      description: 'Statically validate and ask local Kitchen/Pan to load an artifact without deployment.',
+      // Invokes an external PDI process, so it reaches outside the workspace
+      // (open world); it does not deploy or mutate artifacts.
+      annotations: { title: 'Load-check artifact', readOnlyHint: false, destructiveHint: false, openWorldHint: true },
+      inputSchema: { type: 'object', properties: runProperties, required: ['artifact'], additionalProperties: false },
       handler: args => runArtifact(ctx, args, 'loadcheck'),
     },
     {
-      name: 'kettle_runtime_execute', description: 'Execute with Kitchen/Pan; every execution requires confirmed=true.',
-      inputSchema: { type: 'object', properties: { ...runProperties, confirmed: { type: 'boolean' } }, required: ['artifact'] },
+      name: 'kettle_runtime_execute',
+      title: 'Execute artifact',
+      description: 'Execute with Kitchen/Pan; every execution requires confirmed=true.',
+      // Runs the artifact for real: destructive side effects are possible and
+      // the effect reaches external systems (open world).
+      annotations: { title: 'Execute artifact', readOnlyHint: false, destructiveHint: true, openWorldHint: true },
+      inputSchema: { type: 'object', properties: { ...runProperties, confirmed: { type: 'boolean' } }, required: ['artifact'], additionalProperties: false },
       handler: args => runArtifact(ctx, args, 'execute'),
     },
     {
-      name: 'kettle_runtime_logs', description: 'Read sanitized runtime logs stored under the active project root.',
+      name: 'kettle_runtime_logs',
+      title: 'Read runtime logs',
+      description: 'Read sanitized runtime logs stored under the active project root.',
+      annotations: { title: 'Read runtime logs', readOnlyHint: true },
       inputSchema: {
         type: 'object',
         properties: {
           name: str('Optional single log file name to read'),
           limit: { type: 'integer', minimum: 1, maximum: 100, description: 'Maximum number of newest logs to return', default: 20 },
         },
+        additionalProperties: false,
       },
       handler: (args = {}) => {
         const logsDir = logsDirFor(ctx);

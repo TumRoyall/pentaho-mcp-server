@@ -267,7 +267,9 @@ test('runtime tools use the server root without project-selection arguments', ()
   });
   const byName = new Map(tools.map(tool => [tool.name, tool]));
   assert.deepEqual(byName.get('kettle_runtime_detect').inputSchema, {
-    type: 'object', properties: {},
+    // Task 9 closes every tool's top-level object schema; detect still takes no
+    // arguments, and additionalProperties:false now enforces exactly that.
+    type: 'object', properties: {}, additionalProperties: false,
   });
   const logsSchema = byName.get('kettle_runtime_logs').inputSchema;
   assert.equal(logsSchema.properties.name.type, 'string');

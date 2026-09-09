@@ -110,6 +110,7 @@ test('stdio smoke: initialize, 26 tools, and tool calls', async () => {
 
     const bad = responses.find(r => r.id === 4);
     assert.equal(bad.result.content[0].type, 'text'); // errors are payloads, not protocol errors
+    assert.equal(bad.result.isError, true); // failed tool calls flag isError while keeping readable text
     const badPayload = JSON.parse(bad.result.content[0].text);
     assert.equal(badPayload.ok, false);
     assert.ok(badPayload.error.length > 0);
