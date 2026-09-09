@@ -32,6 +32,10 @@ test('stdio smoke: initialize, 22 tools, and tool calls', async () => {
       name: 'kettle_add_element',
       arguments: { path: 'add.ktr', type: 'SetSessionVariableStep', name: 'SetSess', allowObserved: true },
     }),
+    rpc(6, 'tools/call', {
+      name: 'kettle_search',
+      arguments: { query: 'TableInput', kind: 'step_type' },
+    }),
   ].join('\n') + '\n');
   proc.stdin.end();
 
@@ -76,6 +80,18 @@ test('stdio smoke: initialize, 22 tools, and tool calls', async () => {
     assert.match(addedPayload.data.diff, /^--- /);
     assert.equal(addedPayload.data.catalogStatus, 'observed');
     assert.equal(addedPayload.data.manualReviewRequired, true);
+
+    // Bounded search returns a SearchReport; the tool wraps it as {ok, data}
+    // and result.content decodes to data.matches (no bare array anymore).
+    const searched = responses.find(r => r.id === 6);
+    const searchPayload = JSON.parse(searched.result.content[0].text);
+    assert.equal(searchPayload.ok, true);
+    assert.ok(Array.isArray(searchPayload.data.matches));
+    assert.ok(searchPayload.data.matches.some(h => h.file.endsWith('mini.ktr')));
+    assert.equal(searchPayload.data.limit, 100);
+    assert.equal(searchPayload.data.truncated, false);
+    assert.ok(searchPayload.data.scannedFiles > 0);
+    assert.ok(Array.isArray(searchPayload.data.scanIssues));
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

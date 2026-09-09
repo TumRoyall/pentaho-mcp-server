@@ -36,9 +36,11 @@ MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai bá
 ### `kettle_search`
 
 - Mục đích: tìm kiếm toàn cây `.kjb`/`.ktr`.
-- Tham số: `query` (bắt buộc); `kind?` enum `text|table|connection|variable|step_type|entry_type` (mặc định `text`); `directory?` (mặc định `KETTLE_ROOT`).
-- Output: danh sách match. Chỉ đọc.
-- Ví dụ: `{ "query": "customer", "kind": "table" }`
+- Tham số: `query` (bắt buộc, không rỗng sau khi trim); `kind?` enum `text|table|connection|variable|step_type|entry_type` (mặc định `text`); `directory?` (mặc định `KETTLE_ROOT`); `limit?` số nguyên `1..500` (mặc định `100`).
+- Output: một `SearchReport`: `{ matches, limit, truncated, scannedFiles, scanIssues }`. `matches` là danh sách match; lỗi đọc/parse từng file nằm trong `scanIssues` (không chiếm slot match); `truncated: true` khi số match vượt `limit`. Chỉ đọc.
+- Thay đổi response-shape (pre-1.0): tool trước đây trả về một mảng match trần; nay trả về object `SearchReport`. Số match mặc định bị giới hạn ở 100 (`limit`).
+- Query rỗng bị từ chối trước khi duyệt filesystem.
+- Ví dụ: `{ "query": "customer", "kind": "table", "limit": 50 }`
 
 ## Nhóm edit (9)
 
