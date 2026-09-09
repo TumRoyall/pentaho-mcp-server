@@ -143,14 +143,28 @@ export function removeElement(filePath, name, { removeReferences = false } = {})
   // Build the full edit list, right-to-left. Whole-block removals (hops, error
   // blocks, the element) take their leading whitespace; tag-content blanks
   // replace only the inner text.
+  //
+  // Right-to-left splicing keeps only DISJOINT ranges valid. A route-reference
+  // tag (e.g. <source_step>/<target_step>) can be NESTED inside an <error> or
+  // <hop> block that is already scheduled for whole-block removal, so blanking
+  // the inner range would shift offsets and make the enclosing block's `end`
+  // stale — corrupting the edit. Drop any tag-inner range contained within a
+  // whole-block removal (containment de-dup); the block splice removes it too.
   const edits = [];
+  const blockSpans = [];
   for (const span of hopRefs) {
+    blockSpans.push(span);
     edits.push({ start: withLeadingWhitespace(xml, span.start), end: span.end, replacement: '' });
   }
   for (const span of errorRefs) {
+    blockSpans.push(span);
     edits.push({ start: withLeadingWhitespace(xml, span.start), end: span.end, replacement: '' });
   }
   for (const inner of tagRefs) {
+    const containedInRemovedBlock = blockSpans.some(
+      block => inner.start >= block.start && inner.end <= block.end,
+    );
+    if (containedInRemovedBlock) continue;
     edits.push({ start: inner.start, end: inner.end, replacement: '' });
   }
   edits.push({

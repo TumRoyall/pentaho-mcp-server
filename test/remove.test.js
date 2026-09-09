@@ -224,6 +224,86 @@ test('removeElement cascades error blocks and hops when removeReferences:true', 
   assert.equal((m.errorHops ?? []).length, 0);
 });
 
+// Two error blocks in one step_error_handling container, Spoon-standard
+// indentation, with a REALISTIC-LENGTH source step name on the first block.
+// The second block (unrelated source/target) follows the first and must
+// survive cascade removal of the first block's source byte-intact.
+function transWithTwoErrorBlocks() {
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<transformation>',
+    '  <info>',
+    '    <name>eh2</name>',
+    '  </info>',
+    '  <order>',
+    '    <hop>',
+    '      <from>Filter rows step</from>',
+    '      <to>err</to>',
+    '      <enabled>Y</enabled>',
+    '    </hop>',
+    '  </order>',
+    '  <step>',
+    '    <name>Filter rows step</name>',
+    '    <type>TableInput</type>',
+    '  </step>',
+    '  <step>',
+    '    <name>err</name>',
+    '    <type>Dummy</type>',
+    '  </step>',
+    '  <step>',
+    '    <name>Second source step</name>',
+    '    <type>TableInput</type>',
+    '  </step>',
+    '  <step>',
+    '    <name>Second target step</name>',
+    '    <type>Dummy</type>',
+    '  </step>',
+    '  <step_error_handling>',
+    '    <error>',
+    '      <source_step>Filter rows step</source_step>',
+    '      <target_step>err</target_step>',
+    '      <is_enabled>Y</is_enabled>',
+    '      <max_errors/>',
+    '    </error>',
+    '    <error>',
+    '      <source_step>Second source step</source_step>',
+    '      <target_step>Second target step</target_step>',
+    '      <is_enabled>Y</is_enabled>',
+    '      <max_errors/>',
+    '    </error>',
+    '  </step_error_handling>',
+    '</transformation>',
+    '',
+  ].join('\n');
+}
+
+test('removeElement cascade over a long-named error source keeps a trailing error block byte-intact', () => {
+  const file = write('eh2.ktr', transWithTwoErrorBlocks());
+  const secondBlock = [
+    '    <error>',
+    '      <source_step>Second source step</source_step>',
+    '      <target_step>Second target step</target_step>',
+    '      <is_enabled>Y</is_enabled>',
+    '      <max_errors/>',
+    '    </error>',
+  ].join('\n');
+
+  // Must not throw a "malformed XML" error from double-splicing nested ranges.
+  removeElement(file, 'Filter rows step', { removeReferences: true });
+
+  const after = readFileSync(file, 'utf8');
+  // The removed element and its error block are gone.
+  assert.ok(!after.includes('<source_step>Filter rows step</source_step>'));
+  // The unrelated second error block survives, byte-for-byte.
+  assert.ok(after.includes(secondBlock), 'trailing error block must survive intact');
+  // Result is valid, loadable XML with the intact second error hop.
+  const m = loadModel(file);
+  assert.ok(!m.elements.some(e => e.name === 'Filter rows step'));
+  assert.equal((m.errorHops ?? []).length, 1);
+  assert.equal(m.errorHops[0].source, 'Second source step');
+  assert.equal(m.errorHops[0].target, 'Second target step');
+});
+
 test('removeElement refuses on duplicate names', () => {
   const dup = [
     '<?xml version="1.0" encoding="UTF-8"?>',
