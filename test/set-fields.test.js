@@ -160,6 +160,64 @@ test('setFieldPath errors when an ancestor segment is missing', () => {
     /Path segment "file" not found/);
 });
 
+test('setFieldPath targets the direct leaf, not a nested same-name descendant', () => {
+  // <file> contains a nested <sheetname> deeper inside, plus a DIRECT
+  // <sheetname>. The path "file/sheetname" must hit the direct one.
+  const file = writeKtr(`  <step>
+    <name>XLS</name>
+    <type>ExcelWriter</type>
+    <file>
+      <deep>
+        <sheetname>NESTED</sheetname>
+      </deep>
+      <sheetname>OLD</sheetname>
+    </file>
+  </step>`);
+  setFieldPath(file, 'XLS', 'file/sheetname', 'ACTIVE');
+  const xml = readFileSync(file, 'utf8');
+  assert.match(xml, /<sheetname>ACTIVE<\/sheetname>/);
+  // The nested one is preserved.
+  assert.match(xml, /<deep>\s*<sheetname>NESTED<\/sheetname>\s*<\/deep>/);
+});
+
+test('setFieldPath resolves each ancestor segment as a direct child', () => {
+  // The ancestor tag <file> also appears nested inside <other>. Walking must
+  // descend into the DIRECT <file>, then its direct <sheetname>.
+  const file = writeKtr(`  <step>
+    <name>XLS</name>
+    <type>ExcelWriter</type>
+    <other>
+      <file>
+        <sheetname>WRONG</sheetname>
+      </file>
+    </other>
+    <file>
+      <sheetname>OLD</sheetname>
+    </file>
+  </step>`);
+  setFieldPath(file, 'XLS', 'file/sheetname', 'ACTIVE');
+  const xml = readFileSync(file, 'utf8');
+  // The nested <other><file><sheetname> stays WRONG; the direct one changes.
+  assert.match(xml, /<other>\s*<file>\s*<sheetname>WRONG<\/sheetname>\s*<\/file>\s*<\/other>/);
+  assert.match(xml, /<file>\s*<sheetname>ACTIVE<\/sheetname>\s*<\/file>/);
+});
+
+test('setFieldPath rejects an invalid path segment name before touching the file', () => {
+  const file = writeKtr(`  <step>\n    <name>T</name>\n    <type>TableInput</type>\n    <limit>0</limit>\n  </step>`);
+  const before = readFileSync(file, 'utf8');
+  assert.throws(() => setFieldPath(file, 'T', 'bad tag', 'x'), /invalid|tag name/i);
+  assert.throws(() => setFieldPath(file, 'T', 'file/bad tag', 'x'), /invalid|tag name/i);
+  assert.equal(readFileSync(file, 'utf8'), before, 'file must be unchanged after rejection');
+});
+
+test('setFields rejects invalid list/item tag names before touching the file', () => {
+  const file = writeKtr(SELECT_TEMPLATE);
+  const before = readFileSync(file, 'utf8');
+  assert.throws(() => setFields(file, 'FORMAT', 'bad list', 'field', [{ name: 'A' }]), /invalid|tag name/i);
+  assert.throws(() => setFields(file, 'FORMAT', 'fields', 'bad item', [{ name: 'A' }]), /invalid|tag name/i);
+  assert.equal(readFileSync(file, 'utf8'), before, 'file must be unchanged after rejection');
+});
+
 // The KETTLE_ROOT write boundary is now enforced by the tool-adapter layer
 // (createWorkspaceBoundary), covered by test/workspace-boundary.test.js and
 // test/tool-boundary.test.js. Core edit functions are pure filesystem ops.

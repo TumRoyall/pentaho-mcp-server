@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import {
   setField, unifiedDiff, commitEdit,
 } from '../src/core/edit.js';
+import { writeFileSync as writeFile } from 'node:fs';
 import { loadModel, text } from '../src/core/model.js';
 import { assertMinimalDiff } from './helpers.js';
 
@@ -60,6 +61,42 @@ test('setField creates a missing child', () => {
   assert.equal(text(m.elements[0].raw.execute_each_row), 'Y');
   // still well-formed, other step untouched
   assert.equal(text(m.elements[1].raw.connection), 'conn_a');
+});
+
+test('setField changes only the direct child, not a nested same-name descendant', () => {
+  const file = path.join(tmp, 'nested.ktr');
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<transformation>',
+    '  <info><name>t</name></info>',
+    '  <order/>',
+    '  <step>',
+    '    <name>S</name>',
+    '    <type>X</type>',
+    '    <fields>',
+    '      <field>nested</field>',
+    '    </fields>',
+    '    <field>direct</field>',
+    '  </step>',
+    '</transformation>',
+    '',
+  ].join('\n');
+  writeFile(file, xml, 'utf8');
+
+  setField(file, 'S', 'field', 'CHANGED');
+  const after = readFileSync(file, 'utf8');
+  // The direct child changed; the nested one inside <fields> is untouched.
+  assert.match(after, /<field>CHANGED<\/field>/);
+  assert.match(after, /<fields>\s*<field>nested<\/field>\s*<\/fields>/);
+});
+
+test('setField rejects an invalid field/tag name before touching the file', () => {
+  const file = path.join(tmp, 'mini.ktr');
+  const before = readFileSync(file, 'utf8');
+  for (const bad of ['bad tag', '1bad', 'a<b', 'a/b', '']) {
+    assert.throws(() => setField(file, 'in', bad, 'x'), /invalid|tag name/i);
+  }
+  assert.equal(readFileSync(file, 'utf8'), before, 'file must be unchanged after rejection');
 });
 
 test('commitEdit names the file when the result would be malformed XML', () => {
