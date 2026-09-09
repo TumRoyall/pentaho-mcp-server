@@ -46,6 +46,12 @@ Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime phase-gat
 - Thư mục log giữ **100 file mới nhất** sau mỗi lần chạy (retention theo số lượng); file cũ hơn bị xóa.
 - `kettle_runtime_logs` nhận `name` (tùy chọn) và `limit` (1..100), trả **mới nhất trước**, tối đa **256 KiB mỗi file**, kiểm chứa canonical từng file (từ chối tên thoát khỏi thư mục log).
 - Server log stderr (`kettle-mcp-dte running on stdio ...`); tool failure là payload `{ok:false}` trong `text`, không phải protocol error.
+- Runtime log ghi dưới `<KETTLE_ROOT>/.pentaho-mcp/`; thư mục `.pentaho-mcp/` đã nằm trong `.gitignore` nên không lọt vào commit.
+
+## CI và bao bì phát hành
+
+- CI (`.github/workflows/ci.yml`) chạy trên `windows-latest`: job `test` với matrix Node `[20, 22]` (`npm ci` → `npm test` → `npm run verify:profile` → `git diff --check`), job `package` (Node 20) build release `0.0.0-ci` và upload `dist/**` làm artifact.
+- Bản phát hành npm chỉ gồm `src`, `skills`, `README.md` và các file `docs/*.md` hiện hành; tài liệu lịch sử của coordinator dưới `docs/superpowers/` (plan/spec/handoff) **không** được đóng gói lên npm.
 
 ## Cổng thực thi, timeout và xác nhận (runtime phase-gated)
 

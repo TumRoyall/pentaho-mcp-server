@@ -72,6 +72,17 @@ Trạng thái catalog:
 
 `scripts/verify-production-profile.mjs` fail nếu tool chứa `learn|promot|intake|catalog_add/write/promote`, nếu có bất kỳ prompt/resource nào được quảng bá, hoặc khác 22 tool. Không thêm bề mặt ghi/promote tri thức, không đưa bề mặt lifecycle BA trở lại, không quảng bá prompt/resource vào production.
 
+## Continuous integration
+
+`.github/workflows/ci.yml` chạy trên `windows-latest` (khớp môi trường build `.exe`):
+
+- Job `test`: matrix Node `[20, 22]`, mỗi node chạy `npm ci` → `npm test` → `npm run verify:profile` → `git diff --check`.
+- Job `package`: Node 20, chạy `npm run build:release -- --version 0.0.0-ci` rồi upload `dist/**` qua `actions/upload-artifact@v4` để kiểm nhanh artifact release.
+
+## Bao bì npm
+
+`package.json` `files` liệt kê tường minh `src`, `skills`, `README.md` và từng file `docs/*.md` hiện hành. Thư mục `docs/superpowers/` (plan/spec/handoff lịch sử của coordinator) **không** nằm trong danh sách nên không phát hành lên npm. Dev dependency dùng `esbuild` (bundle release) và `postject` (SEA inject); không còn phụ thuộc `yaml` (không có source nào import). Kiểm tra danh mục tarball bằng `npm pack --dry-run --json`.
+
 ## Release build internals
 
 `scripts/build-release.mjs --version <semver>`:
