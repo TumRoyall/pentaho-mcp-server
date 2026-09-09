@@ -13,8 +13,15 @@ Cả hai đều tôn trọng `KETTLE_ROOT` (mặc định `process.cwd()`, luôn
 
 ## Xác minh cài đặt
 
+Bản packaged, chạy từ thư mục đã giải nén ZIP:
+
 ```powershell
 .\doctor.ps1 -PentahoHome C:\Pentaho\data-integration
+```
+
+Source-mode, chạy từ repo root:
+
+```powershell
 node scripts/verify-production-profile.mjs
 ```
 
@@ -41,7 +48,7 @@ Bản packaged kèm companion skill dưới `skills/developing-pentaho-jobs/` (g
 
 ## `doctor.ps1`
 
-Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime phase-gated, thiếu PDI không fail). Dùng sau mỗi cài đặt, nâng cấp, đổi `KETTLE_ROOT`.
+Thoát nonzero khi executable bị thiếu hoặc MCP handshake không hợp lệ; báo PDI riêng (runtime phase-gated, thiếu PDI không fail). Đây là kiểm tra độc lập executable và MCP handshake, không đọc cấu hình Kiro/Claude Code/Codex và không kiểm tra `KETTLE_ROOT`. Dùng sau khi build/giải nén hoặc trước khi đổi đường dẫn executable trong cấu hình client; kiểm tra kết nối của từng client theo `docs/install.md`.
 
 ## Log và khử nhạy cảm (runtime phase-gated)
 

@@ -102,6 +102,16 @@ test('current documentation has no removed installer workflow', () => {
   }
 });
 
+test('doctor documentation uses the built artifact path and states its actual scope', () => {
+  const readme = readFileSync(path.join(root, 'README.md'), 'utf8');
+  assert.match(readme, /\.\\build\\release\\doctor\.ps1 -PentahoHome/);
+  assert.doesNotMatch(readme, /^\.\\doctor\.ps1 -PentahoHome/m);
+
+  const operations = readFileSync(path.join(root, 'docs', 'operations.md'), 'utf8');
+  assert.match(operations, /kiểm tra độc lập executable và MCP handshake/i);
+  assert.doesNotMatch(operations, /Dùng sau mỗi cài đặt, nâng cấp, đổi `KETTLE_ROOT`/);
+});
+
 test('versioned Windows release has exact inventory, checksum, and working MCP executable', async () => {
   rmSync(path.join(root, 'dist'), { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   const build = spawnSync(process.execPath, ['scripts/build-release.mjs', '--version', version], { cwd: root, encoding: 'utf8', timeout: 120_000 });

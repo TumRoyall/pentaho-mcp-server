@@ -100,7 +100,7 @@ Không cần system Node hay `npm install`; knowledge và companion skill nằm 
 
 ```powershell
 npm run build:release -- --version 1.0.0
-.\doctor.ps1 -PentahoHome C:\Pentaho\data-integration
+.\build\release\doctor.ps1 -PentahoHome C:\Pentaho\data-integration
 ```
 
 Đăng ký client là thao tác thủ công theo `docs/install.md` (Kiro, Claude Code, Codex). Giải nén ZIP ra thư mục ổn định vì cấu hình client trỏ trực tiếp tới `dte-pentaho-mcp.exe`.
