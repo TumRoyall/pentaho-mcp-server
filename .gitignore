@@ -1,7 +1,13 @@
 node_modules/
 *.tmp
 
+# Coordinator scratch (SDD ledger, task briefs, review packages)
+.superpowers/
+
 # Release build artifacts (produced by scripts/build-release.mjs)
 build/
 dist/
 .kiro/
+
+# Local PDI runtime logs (written under the active project root)
+.pentaho-mcp/

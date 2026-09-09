@@ -16,17 +16,24 @@
   },
   "files": [
     "src",
-    "docs",
     "skills",
-    "README.md"
+    "README.md",
+    "docs/architecture.md",
+    "docs/configuration.md",
+    "docs/development.md",
+    "docs/documentation-facts.md",
+    "docs/install.md",
+    "docs/operations.md",
+    "docs/pdi94-evidence-report.md",
+    "docs/tools-reference.md",
+    "docs/workflow-guide.md"
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "fast-xml-parser": "^5.8.0",
-    "yaml": "^2.9.0"
+    "fast-xml-parser": "^5.8.0"
   },
   "devDependencies": {
-    "esbuild": "0.25.9",
+    "esbuild": "^0.28.2",
     "postject": "1.0.0-alpha.6"
   }
 }
