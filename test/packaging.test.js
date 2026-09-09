@@ -10,20 +10,20 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const version = '1.0.0';
 const zip = path.join(root, 'dist', `dte-pentaho-mcp-${version}-win-x64.zip`);
 
-test('production profile excludes learning and installer scripts are portable and scoped', () => {
+test('production profile and client-neutral doctor remain portable', () => {
   const verify = spawnSync(process.execPath, ['scripts/verify-production-profile.mjs'], { cwd: root, encoding: 'utf8' });
   assert.equal(verify.status, 0, verify.stderr || verify.stdout);
-  for (const name of ['install.ps1', 'uninstall.ps1', 'doctor.ps1']) {
-    const text = readFileSync(path.join(root, 'packaging', name), 'utf8');
-    assert.doesNotMatch(text, /C:\\Users\\|autoApprove\s*[:=]\s*\[\s*["']\*["']/i);
-  }
+  const doctor = readFileSync(path.join(root, 'packaging', 'doctor.ps1'), 'utf8');
+  assert.doesNotMatch(doctor, /C:\\Users\\|autoApprove\s*[:=]\s*\[\s*["']\*["']/i);
+  assert.equal(existsSync(path.join(root, 'packaging', 'install.ps1')), false);
+  assert.equal(existsSync(path.join(root, 'packaging', 'uninstall.ps1')), false);
 });
 
 test('current user-facing docs and installers drop legacy configuration references', () => {
   for (const relative of [
     'README.md', 'docs/architecture.md', 'docs/configuration.md',
     'docs/tools-reference.md', 'docs/operations.md', 'docs/install.md',
-    'packaging/install.ps1', 'packaging/doctor.ps1',
+    'packaging/doctor.ps1',
   ]) {
     const text = readFileSync(path.join(root, relative), 'utf8');
     assert.doesNotMatch(
@@ -79,7 +79,10 @@ test('versioned Windows release has exact inventory, checksum, and working MCP e
   const listing = spawnSync('tar.exe', ['-tf', zip], { encoding: 'utf8' });
   assert.equal(listing.status, 0, listing.stderr);
   assert.deepEqual(listing.stdout.trim().split(/\r?\n/).sort(), [
-    'README.md', 'VERSION', 'doctor.ps1', 'dte-pentaho-mcp.exe', 'install.ps1', 'uninstall.ps1',
+    'README.md',
+    'VERSION',
+    'doctor.ps1',
+    'dte-pentaho-mcp.exe',
     'skills/',
     'skills/developing-pentaho-jobs/',
     'skills/developing-pentaho-jobs/references/',

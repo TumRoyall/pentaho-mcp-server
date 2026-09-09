@@ -223,9 +223,10 @@ function assembleRelease(exePath, version) {
 
   copyFileSync(exePath, path.join(staging, EXE_NAME));
   copyFileSync(path.join(root, 'README.md'), path.join(staging, 'README.md'));
-  for (const script of ['install.ps1', 'uninstall.ps1', 'doctor.ps1']) {
-    copyFileSync(path.join(root, 'packaging', script), path.join(staging, script));
-  }
+  copyFileSync(
+    path.join(root, 'packaging', 'doctor.ps1'),
+    path.join(staging, 'doctor.ps1'),
+  );
   // Ship the companion Superpowers skill so a compatible agent can discover it.
   cpSync(path.join(root, 'skills'), path.join(staging, 'skills'), { recursive: true });
   writeFileSync(path.join(staging, 'VERSION'), `${version}\n`, 'utf8');
