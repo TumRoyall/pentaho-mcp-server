@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { findAllSpans, findChildSpan, findElementSpan, innerText, escapeXml, unescapeXml } from '../src/core/span.js';
+import { findAllSpans, findChildSpan, findDirectChildSpan, findElementSpan, innerText, escapeXml, unescapeXml } from '../src/core/span.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fx = (...p) => path.join(here, 'fixtures', ...p);
@@ -42,6 +42,60 @@ test('findChildSpan handles self-closing and prefix-tags', () => {
   const from = findChildSpan(xml, span, 'from');
   assert.equal(xml.slice(from.inner.start, from.inner.end), 'x'); // not '<from_nr>'
   assert.equal(findChildSpan(xml, span, 'absent'), null);
+});
+
+test('findDirectChildSpan returns a direct child, not a nested same-name descendant', () => {
+  // A step whose <fields> nests a <field>, followed by a DIRECT <field>. The
+  // old findChildSpan reaches the nested one (first occurrence); the new
+  // findDirectChildSpan must return the direct child declared later.
+  const xml = [
+    '<step>',
+    '  <name>S</name>',
+    '  <fields>',
+    '    <field>nested</field>',
+    '  </fields>',
+    '  <field>direct</field>',
+    '</step>',
+  ].join('\n');
+  const span = { start: 0, end: xml.length };
+
+  const direct = findDirectChildSpan(xml, span, 'field');
+  assert.ok(direct, 'expected a direct <field> child');
+  assert.equal(xml.slice(direct.inner.start, direct.inner.end), 'direct');
+
+  // Prove the bug the new function fixes: the old scan finds the nested one.
+  const first = findChildSpan(xml, span, 'field');
+  assert.equal(xml.slice(first.inner.start, first.inner.end), 'nested');
+});
+
+test('findDirectChildSpan skips comments, declarations, CDATA, and self-closing tags', () => {
+  const xml = [
+    '<step>',
+    '  <!-- <field>commented</field> -->',
+    '  <other/>',
+    '  <note><![CDATA[<field>cdata</field>]]></note>',
+    '  <field>real</field>',
+    '</step>',
+  ].join('\n');
+  const span = { start: 0, end: xml.length };
+  const direct = findDirectChildSpan(xml, span, 'field');
+  assert.ok(direct);
+  assert.equal(xml.slice(direct.inner.start, direct.inner.end), 'real');
+});
+
+test('findDirectChildSpan handles a self-closing direct child', () => {
+  const xml = '<step>\n  <fields>\n    <field>nested</field>\n  </fields>\n  <field/>\n</step>';
+  const span = { start: 0, end: xml.length };
+  const direct = findDirectChildSpan(xml, span, 'field');
+  assert.ok(direct);
+  assert.equal(direct.selfClosing, true);
+  assert.equal(direct.inner.start, direct.inner.end);
+});
+
+test('findDirectChildSpan returns null when the tag exists only as a descendant', () => {
+  const xml = '<step>\n  <fields>\n    <field>nested</field>\n  </fields>\n</step>';
+  const span = { start: 0, end: xml.length };
+  assert.equal(findDirectChildSpan(xml, span, 'field'), null);
 });
 
 test('span works on a real job file', () => {

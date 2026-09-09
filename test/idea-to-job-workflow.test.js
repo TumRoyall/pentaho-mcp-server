@@ -1,6 +1,6 @@
 import { afterEach, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, existsSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { createWorkspaceBoundary } from '../src/workspace/boundary.js';
@@ -74,4 +74,85 @@ test('knowledge-first primitive sequence builds a statically valid job+transform
   assert.equal(ktrReport.summary.errors, 0, JSON.stringify(ktrReport.issues));
   assert.equal(kjbReport.summary.errors, 0, JSON.stringify(kjbReport.issues));
   assert.equal(treeReport.summary.errors, 0, JSON.stringify(treeReport.files));
+});
+
+// A minimal in-root source transformation carrying ONE top-level <connection>
+// whose password is a ${VARIABLE} placeholder (never plaintext). This is the
+// fixture kettle_copy_connection reads from; nothing here touches a database.
+function connectionSourceXml() {
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<transformation>',
+    '  <info>',
+    '    <name>conn_source</name>',
+    '  </info>',
+    '  <connection>',
+    '    <name>DW</name>',
+    '    <server>${DW_HOST}</server>',
+    '    <type>POSTGRESQL</type>',
+    '    <access>Native</access>',
+    '    <database>${DW_DB}</database>',
+    '    <port>5432</port>',
+    '    <username>${DW_USER}</username>',
+    '    <password>${DW_PASSWORD}</password>',
+    '  </connection>',
+    '  <order>',
+    '  </order>',
+    '</transformation>',
+    '',
+  ].join('\n');
+}
+
+test('end-to-end: create trans, set parameters, copy a placeholder connection, wire TableInput->TableOutput, validate clean', async () => {
+  const root = workspace();
+  const context = createWorkspaceBoundary(root);
+  const tools = new Map(buildTools(context).map(tool => [tool.name, tool]));
+
+  // Seed the in-root connection source fixture (placeholder-only password).
+  writeFileSync(path.join(root, 'conn_source.ktr'), connectionSourceXml(), 'utf8');
+
+  const ktr = 'stage_orders.ktr';
+
+  // 1. Create the transformation from scratch.
+  await call(tools, 'kettle_create_file', { path: ktr, kind: 'trans', name: 'stage_orders' });
+  assert.ok(existsSync(path.join(root, ktr)));
+
+  // 2. Declare artifact-level parameters.
+  await call(tools, 'kettle_set_parameters', {
+    path: ktr,
+    parameters: [
+      { name: 'RUN_DATE', default: '2026-09-09', description: 'Business date' },
+      { name: 'BATCH_SIZE', default: '1000', description: 'Rows per commit' },
+    ],
+  });
+
+  // 3. Copy the placeholder-only connection into the new transformation.
+  const copyResult = await call(tools, 'kettle_copy_connection', {
+    sourcePath: 'conn_source.ktr',
+    destPath: ktr,
+    sourceName: 'DW',
+  });
+  assert.match(copyResult.diff, /DW/);
+
+  // 4. Add a TableInput and a TableOutput step.
+  await call(tools, 'kettle_add_element', { path: ktr, type: 'TableInput', name: 'READ_ORDERS' });
+  await call(tools, 'kettle_add_element', { path: ktr, type: 'TableOutput', name: 'WRITE_ORDERS' });
+
+  // 5. Point both steps at the copied connection by name.
+  await call(tools, 'kettle_set_field', { path: ktr, name: 'READ_ORDERS', field: 'connection', value: 'DW' });
+  await call(tools, 'kettle_set_field', { path: ktr, name: 'WRITE_ORDERS', field: 'connection', value: 'DW' });
+
+  // 6. Wire the hop.
+  await call(tools, 'kettle_edit_hops', { path: ktr, action: 'add', from: 'READ_ORDERS', to: 'WRITE_ORDERS' });
+
+  // 7. Static validation: zero structural errors. No DB, no PDI process.
+  const report = await call(tools, 'kettle_validate', { path: ktr });
+  assert.equal(report.summary.errors, 0, JSON.stringify(report.issues));
+
+  // The parameters and the copied (still-placeholder) connection are present;
+  // no plaintext password was introduced.
+  const finalXml = readFileSync(path.join(root, ktr), 'utf8');
+  assert.match(finalXml, /<name>RUN_DATE<\/name>/);
+  assert.match(finalXml, /<name>BATCH_SIZE<\/name>/);
+  assert.match(finalXml, /<password>\$\{DW_PASSWORD\}<\/password>/);
 });

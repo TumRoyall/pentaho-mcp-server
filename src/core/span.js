@@ -51,6 +51,101 @@ export function findChildSpan(xml, span, childTag) {
   };
 }
 
+/**
+ * Locate a DIRECT child element `childTag` within `parentSpan` (depth one),
+ * ignoring same-named descendants nested deeper. Unlike findChildSpan (which
+ * returns the first textual occurrence and can reach a grandchild), this walks
+ * tokens from parentSpan.start to parentSpan.end tracking element depth, and
+ * returns only a match whose opening tag sits at depth one relative to the
+ * parent's own content. Comments, declarations/DOCTYPE, CDATA, and self-closing
+ * tags of other names do not change the depth and are skipped; a self-closing
+ * `<childTag/>` at depth one is a valid (empty) direct child.
+ *
+ * Returns the same shape findChildSpan returns:
+ *   { start, end, inner: { start, end }, selfClosing }
+ * or null when no direct child exists.
+ *
+ * The scanner assumes Kettle's machine-generated XML: container tags carry no
+ * attributes, so an opening tag is `<tag>` or `<tag/>` with optional trailing
+ * whitespace before `>`. That matches the rest of this module's contract.
+ */
+export function findDirectChildSpan(xml, parentSpan, childTag) {
+  const end = parentSpan.end;
+  let i = parentSpan.start;
+  // Depth 0 is the parent element itself. Its own opening tag is the first
+  // token we meet; after it, direct children live at depth 1.
+  let depth = 0;
+  let sawParentOpen = false;
+
+  while (i < end) {
+    const lt = xml.indexOf('<', i);
+    if (lt === -1 || lt >= end) break;
+
+    // Comment: <!-- ... -->
+    if (xml.startsWith('<!--', lt)) {
+      const close = xml.indexOf('-->', lt + 4);
+      i = close === -1 ? end : close + 3;
+      continue;
+    }
+    // CDATA: <![CDATA[ ... ]]>
+    if (xml.startsWith('<![CDATA[', lt)) {
+      const close = xml.indexOf(']]>', lt + 9);
+      i = close === -1 ? end : close + 3;
+      continue;
+    }
+    // Declaration / DOCTYPE: <! ... > and processing instruction <? ... ?>
+    if (xml[lt + 1] === '!' || xml[lt + 1] === '?') {
+      const close = xml.indexOf('>', lt + 2);
+      i = close === -1 ? end : close + 1;
+      continue;
+    }
+
+    const gt = xml.indexOf('>', lt);
+    if (gt === -1 || gt >= end) break;
+    const isClose = xml[lt + 1] === '/';
+    const selfClosing = xml[gt - 1] === '/';
+    // Tag name = leading run of name chars after '<' (or '</').
+    const nameStart = lt + (isClose ? 2 : 1);
+    let ns = nameStart;
+    while (ns < gt && /[^\s/>]/.test(xml[ns])) ns++;
+    const name = xml.slice(nameStart, ns);
+
+    if (isClose) {
+      depth--;
+      i = gt + 1;
+      continue;
+    }
+
+    if (!sawParentOpen) {
+      // This first opening tag is the parent element itself.
+      sawParentOpen = true;
+      if (!selfClosing) depth = 1; // now inside the parent -> children at depth 1
+      i = gt + 1;
+      continue;
+    }
+
+    // An opening (or self-closing) tag inside the parent.
+    if (depth === 1 && name === childTag) {
+      if (selfClosing) {
+        return { start: lt, end: gt + 1, inner: { start: gt + 1, end: gt + 1 }, selfClosing: true };
+      }
+      const close = `</${childTag}>`;
+      const k = xml.indexOf(close, gt + 1);
+      if (k === -1 || k >= end) throw new Error(`Unclosed <${childTag}> inside span`);
+      return {
+        start: lt,
+        end: k + close.length,
+        inner: { start: gt + 1, end: k },
+        selfClosing: false,
+      };
+    }
+
+    if (!selfClosing) depth++;
+    i = gt + 1;
+  }
+  return null;
+}
+
 export function innerText(xml, span, childTag) {
   const c = findChildSpan(xml, span, childTag);
   return c ? xml.slice(c.inner.start, c.inner.end) : null;

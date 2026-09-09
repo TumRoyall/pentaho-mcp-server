@@ -9,17 +9,29 @@
  */
 import { walkKettleFiles } from './search.js';
 import { loadModel } from './model.js';
-import { findByXmlType, isGeneratorEligible } from '../knowledge/loader.js';
+import { findByXmlType, isGeneratorEligible, verifiedVersions } from '../knowledge/loader.js';
 
 const STATUS_RANK = { missing: 0, observed: 1, canonical: 2 };
 
 function classify(kind, type) {
   const entry = findByXmlType(kind, type);
-  if (!entry) return { status: 'missing', generatorEligible: false, alias: null };
+  if (!entry) {
+    return {
+      status: 'missing',
+      generatorEligible: false,
+      alias: null,
+      sourceVersion: null,
+      verifiedVersions: [],
+      verification: null,
+    };
+  }
   return {
     status: entry.status ?? 'observed',
     generatorEligible: isGeneratorEligible(kind, entry.xml_type),
     alias: entry.type ?? null,
+    sourceVersion: entry.source_version ?? null,
+    verifiedVersions: verifiedVersions(entry),
+    verification: entry.verification ?? null,
   };
 }
 
@@ -53,6 +65,9 @@ export function knowledgeCoverage(root, { includeExamples = true } = {}) {
           alias: info.alias,
           status: info.status,
           generatorEligible: info.generatorEligible,
+          sourceVersion: info.sourceVersion,
+          verifiedVersions: info.verifiedVersions,
+          verification: info.verification,
           uses: 0,
           examples: [],
         };

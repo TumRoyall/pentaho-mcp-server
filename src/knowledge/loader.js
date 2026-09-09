@@ -150,6 +150,18 @@ export function knownXmlTypes(kind) {
   return new Set(componentList(kind).map(e => e.xml_type).filter(Boolean));
 }
 
+/**
+ * Parse an entry's `verified_versions` scalar into a clean list. The scalar is
+ * a pipe-separated set of PDI versions for which target evidence exists (e.g.
+ * "9.3|9.4"). Empty/missing means no target-version verification is recorded.
+ */
+export function verifiedVersions(entry) {
+  return String(entry?.verified_versions ?? '')
+    .split('|')
+    .map(v => v.trim())
+    .filter(Boolean);
+}
+
 /** True when a type is safe for automatic scaffolding (per catalog policy). */
 export function isGeneratorEligible(kind, xmlType) {
   const entry = findByXmlType(kind, xmlType);
@@ -159,6 +171,10 @@ export function isGeneratorEligible(kind, xmlType) {
   const needEligible = policy.generator_requires_eligible !== false;
   if (needStatus && entry.status !== needStatus) return false;
   if (needEligible && entry.generator_eligible !== true) return false;
+  // The catalog target must be explicitly verified for this entry; without
+  // target-version evidence a row cannot be generator-eligible.
+  const target = String(loadCatalog().pdi_version ?? '').trim();
+  if (target && !verifiedVersions(entry).includes(target)) return false;
   return true;
 }
 

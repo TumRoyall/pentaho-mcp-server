@@ -1,6 +1,6 @@
 # Tham chiếu tool MCP
 
-Catalog đầy đủ 22 tool production. Nguồn sự thật: `src/tools/*.tools.js`, `src/tools/registry.js`, `src/server.js`, `test/`. Mọi kết quả là `text` chứa `{ "ok": true, "data": ... }` hoặc `{ "ok": false, "error": "..." }`.
+Catalog đầy đủ 26 tool production. Nguồn sự thật: `src/tools/*.tools.js`, `src/tools/registry.js`, `src/server.js`, `test/`. Mọi kết quả là `text` chứa `{ "ok": true, "data": ... }` hoặc `{ "ok": false, "error": "..." }`.
 
 MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai báo `capabilities = { tools: {} }`. Superpowers (ngoài MCP) là workflow suy luận khuyến nghị, nhưng các tool dưới đây gọi trực tiếp được bởi client bất kỳ.
 
@@ -36,9 +36,11 @@ MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai bá
 ### `kettle_search`
 
 - Mục đích: tìm kiếm toàn cây `.kjb`/`.ktr`.
-- Tham số: `query` (bắt buộc); `kind?` enum `text|table|connection|variable|step_type|entry_type` (mặc định `text`); `directory?` (mặc định `KETTLE_ROOT`).
-- Output: danh sách match. Chỉ đọc.
-- Ví dụ: `{ "query": "customer", "kind": "table" }`
+- Tham số: `query` (bắt buộc, không rỗng sau khi trim); `kind?` enum `text|table|connection|variable|step_type|entry_type` (mặc định `text`); `directory?` (mặc định `KETTLE_ROOT`); `limit?` số nguyên `1..500` (mặc định `100`).
+- Output: một `SearchReport`: `{ matches, limit, truncated, scannedFiles, scanIssues }`. `matches` là danh sách match; lỗi đọc/parse từng file nằm trong `scanIssues` (không chiếm slot match); `truncated: true` khi số match vượt `limit`. Chỉ đọc.
+- Thay đổi response-shape (pre-1.0): tool trước đây trả về một mảng match trần; nay trả về object `SearchReport`. Số match mặc định bị giới hạn ở 100 (`limit`).
+- Query rỗng bị từ chối trước khi duyệt filesystem.
+- Ví dụ: `{ "query": "customer", "kind": "table", "limit": 50 }`
 
 ## Nhóm edit (9)
 
@@ -102,6 +104,39 @@ MCP **không quảng bá prompt hay resource nào**; `initialize` chỉ khai bá
 - Mục đích: copy `.kjb`/`.ktr` làm template: đặt internal name và find/replace literal.
 - Tham số: `sourcePath`, `destPath` (chưa tồn tại), `name` (bắt buộc); `replacements?` array `{find, replace}`.
 - Ví dụ: `{ "sourcePath": "etl-pentaho/a.ktr", "destPath": "etl-pentaho/b.ktr", "name": "b", "replacements": [] }`
+
+## Nhóm artifact (2)
+
+### `kettle_set_parameters`
+
+- Mục đích: thay thế danh sách tham số cấp artifact (`transformation/info/parameters` cho trans, `job/parameters` cho job). Một edit tối thiểu, giữ nguyên byte không liên quan.
+- Tham số: `path` (bắt buộc); `parameters` (bắt buộc) — mảng `{ name, default?, description? }`. Tên trùng hoặc rỗng → từ chối.
+- Trả về: `{ diff }`.
+- Ví dụ: `{ "path": "etl-pentaho/load.ktr", "parameters": [{ "name": "RUN_DATE", "default": "2026-09-09", "description": "Business date" }] }`
+
+### `kettle_copy_connection`
+
+- Mục đích: sao chép một block `<connection>` đã đặt tên từ artifact nguồn (trong root) sang artifact đích. Trích đúng span nguồn; khi đổi tên chỉ đổi child `<name>` trực tiếp; chèn cạnh các connection cấp cao hiện có. Nguồn và đích độc lập về kind (job↔trans).
+- Chính sách mật khẩu (không bao giờ ghi plaintext): rỗng/self-closing → cho phép; `${BIẾN}` → cho phép; `Encrypted...` → chỉ khi truyền `allowEncryptedPassword: true`; còn lại → từ chối.
+- Tham số: `sourcePath` (bắt buộc, trong root), `destPath` (bắt buộc, trong root), `sourceName` (bắt buộc); `destName?` (đổi tên), `allowEncryptedPassword?` (boolean). Trùng tên ở đích → từ chối.
+- Trả về: `{ diff }`.
+- Ví dụ: `{ "sourcePath": "etl-pentaho/conn.ktr", "destPath": "etl-pentaho/load.ktr", "sourceName": "DW" }`
+
+## Nhóm removal (2)
+
+### `kettle_remove_element`
+
+- Mục đích: xóa một step (trans) hoặc entry (job) an toàn theo tham chiếu. Mặc định (`removeReferences:false`) **từ chối** khi còn hop, error block, hoặc step-reference tag trỏ tới nó — liệt kê loại tham chiếu, không đụng file. `removeReferences:true` → xóa cascade (bỏ hop/error block, làm rỗng nội dung tag route-reference nhưng giữ tag), rồi xóa element, một edit atomic đã validate. Xóa entry START duy nhất của job luôn bị từ chối; tên trùng → từ chối.
+- Tham số: `path` (bắt buộc), `name` (bắt buộc); `removeReferences?` (boolean, mặc định false).
+- Trả về: `{ diff }`.
+- Ví dụ: `{ "path": "etl-pentaho/load.ktr", "name": "OLD_STEP", "removeReferences": true }`
+
+### `kettle_edit_error_hop`
+
+- Mục đích: bật/tắt/xóa error block của một step nguồn (transformation). `enable`/`disable` đặt `<is_enabled>`. `remove` bỏ block `<error>` và bỏ luôn hop thường source→target **chỉ khi** không còn route rõ ràng nào khác cần nó. Job → từ chối; nguồn không tồn tại → lỗi.
+- Tham số: `path` (bắt buộc), `action` (enum `enable|disable|remove`, bắt buộc), `source` (bắt buộc).
+- Trả về: `{ diff }`.
+- Ví dụ: `{ "path": "etl-pentaho/load.ktr", "action": "disable", "source": "READ_ORDERS" }`
 
 ## Nhóm validation (1)
 

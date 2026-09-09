@@ -39,6 +39,35 @@ test('package metadata ships the companion skill in the npm files list', () => {
   assert.ok(pkg.files.includes('skills'), 'package.json files must include skills');
 });
 
+test('npm tarball excludes historical superpowers docs but keeps current docs, source, and skill', () => {
+  const npmCli = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  const packed = spawnSync(npmCli, ['pack', '--dry-run', '--json'], {
+    cwd: root,
+    encoding: 'utf8',
+    shell: process.platform === 'win32',
+    timeout: 120_000,
+  });
+  assert.equal(packed.status, 0, packed.stderr || packed.stdout);
+  const jsonStart = packed.stdout.indexOf('[');
+  assert.ok(jsonStart >= 0, `npm pack did not emit JSON: ${packed.stdout}`);
+  const report = JSON.parse(packed.stdout.slice(jsonStart));
+  const entries = report.flatMap(item => (item.files ?? []).map(file => file.path.replace(/\\/g, '/')));
+
+  assert.equal(
+    entries.some(file => file.startsWith('docs/superpowers/')),
+    false,
+    `published tarball must not contain historical superpowers docs: ${entries.filter(f => f.startsWith('docs/superpowers/')).join(', ')}`,
+  );
+  for (const required of [
+    'docs/architecture.md',
+    'docs/operations.md',
+    'src/index.js',
+    'skills/developing-pentaho-jobs/SKILL.md',
+  ]) {
+    assert.ok(entries.includes(required), `published tarball must include ${required}`);
+  }
+});
+
 test('versioned Windows release has exact inventory, checksum, and working MCP executable', async () => {
   rmSync(path.join(root, 'dist'), { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   const build = spawnSync(process.execPath, ['scripts/build-release.mjs', '--version', version], { cwd: root, encoding: 'utf8', timeout: 120_000 });
@@ -73,7 +102,7 @@ test('versioned Windows release has exact inventory, checksum, and working MCP e
   for await (const chunk of proc.stdout) output += chunk;
   const responses = output.split(/\r?\n/).filter(line => line.startsWith('{')).map(JSON.parse);
   const tools = responses.find(row => row.id === 2).result.tools;
-  assert.equal(tools.length, 22);
+  assert.equal(tools.length, 26);
   assert.equal(tools.some(item => item.name.startsWith('pentaho_')), false);
   const capabilities = responses.find(row => row.id === 1).result.capabilities;
   assert.ok(Object.hasOwn(capabilities, 'tools'));

@@ -16,19 +16,19 @@ node --test
 node scripts/verify-production-profile.mjs
 ```
 
-Chuẩn mực baseline: toàn suite pass, profile `production profile OK: 22 tools, no lifecycle prompt/resource surface, no learning/promotion surface`.
+Chuẩn mực baseline: toàn suite pass, profile `production profile OK: 26 tools (exact set), no lifecycle prompt/resource surface, no learning/promotion surface`.
 
 ## npm script
 
 | Script | Ý nghĩa |
 |--------|---------|
 | `npm test` (`node --test`) | Toàn suite `node:test` + fixture (gồm file 9.4 thật) |
-| `npm run verify:profile` | Chặn learning/promotion surface, assert đúng 22 tool và không có bề mặt lifecycle prompt/resource |
+| `npm run verify:profile` | Chặn learning/promotion surface, assert đúng tập 26 tool (so khớp tên chính xác) và không có bề mặt lifecycle prompt/resource |
 | `npm run build:release -- --version <semver>` | Bundle + SEA + ZIP versioned + checksum (chỉ Windows), gồm companion skill |
 
 ## Bề mặt production
 
-Registry (`src/tools/registry.js`) đăng ký đúng **5 factory**: read/edit/validate/knowledge/runtime → tổng **22 tool**. Nhóm runtime thuộc workflow nhưng phase-gated (Pha 5, chỉ sau validation tĩnh).
+Registry (`src/tools/registry.js`) đăng ký đúng **7 factory**: read/edit/validate/knowledge/runtime/artifact/removal → tổng **26 tool**. Nhóm runtime thuộc workflow nhưng phase-gated (Pha 5, chỉ sau validation tĩnh).
 
 Phần cài đặt lifecycle BA cũ đã **gỡ bỏ khỏi source** cùng toàn bộ test riêng của nó; không còn module nào như vậy trên đĩa. `test/legacy-removal.test.js` giữ vai trò guard, fail nếu bất kỳ đường dẫn legacy nào quay lại. MCP cũng không quảng bá prompt/resource nào; `initialize` chỉ khai báo `capabilities = { tools: {} }`.
 
@@ -70,7 +70,18 @@ Trạng thái catalog:
 
 ## Giới hạn production-profile
 
-`scripts/verify-production-profile.mjs` fail nếu tool chứa `learn|promot|intake|catalog_add/write/promote`, nếu có bất kỳ prompt/resource nào được quảng bá, hoặc khác 22 tool. Không thêm bề mặt ghi/promote tri thức, không đưa bề mặt lifecycle BA trở lại, không quảng bá prompt/resource vào production.
+`scripts/verify-production-profile.mjs` fail nếu tool chứa `learn|promot|intake|catalog_add/write/promote`, nếu có bất kỳ prompt/resource nào được quảng bá, hoặc tập tool khác tập 26 tên kỳ vọng (so khớp tập chính xác, không chỉ đếm). Không thêm bề mặt ghi/promote tri thức, không đưa bề mặt lifecycle BA trở lại, không quảng bá prompt/resource vào production.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` chạy trên `windows-latest` (khớp môi trường build `.exe`):
+
+- Job `test`: matrix Node `[20, 22]`, mỗi node chạy `npm ci` → `npm test` → `npm run verify:profile` → `git diff --check`.
+- Job `package`: Node 20, chạy `npm run build:release -- --version 0.0.0-ci` rồi upload `dist/**` qua `actions/upload-artifact@v4` để kiểm nhanh artifact release.
+
+## Bao bì npm
+
+`package.json` `files` liệt kê tường minh `src`, `skills`, `README.md` và từng file `docs/*.md` hiện hành. Thư mục `docs/superpowers/` (plan/spec/handoff lịch sử của coordinator) **không** nằm trong danh sách nên không phát hành lên npm. Dev dependency dùng `esbuild` (bundle release) và `postject` (SEA inject); không còn phụ thuộc `yaml` (không có source nào import). Kiểm tra danh mục tarball bằng `npm pack --dry-run --json`.
 
 ## Release build internals
 
@@ -79,7 +90,7 @@ Trạng thái catalog:
 1. esbuild bundle `src/index.js` thành một CJS, collapse `import.meta.url` về base ổn định.
 2. Nhúng mọi text asset bất biến (`src/knowledge/pentaho/**`) vào module generated; fs shim serve read theo suffix, fallback fs thật.
 3. `node --experimental-sea-config packaging/sea-config.json` tạo blob; copy Node exe và inject bằng postject.
-4. Smoke `.exe` qua stdio (initialize/tools, assert 22 tool, không prompt/resource, không learning/promotion).
+4. Smoke `.exe` qua stdio (initialize/tools, assert 26 tool, không prompt/resource, không learning/promotion).
 5. Stage ZIP versioned + `checksums.sha256` (cạnh ZIP), gồm companion skill dưới `skills/`. Thiếu esbuild/postject/SEA toolchain → fail to, không fallback cần system Node.
 
 ## Danh mục phát hành
@@ -88,7 +99,7 @@ ZIP gồm các entry: `README.md`, `VERSION`, `doctor.ps1`, `dte-pentaho-mcp.exe
 
 ## Checklist đóng góp
 
-- [ ] Test focused pass; `node --test` pass; `node scripts/verify-production-profile.mjs` OK (22 tool, no prompt/resource, no learning/promotion).
+- [ ] Test focused pass; `node --test` pass; `node scripts/verify-production-profile.mjs` OK (26 tool, no prompt/resource, no learning/promotion).
 - [ ] Không hard-code `dte-*`; biên workspace (`createWorkspaceBoundary`) enforce mọi đường ghi/đọc.
 - [ ] Knowledge mới có provenance, không secret/endpoint/path thật.
 - [ ] Không commit/push trừ khi user cho phép riêng; mỗi task kết thúc bằng diff reviewable.

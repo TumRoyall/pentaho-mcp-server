@@ -62,11 +62,11 @@ foreach ($line in ($stdout -split "`r?`n")) {
 }
 
 $tools = ($responses | Where-Object { $_.id -eq 2 }).result.tools
-if ($tools -and $tools.Count -eq 22) {
+if ($tools -and $tools.Count -eq 26) {
   Write-Host "[OK]   MCP handshake: $($tools.Count) tools"
 } else {
   $count = if ($tools) { $tools.Count } else { 0 }
-  Write-Host "[FAIL] MCP handshake: expected 22 tools, got $count"
+  Write-Host "[FAIL] MCP handshake: expected 26 tools, got $count"
   $failures += 'handshake'
 }
 

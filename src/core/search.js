@@ -102,15 +102,43 @@ function excerptFor(xml, idx, matchLen, maxLen = 200) {
   return trimmed.slice(start, start + winLen);
 }
 
-export function search(root, query, kind = 'text', directory) {
+const SEARCH_KINDS = ['text', 'table', 'connection', 'variable', 'step_type', 'entry_type'];
+
+/**
+ * Search across .kjb/.ktr files and return a bounded SearchReport:
+ *   { matches, limit, truncated, scannedFiles, scanIssues }
+ *
+ * Blank queries are rejected before any filesystem traversal; only the
+ * blank-detection uses a trim, the caller's original query drives matching.
+ * Per-file read/parse failures are collected in scanIssues and never consume
+ * a match slot. Collection stops once one match beyond the limit proves
+ * truncation, so a huge tree is not scanned in full unnecessarily.
+ */
+export function search(root, query, kind = 'text', directory, { limit = 100 } = {}) {
+  if (typeof query !== 'string' || query.trim() === '') {
+    throw new Error('search query must be a non-empty string');
+  }
+  if (!SEARCH_KINDS.includes(kind)) {
+    throw new Error(`search kind must be one of: ${SEARCH_KINDS.join(', ')}`);
+  }
+  if (!Number.isInteger(limit) || limit < 1 || limit > 500) {
+    throw new Error('search limit must be an integer in 1..500');
+  }
+
   const base = directory ?? root;
-  const results = [];
+  const matches = [];
+  const scanIssues = [];
+  let scannedFiles = 0;
+  let truncated = false;
+
   for (const file of walkKettleFiles(base)) {
+    if (truncated) break;
     try {
       const fileKind = kindOf(file);
       if (kind === 'step_type' && fileKind !== 'trans') continue;
       if (kind === 'entry_type' && fileKind !== 'job') continue;
       const xml = readFileSync(file, 'utf8');
+      scannedFiles++;
       const tag = fileKind === 'job' ? 'entry' : 'step';
       const elements = findAllSpans(xml, tag).map(s => ({
         span: s,
@@ -118,8 +146,13 @@ export function search(root, query, kind = 'text', directory) {
         type: unescapeXml(innerText(xml, s, 'type') ?? ''),
       }));
       for (const { index: idx, length: len } of findMatches(xml, query, kind, elements)) {
+        if (matches.length >= limit) {
+          // One match beyond the limit is enough to prove truncation; stop.
+          truncated = true;
+          break;
+        }
         const el = elements.find(e => idx >= e.span.start && idx < e.span.end);
-        results.push({
+        matches.push({
           file,
           line: lineOf(xml, idx),
           element: el ? el.name : null,
@@ -128,8 +161,8 @@ export function search(root, query, kind = 'text', directory) {
         });
       }
     } catch (err) {
-      results.push({ file, error: err.message });
+      scanIssues.push({ file, error: err.message });
     }
   }
-  return results;
+  return { matches, limit, truncated, scannedFiles, scanIssues };
 }

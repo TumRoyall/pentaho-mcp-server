@@ -7,6 +7,18 @@ import {
 } from './model.js';
 import { walkKettleFiles } from './search.js';
 
+/**
+ * A hop is an ACTIVE graph edge unless it is explicitly disabled. Kettle's
+ * <enabled> is 'Y' for active hops and 'N' for a hop the author has switched
+ * off in Spoon; an absent/empty value defaults to active. Only active hops
+ * draw an arrow, carry rows, and satisfy target-reference/error routing.
+ * Disabled hops are still part of the saved artifact and are still checked for
+ * endpoint existence, but they do not connect the graph.
+ */
+export function isActiveHop(hop) {
+  return hop.enabled !== 'N';
+}
+
 function report(filePath, issues) {
   return {
     path: filePath,
@@ -25,8 +37,9 @@ function isStartEntry(e) {
 
 /** BFS over hops. Jobs start from the start entry; transformations from source steps. */
 function computeReachable(m) {
+  const activeHops = m.hops.filter(isActiveHop);
   const adj = new Map();
-  for (const h of m.hops) {
+  for (const h of activeHops) {
     if (!adj.has(h.from)) adj.set(h.from, []);
     adj.get(h.from).push(h.to);
   }
@@ -36,7 +49,7 @@ function computeReachable(m) {
   } else if (m.elements.length === 1) {
     roots = [m.elements[0].name];
   } else {
-    const targets = new Set(m.hops.map(h => h.to));
+    const targets = new Set(activeHops.map(h => h.to));
     roots = m.elements
       .map(e => e.name)
       .filter(n => !targets.has(n) && (adj.get(n) ?? []).length > 0);
@@ -132,7 +145,7 @@ function checkStepReferences(m, names, push) {
  */
 function checkTargetReferenceHops(m, push) {
   if (m.kind !== 'trans') return;
-  const hopSet = new Set(m.hops.map(h => `${h.from}\u0000${h.to}`));
+  const hopSet = new Set(m.hops.filter(isActiveHop).map(h => `${h.from}\u0000${h.to}`));
   const flag = (from, target, where) => {
     if (target && !hopSet.has(`${from}\u0000${target}`)) {
       push('warning', `Step "${from}" routes to "${target}" via ${where} but has no hop to it`);
@@ -162,10 +175,13 @@ function checkTargetReferenceHops(m, push) {
 function checkErrorHandlingHops(m, push) {
   if (m.kind !== 'trans') return;
   const names = new Set(m.elements.map(e => e.name));
-  const hopSet = new Set(m.hops.map(h => `${h.from}\u0000${h.to}`));
+  const hopSet = new Set(m.hops.filter(isActiveHop).map(h => `${h.from}\u0000${h.to}`));
   for (const err of m.errorHops ?? []) {
     if (err.enabled !== 'Y') continue;
     if (!err.source || !err.target) continue;
+    if (!names.has(err.source)) {
+      push('error', `Error handling names missing source step "${err.source}"`);
+    }
     if (!names.has(err.target)) {
       push('error', `Error handling on "${err.source}" targets missing step "${err.target}"`);
     } else if (!hopSet.has(`${err.source}\u0000${err.target}`)) {

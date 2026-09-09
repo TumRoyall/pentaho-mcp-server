@@ -18,9 +18,9 @@ Cả hai đều tôn trọng `KETTLE_ROOT` (mặc định `process.cwd()`, luôn
 node scripts/verify-production-profile.mjs
 ```
 
-`doctor.ps1` bắt tay MCP bằng **initialize + tools/list** (không kiểm prompt/resource), assert đúng **22 tool** và từ chối mọi tool `pentaho_*` (lifecycle legacy không được đăng ký). Kỳ vọng profile: `production profile OK: 22 tools, no lifecycle prompt/resource surface, no learning/promotion surface`.
+`doctor.ps1` bắt tay MCP bằng **initialize + tools/list** (không kiểm prompt/resource), assert đúng **26 tool** và từ chối mọi tool `pentaho_*` (lifecycle legacy không được đăng ký). Kỳ vọng profile: `production profile OK: 26 tools (exact set), no lifecycle prompt/resource surface, no learning/promotion surface`.
 
-Kiểm tra handshake thủ công: `tools/list` phải có `kettle_add_error_hop` và 4 `kettle_runtime_*`, tổng 22 tool, và **không** có tool `pentaho_*` nào; MCP không quảng bá prompt/resource.
+Kiểm tra handshake thủ công: `tools/list` phải có `kettle_add_error_hop`, 4 `kettle_runtime_*`, và 4 tool artifact/removal mới (`kettle_set_parameters`, `kettle_copy_connection`, `kettle_remove_element`, `kettle_edit_error_hop`), tổng 26 tool, và **không** có tool `pentaho_*` nào; MCP không quảng bá prompt/resource.
 
 ## Companion skill
 
@@ -42,13 +42,26 @@ Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime phase-gat
 
 ## Log và khử nhạy cảm (runtime phase-gated)
 
-- Runtime log khử nhạy cảm nằm trong `runtime-logs/` (`<timestamp>-<kind>-<mode>.log`), gồm status/exitCode/signal + STDOUT/STDERR đã cắt 256KB và redact credential/tham số nhạy cảm. Đọc bằng `kettle_runtime_logs`.
+- Runtime log khử nhạy cảm nằm trong `runtime-logs/` (`<timestamp>-<kind>-<mode>.log`), gồm status/exitCode/signal + STDOUT/STDERR (mỗi luồng bị chặn 256 KiB bằng tail buffer ngay khi streaming) và redact credential/tham số nhạy cảm. Đọc bằng `kettle_runtime_logs`.
+- Thư mục log giữ **100 file mới nhất** sau mỗi lần chạy (retention theo số lượng); file cũ hơn bị xóa.
+- `kettle_runtime_logs` nhận `name` (tùy chọn) và `limit` (1..100), trả **mới nhất trước**, tối đa **256 KiB mỗi file**, kiểm chứa canonical từng file (từ chối tên thoát khỏi thư mục log).
 - Server log stderr (`kettle-mcp-dte running on stdio ...`); tool failure là payload `{ok:false}` trong `text`, không phải protocol error.
+- Runtime log ghi dưới `<KETTLE_ROOT>/.pentaho-mcp/`; thư mục `.pentaho-mcp/` đã nằm trong `.gitignore` nên không lọt vào commit.
 
-## Timeout và xác nhận thực thi (runtime phase-gated)
+## CI và bao bì phát hành
 
-- `timeoutMs` mặc định 120s, tối thiểu 1ms; timeout → `TIMEOUT` + SIGTERM, log vẫn lưu.
-- `kettle_runtime_execute` **luôn** cần `confirmed: true`, nếu không trả `CONFIRM_REQUIRED` mà không chạm PDI. Không có auto theo tên môi trường (không `DEV`/`TEST`/`UNKNOWN`).
+- CI (`.github/workflows/ci.yml`) chạy trên `windows-latest`: job `test` với matrix Node `[20, 22]` (`npm ci` → `npm test` → `npm run verify:profile` → `git diff --check`), job `package` (Node 20) build release `0.0.0-ci` và upload `dist/**` làm artifact.
+- Bản phát hành npm chỉ gồm `src`, `skills`, `README.md` và các file `docs/*.md` hiện hành; tài liệu lịch sử của coordinator dưới `docs/superpowers/` (plan/spec/handoff) **không** được đóng gói lên npm.
+
+## Cổng thực thi, timeout và xác nhận (runtime phase-gated)
+
+- Thực thi cần **cả hai**: `PENTAHO_ENABLE_EXECUTE=1` ở môi trường server **và** `confirmed: true` trên lời gọi.
+  - Server không đặt `PENTAHO_ENABLE_EXECUTE=1` → `EXECUTE_DISABLED`, trả về **trước khi** detect/spawn (không chạm PDI).
+  - Bật server nhưng thiếu `confirmed` → `CONFIRM_REQUIRED`, cũng không spawn.
+  - `PENTAHO_ENABLE_EXECUTE=1` + `confirmed: true` → `ALLOW`.
+  - Không có auto theo tên môi trường (không `DEV`/`TEST`/`UNKNOWN`).
+- `timeoutMs` mặc định 120s, tối thiểu 1ms; timeout → `TIMEOUT` và hạ **cả cây tiến trình**: Windows chạy `taskkill.exe /PID <pid> /T /F` (`shell:false`); nền tảng khác `SIGTERM` rồi `SIGKILL` sau ân hạn. Log vẫn lưu.
+- Trên Windows, launcher `.bat`/`.cmd` chạy qua shell; mọi token bị kiểm chống metacharacter (`" & | < > ^ % !`, CR/LF/NUL) và tên tham số phải là identifier trước khi spawn.
 - Runtime là bước verification phase-gated: chỉ dùng sau validation tĩnh; `execute` còn cần user duyệt riêng cho lần chạy đó.
 - `loadcheck`/`execute` luôn validation tĩnh trước; structural error → `STATIC_VALIDATION_FAILED`.
 
@@ -83,5 +96,5 @@ Chi tiết biên xem `docs/configuration.md`.
 
 1. `doctor.ps1` fail handshake → kiểm tra `.exe` bị chặn, `mcp.json` trỏ đúng path, reconnect MCP.
 2. Tool trả `{ok:false}` → đọc `error`: đường ngoài `KETTLE_ROOT` / validation fail → sửa path hoặc artifact.
-3. Runtime `FAIL`/`TIMEOUT` (tùy chọn) → `kettle_runtime_logs` xem log khử dưới `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs/`; kiểm tra `confirmed`, `timeoutMs`, `PENTAHO_HOME`, structural validation.
+3. Runtime `FAIL`/`TIMEOUT` (tùy chọn) → `kettle_runtime_logs` xem log khử dưới `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs/`; kiểm tra `PENTAHO_ENABLE_EXECUTE`, `confirmed`, `timeoutMs`, `PENTAHO_HOME`, structural validation. `EXECUTE_DISABLED` = server chưa opt-in; `CONFIRM_REQUIRED` = thiếu `confirmed`.
 4. Giữ `git status --short` sạch khỏi artifact tạm; server không bao giờ commit/push.

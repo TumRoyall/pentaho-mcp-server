@@ -42,9 +42,9 @@ Cơ chế `assertWritable` cũ (dựa biến môi trường trong `src/core/edit
 | Module | Vai trò | Nguồn |
 |--------|---------|-------|
 | `src/server.js` | Wiring MCP: `ListTools`, `CallTool`; `initialize` khai báo `capabilities = { tools: {} }` (không prompt/resource); envelope `{ok, data/error}` | `src/server.js` |
-| `src/tools/registry.js` | `buildTools(ctx)` gộp 5 factory: read/edit/validate/knowledge/runtime; chặn trùng tên | `src/tools/registry.js` |
+| `src/tools/registry.js` | `buildTools(ctx)` gộp 7 factory: read/edit/validate/knowledge/runtime/artifact/removal; chặn trùng tên | `src/tools/registry.js` |
 | `src/workspace/boundary.js` | `createWorkspaceBoundary` — chính sách biên workspace chia sẻ (canonical containment) | `src/workspace/boundary.js` |
-| `src/core/` | `model.js`, `span.js`, `edit.js`, `search.js`, `validate.js`, `summarize.js`, `knowledge-intake.js`, `knowledge-coverage.js` — engine thuần túy, filesystem op | `src/core/*.js` |
+| `src/core/` | `model.js`, `span.js`, `edit.js`, `artifact-edit.js`, `remove.js`, `search.js`, `validate.js`, `summarize.js`, `knowledge-intake.js`, `knowledge-coverage.js` — engine thuần túy, filesystem op | `src/core/*.js` |
 | `src/knowledge/` | `loader.js` (parse `catalog.yaml`, resolve reference, `KETTLE_KNOWLEDGE_DIR` override), `catalog-check.js` | `src/knowledge/loader.js` |
 | `src/runtime/` | `detect.js`, `policy.js`, `run.js`, `redact.js` — dò PDI theo `PENTAHO_HOME`, chính sách thực thi confirm-only, spawn có timeout, khử nhạy cảm; **tùy chọn, phase-gated** (chỉ sau validation tĩnh), dùng chung biên `KETTLE_ROOT` | `src/runtime/*.js` |
 | `scripts/`, `packaging/` | `build-release.mjs` (esbuild + SEA + postject + ZIP), `verify-production-profile.mjs`, `install.ps1`/`uninstall.ps1`/`doctor.ps1` | `scripts/*`, `packaging/*` |
