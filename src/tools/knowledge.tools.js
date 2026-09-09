@@ -3,7 +3,7 @@
  * "which types do you know?" and "how is this type built?" without shipping the
  * knowledge folder separately.
  */
-import { listTypes, getReference, isGeneratorEligible, knowledgeDir } from '../knowledge/loader.js';
+import { listTypes, getReference, isGeneratorEligible, verifiedVersions, knowledgeDir } from '../knowledge/loader.js';
 import { analyzeKnowledgeXml } from '../core/knowledge-intake.js';
 import { knowledgeCoverage } from '../core/knowledge-coverage.js';
 
@@ -32,7 +32,10 @@ export function knowledgeTools({ resolveRead, root } = {}) {
             type: e.type,
             xml_type: e.xml_type,
             status: e.status,
-            generator_eligible: e.generator_eligible === true,
+            generator_eligible: isGeneratorEligible(k, e.xml_type),
+            source_version: e.source_version ?? null,
+            verified_versions: verifiedVersions(e),
+            verification: e.verification ?? null,
             file: e.file,
           }));
         }
@@ -54,6 +57,9 @@ export function knowledgeTools({ resolveRead, root } = {}) {
           requested: a.type,
           entry: ref.entry,
           generator_eligible: isGeneratorEligible(a.kind, ref.entry.xml_type),
+          source_version: ref.entry.source_version ?? null,
+          verified_versions: verifiedVersions(ref.entry),
+          verification: ref.entry.verification ?? null,
           file: ref.file,
           content: ref.content,
         };
