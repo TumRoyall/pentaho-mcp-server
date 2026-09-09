@@ -9,6 +9,7 @@ import { createWorkspaceBoundary } from '../src/workspace/boundary.js';
 import { buildTools } from '../src/tools/registry.js';
 import { makeContext } from '../src/server.js';
 import { runtimeTools } from '../src/tools/runtime.tools.js';
+import { artifactTools } from '../src/tools/artifact.tools.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fx = (...p) => path.join(here, 'fixtures', ...p);
@@ -206,4 +207,58 @@ test('kettle_clone rejects an outside source and independently an outside destin
     /outside KETTLE_ROOT/i,
   );
   assert.equal(existsSync(path.join(outside, 'clone.ktr')), false);
+});
+
+// The artifact tools are not yet in the global registry (the coordinator wires
+// that in a later integration task), so build them directly from the factory
+// with the shared boundary to prove both source and destination paths are
+// enforced.
+function artifactMap(root) {
+  const context = createWorkspaceBoundary(root);
+  return new Map(artifactTools(context).map(tool => [tool.name, tool]));
+}
+
+test('kettle_set_parameters rejects an outside file and leaves it unchanged', async () => {
+  const { root, outside } = scratch();
+  const tools = artifactMap(root);
+  const target = path.join(outside, 'mini.ktr');
+  const before = readFileSync(target);
+  await assert.rejects(
+    () => invoke(tools.get('kettle_set_parameters'), {
+      path: target,
+      parameters: [{ name: 'RUN_DATE', default: '2026-09-09', description: 'Business date' }],
+    }),
+    /outside KETTLE_ROOT/i,
+  );
+  assert.deepEqual(readFileSync(target), before);
+});
+
+test('kettle_copy_connection rejects an outside source and independently an outside destination', async () => {
+  const { root, outside } = scratch();
+  const tools = artifactMap(root);
+  // Outside source is refused before any destination write.
+  await assert.rejects(
+    () => invoke(tools.get('kettle_copy_connection'), {
+      sourcePath: path.join(outside, 'mini.ktr'),
+      destPath: 'mini.kjb',
+      sourceName: 'conn_a',
+      destName: 'conn_copy',
+    }),
+    /outside KETTLE_ROOT/i,
+  );
+  const destBefore = readFileSync(path.join(root, 'mini.kjb'));
+  assert.deepEqual(readFileSync(path.join(root, 'mini.kjb')), destBefore);
+  // Outside destination is refused independently.
+  const target = path.join(outside, 'mini.kjb');
+  const targetBefore = readFileSync(target);
+  await assert.rejects(
+    () => invoke(tools.get('kettle_copy_connection'), {
+      sourcePath: 'mini.ktr',
+      destPath: target,
+      sourceName: 'conn_a',
+      destName: 'conn_copy',
+    }),
+    /outside KETTLE_ROOT/i,
+  );
+  assert.deepEqual(readFileSync(target), targetBefore);
 });
