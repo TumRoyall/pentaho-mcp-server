@@ -12,7 +12,9 @@ export function artifactTools({ resolveRead, resolveWrite }) {
   return [
     {
       name: 'kettle_set_parameters',
+      title: 'Set artifact parameters',
       description: 'Replace the artifact-level parameter list. Transformation parameters live under transformation/info/parameters; job parameters live under job/parameters. Each parameter renders <name>, <default_value>, <description> in that stable order. Duplicate or blank names are rejected. Creates the <parameters> container when absent. Returns a unified diff.',
+      annotations: { title: 'Set artifact parameters', readOnlyHint: false, destructiveHint: true, idempotentHint: true },
       inputSchema: {
         type: 'object',
         properties: {
@@ -33,12 +35,15 @@ export function artifactTools({ resolveRead, resolveWrite }) {
           },
         },
         required: ['path', 'parameters'],
+        additionalProperties: false,
       },
       handler: a => ({ diff: setArtifactParameters(resolveWrite(a.path), a.parameters) }),
     },
     {
       name: 'kettle_copy_connection',
+      title: 'Copy connection',
       description: 'Copy one named top-level <connection> block from an in-root source artifact into a destination artifact. Refuses a destination-name collision. Source and destination kind are independent (a job connection may be copied into a transformation and vice versa). Rejects a source connection whose password is non-placeholder (plaintext); an encrypted password requires allowEncryptedPassword:true. Placeholder passwords (empty or ${VARIABLE}) are always allowed. Returns the destination diff.',
+      annotations: { title: 'Copy connection', readOnlyHint: false, destructiveHint: true, idempotentHint: false },
       inputSchema: {
         type: 'object',
         properties: {
@@ -52,6 +57,7 @@ export function artifactTools({ resolveRead, resolveWrite }) {
           },
         },
         required: ['sourcePath', 'destPath', 'sourceName'],
+        additionalProperties: false,
       },
       handler: a => ({
         diff: copyConnection(resolveRead(a.sourcePath), resolveWrite(a.destPath), a.sourceName, {

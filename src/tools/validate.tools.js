@@ -43,13 +43,16 @@ export function validateTools({ resolveRead, root }) {
   return [
     {
       name: 'kettle_validate',
+      title: 'Validate artifact',
       description: 'Lint one file (or every file under KETTLE_ROOT when path omitted). Checks structure (XML, hops, connections, start entry, reachability) plus knowledge-catalog type coverage. checkCatalog:false skips the catalog layer.',
+      annotations: { title: 'Validate artifact', readOnlyHint: true },
       inputSchema: {
         type: 'object',
         properties: {
           path: str('Path to a .kjb/.ktr file (workspace-relative, or an absolute path contained by KETTLE_ROOT)'),
           checkCatalog: { type: 'boolean', description: 'Include knowledge-catalog type check (default true)' },
         },
+        additionalProperties: false,
       },
       handler: a => {
         const withCatalog = a.checkCatalog !== false;

@@ -153,7 +153,7 @@ function run(cmd, args, options = {}) {
   return res;
 }
 
-async function bundleServer() {
+async function bundleServer(version) {
   let esbuild;
   try { esbuild = require('esbuild'); }
   catch { fail('esbuild is required (npm install) but was not found'); }
@@ -165,10 +165,15 @@ async function bundleServer() {
     target: 'node20',
     write: false,
     logLevel: 'silent',
-    // Collapse every module's import.meta.url to one stable base so runtime
-    // file reads produce predictable suffixes the embedded-asset fs shim can
-    // match. The value is never opened on disk in the SEA.
-    define: { 'import.meta.url': JSON.stringify(IMPORT_META_URL) },
+    define: {
+      // Collapse every module's import.meta.url to one stable base so runtime
+      // file reads produce predictable suffixes the embedded-asset fs shim can
+      // match. The value is never opened on disk in the SEA.
+      'import.meta.url': JSON.stringify(IMPORT_META_URL),
+      // Inject the release version so src/version.js advertises the real
+      // release identity in serverInfo.version instead of the source fallback.
+      __PENTAHO_MCP_VERSION__: JSON.stringify(version),
+    },
   });
   return result.outputFiles[0].text;
 }
@@ -245,7 +250,7 @@ async function main() {
   rmrf(buildDir);
   mkdirSync(buildDir, { recursive: true });
 
-  const rawBundle = await bundleServer();
+  const rawBundle = await bundleServer(version);
   // esbuild preserves the entry's shebang at the top of the bundle; strip it so
   // the prologue can lead the composed single-file SEA entry.
   const serverBundle = rawBundle.replace(/^#![^\n]*\n/, '');
