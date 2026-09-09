@@ -35,13 +35,15 @@ export function readTools({ resolveRead, root }) {
       inputSchema: {
         type: 'object',
         properties: {
-          query: str('What to search for'),
+          query: { type: 'string', minLength: 1, description: 'What to search for' },
           kind: { type: 'string', enum: ['text', 'table', 'connection', 'variable', 'step_type', 'entry_type'] },
           directory: str('Directory to scan (default: KETTLE_ROOT)'),
+          limit: { type: 'integer', minimum: 1, maximum: 500, default: 100, description: 'Maximum matches to return (1..500)' },
         },
         required: ['query'],
+        additionalProperties: false,
       },
-      handler: a => search(root, a.query, a.kind ?? 'text', resolveRead(a.directory)),
+      handler: a => search(root, a.query, a.kind ?? 'text', resolveRead(a.directory), { limit: a.limit ?? 100 }),
     },
   ];
 }
