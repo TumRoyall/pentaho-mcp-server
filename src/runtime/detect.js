@@ -17,5 +17,12 @@ export function detectPdi(pentahoHome) {
   if (!existsSync(kitchen) || !existsSync(pan)) {
     return { available: false, reason: 'Kitchen.bat or Pan.bat is unavailable', home, kitchen, pan };
   }
-  return { available: true, home, kitchen, pan };
+  // Re-check after canonicalization: a symlink/junction launcher could point
+  // outside the canonical PDI home even though its literal path is inside.
+  const realKitchen = realpathSync(kitchen);
+  const realPan = realpathSync(pan);
+  if (!inside(home, realKitchen) || !inside(home, realPan)) {
+    throw new Error('PDI executable resolved outside configured home');
+  }
+  return { available: true, home, kitchen: realKitchen, pan: realPan };
 }

@@ -26,6 +26,7 @@ export function makeContext({
     pentahoHome: typeof pentahoHome === 'string' && pentahoHome.trim()
       ? pentahoHome.trim()
       : null,
+    executeEnabled: process.env.PENTAHO_ENABLE_EXECUTE === '1',
   };
 }
 

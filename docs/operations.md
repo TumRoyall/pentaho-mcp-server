@@ -42,13 +42,20 @@ Thoát nonzero khi install/handshake invalid; báo PDI riêng (runtime phase-gat
 
 ## Log và khử nhạy cảm (runtime phase-gated)
 
-- Runtime log khử nhạy cảm nằm trong `runtime-logs/` (`<timestamp>-<kind>-<mode>.log`), gồm status/exitCode/signal + STDOUT/STDERR đã cắt 256KB và redact credential/tham số nhạy cảm. Đọc bằng `kettle_runtime_logs`.
+- Runtime log khử nhạy cảm nằm trong `runtime-logs/` (`<timestamp>-<kind>-<mode>.log`), gồm status/exitCode/signal + STDOUT/STDERR (mỗi luồng bị chặn 256 KiB bằng tail buffer ngay khi streaming) và redact credential/tham số nhạy cảm. Đọc bằng `kettle_runtime_logs`.
+- Thư mục log giữ **100 file mới nhất** sau mỗi lần chạy (retention theo số lượng); file cũ hơn bị xóa.
+- `kettle_runtime_logs` nhận `name` (tùy chọn) và `limit` (1..100), trả **mới nhất trước**, tối đa **256 KiB mỗi file**, kiểm chứa canonical từng file (từ chối tên thoát khỏi thư mục log).
 - Server log stderr (`kettle-mcp-dte running on stdio ...`); tool failure là payload `{ok:false}` trong `text`, không phải protocol error.
 
-## Timeout và xác nhận thực thi (runtime phase-gated)
+## Cổng thực thi, timeout và xác nhận (runtime phase-gated)
 
-- `timeoutMs` mặc định 120s, tối thiểu 1ms; timeout → `TIMEOUT` + SIGTERM, log vẫn lưu.
-- `kettle_runtime_execute` **luôn** cần `confirmed: true`, nếu không trả `CONFIRM_REQUIRED` mà không chạm PDI. Không có auto theo tên môi trường (không `DEV`/`TEST`/`UNKNOWN`).
+- Thực thi cần **cả hai**: `PENTAHO_ENABLE_EXECUTE=1` ở môi trường server **và** `confirmed: true` trên lời gọi.
+  - Server không đặt `PENTAHO_ENABLE_EXECUTE=1` → `EXECUTE_DISABLED`, trả về **trước khi** detect/spawn (không chạm PDI).
+  - Bật server nhưng thiếu `confirmed` → `CONFIRM_REQUIRED`, cũng không spawn.
+  - `PENTAHO_ENABLE_EXECUTE=1` + `confirmed: true` → `ALLOW`.
+  - Không có auto theo tên môi trường (không `DEV`/`TEST`/`UNKNOWN`).
+- `timeoutMs` mặc định 120s, tối thiểu 1ms; timeout → `TIMEOUT` và hạ **cả cây tiến trình**: Windows chạy `taskkill.exe /PID <pid> /T /F` (`shell:false`); nền tảng khác `SIGTERM` rồi `SIGKILL` sau ân hạn. Log vẫn lưu.
+- Trên Windows, launcher `.bat`/`.cmd` chạy qua shell; mọi token bị kiểm chống metacharacter (`" & | < > ^ % !`, CR/LF/NUL) và tên tham số phải là identifier trước khi spawn.
 - Runtime là bước verification phase-gated: chỉ dùng sau validation tĩnh; `execute` còn cần user duyệt riêng cho lần chạy đó.
 - `loadcheck`/`execute` luôn validation tĩnh trước; structural error → `STATIC_VALIDATION_FAILED`.
 
@@ -83,5 +90,5 @@ Chi tiết biên xem `docs/configuration.md`.
 
 1. `doctor.ps1` fail handshake → kiểm tra `.exe` bị chặn, `mcp.json` trỏ đúng path, reconnect MCP.
 2. Tool trả `{ok:false}` → đọc `error`: đường ngoài `KETTLE_ROOT` / validation fail → sửa path hoặc artifact.
-3. Runtime `FAIL`/`TIMEOUT` (tùy chọn) → `kettle_runtime_logs` xem log khử dưới `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs/`; kiểm tra `confirmed`, `timeoutMs`, `PENTAHO_HOME`, structural validation.
+3. Runtime `FAIL`/`TIMEOUT` (tùy chọn) → `kettle_runtime_logs` xem log khử dưới `<KETTLE_ROOT>/.pentaho-mcp/runtime-logs/`; kiểm tra `PENTAHO_ENABLE_EXECUTE`, `confirmed`, `timeoutMs`, `PENTAHO_HOME`, structural validation. `EXECUTE_DISABLED` = server chưa opt-in; `CONFIRM_REQUIRED` = thiếu `confirmed`.
 4. Giữ `git status --short` sạch khỏi artifact tạm; server không bao giờ commit/push.
