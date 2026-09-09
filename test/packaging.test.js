@@ -68,6 +68,25 @@ test('npm tarball excludes historical superpowers docs but keeps current docs, s
   }
 });
 
+test('installation guide covers all supported clients and their skill locations', () => {
+  const install = readFileSync(path.join(root, 'docs', 'install.md'), 'utf8');
+  for (const required of [
+    'Kiro',
+    'Claude Code',
+    'Codex',
+    '.kiro/settings/mcp.json',
+    '.mcp.json',
+    '.claude/skills/developing-pentaho-jobs/',
+    '.codex/config.toml',
+    '.agents/skills/developing-pentaho-jobs/',
+    'claude mcp list',
+    'codex mcp list',
+  ]) {
+    assert.ok(install.includes(required), `docs/install.md must include ${required}`);
+  }
+  assert.doesNotMatch(install, /install\.ps1|uninstall\.ps1/);
+});
+
 test('versioned Windows release has exact inventory, checksum, and working MCP executable', async () => {
   rmSync(path.join(root, 'dist'), { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   const build = spawnSync(process.execPath, ['scripts/build-release.mjs', '--version', version], { cwd: root, encoding: 'utf8', timeout: 120_000 });
